@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grandma.care</title>
+  <meta name="description" content="Grandma.care is building a simple, compassionate AI companion to help seniors live more safely and independently." />
+  <style>
+    :root {
+      --bg: #fbf7f2;
+      --card: #fffdfb;
+      --text: #2f2a26;
+      --muted: #6f675f;
+      --accent: #e7b8a2;
+      --accent-2: #f3dfd2;
+      --border: #eadfd6;
+      --shadow: 0 10px 30px rgba(90, 70, 50, 0.08);
+      --radius: 24px;
+      --max: 1100px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: linear-gradient(180deg, #fffaf6 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+    }
+
+    .brand {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.7);
+      font-size: 0.92rem;
+      color: var(--muted);
+      backdrop-filter: blur(8px);
+    }
+
+    .hero {
+      padding: 28px 0 56px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .headline {
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      margin: 18px 0 18px;
+      max-width: 10ch;
+    }
+
+    .subhead {
+      font-size: 1.08rem;
+      color: var(--muted);
+      max-width: 58ch;
+      margin-bottom: 26px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      cursor: pointer;
+    }
+
+    .btn:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: var(--text);
+      color: white;
+      box-shadow: var(--shadow);
+      border-color: var(--text);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: var(--text);
+    }
+
+    .note {
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top right, #fff 0%, var(--card) 60%, #f9f0ea 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glow {
+      position: absolute;
+      right: -40px;
+      top: -30px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(231,184,162,0.55), rgba(231,184,162,0));
+      pointer-events: none;
+    }
+
+    .device {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: 18px;
+      max-width: 340px;
+      box-shadow: 0 18px 40px rgba(90, 70, 50, 0.08);
+    }
+
+    .device-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .bubble {
+      padding: 14px 16px;
+      border-radius: 18px;
+      margin-bottom: 12px;
+      font-size: 0.97rem;
+    }
+
+    .bubble-ai {
+      background: #f8eee7;
+      border: 1px solid #ecd9ce;
+    }
+
+    .bubble-user {
+      background: #f4f4f4;
+      border: 1px solid #ececec;
+      margin-left: 28px;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .mini-item {
+      background: rgba(255,255,255,0.8);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .section {
+      padding: 24px 0 56px;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.5rem);
+      letter-spacing: -0.04em;
+      margin: 0 0 12px;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      max-width: 62ch;
+      margin-bottom: 26px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.85);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 1.12rem;
+      letter-spacing: -0.02em;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.98rem;
+    }
+
+    .footer {
+      padding: 14px 0 40px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid,
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .headline { max-width: 12ch; }
+      .hero-card { order: -1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav class="nav">
+      <div class="brand">Grandma.care</div>
+      <div class="tag">Coming soon</div>
+    </nav>
+  </div>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="tag">AI support for seniors and caregivers</div>
+        <h1 class="headline">For analog people in a digital world.</h1>
+        <p class="subhead">
+          Grandma.care is building a simple, compassionate AI companion to help seniors live more safely and independently — with caregiver support built in from the start.
+        </p>
+        <div class="actions">
+          <a class="btn btn-primary" href="mailto:hello@grandma.care">Contact us</a>
+          <a class="btn btn-secondary" href="#about">Learn more</a>
+        </div>
+        <p class="note">Temporary landing page while the first version is in development.</p>
+      </div>
+
+      <div class="hero-card">
+        <div class="glow"></div>
+        <div class="device">
+          <div class="device-top">
+            <span>Grandma.care</span>
+            <span>Live prototype</span>
+          </div>
+          <div class="bubble bubble-ai">Hi Barbara. It’s okay. You’re at home, and Alison will check in later this afternoon.</div>
+          <div class="bubble bubble-user">Okay. Thank you.</div>
+          <div class="bubble bubble-ai">I noticed the stove has been on for a while. Would you like me to remind you to turn it off?</div>
+          <div class="mini-list">
+            <div class="mini-item">Caregiver alerts</div>
+            <div class="mini-item">Fall and inactivity check-ins</div>
+            <div class="mini-item">Simple voice guidance</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="about">
+      <div class="container">
+        <h2 class="section-title">Built for real families.</h2>
+        <p class="section-copy">
+          We’re exploring a new kind of support system for seniors with memory loss, confusion, or low comfort with technology — and for the families trying to keep them safe without taking away independence.
+        </p>
+
+        <div class="cards">
+          <div class="card">
+            <h3>Simple by design</h3>
+            <p>No complicated menus, no technical setup for the senior, and no assumption that they can navigate modern devices on their own.</p>
+          </div>
+          <div class="card">
+            <h3>Caregiver connected</h3>
+            <p>Designed to keep trusted family members informed with alerts, updates, and support tools in the background.</p>
+          </div>
+          <div class="card">
+            <h3>Safety focused</h3>
+            <p>Made to support everyday independence while reducing risks around falls, wandering, confusion, and household safety.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © 2026 Grandma.care. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>
