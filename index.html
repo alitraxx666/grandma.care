@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Grandma.care</title>
-  <meta name="description" content="Grandma.care is building a simple, compassionate AI companion to help seniors live more safely and independently." />
+  <meta name="description" content="Grandma.care is a simple caregiver and senior tablet app designed to help older adults stay safer, connected, and supported at home." />
   <style>
     :root {
       --bg: #fbf7f2;
@@ -70,8 +70,8 @@
 
     .hero-grid {
       display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 28px;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
       align-items: center;
     }
 
@@ -129,76 +129,12 @@
       color: var(--muted);
     }
 
-    .hero-card {
-      background: radial-gradient(circle at top right, #fff 0%, var(--card) 60%, #f9f0ea 100%);
-      border: 1px solid var(--border);
+    .hero-image {
+      width: 100%;
       border-radius: var(--radius);
+      border: 1px solid var(--border);
       box-shadow: var(--shadow);
-      padding: 26px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .glow {
-      position: absolute;
-      right: -40px;
-      top: -30px;
-      width: 180px;
-      height: 180px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(231,184,162,0.55), rgba(231,184,162,0));
-      pointer-events: none;
-    }
-
-    .device {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 26px;
-      padding: 18px;
-      max-width: 340px;
-      box-shadow: 0 18px 40px rgba(90, 70, 50, 0.08);
-    }
-
-    .device-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.9rem;
-      color: var(--muted);
-      margin-bottom: 16px;
-    }
-
-    .bubble {
-      padding: 14px 16px;
-      border-radius: 18px;
-      margin-bottom: 12px;
-      font-size: 0.97rem;
-    }
-
-    .bubble-ai {
-      background: #f8eee7;
-      border: 1px solid #ecd9ce;
-    }
-
-    .bubble-user {
-      background: #f4f4f4;
-      border: 1px solid #ececec;
-      margin-left: 28px;
-    }
-
-    .mini-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .mini-item {
-      background: rgba(255,255,255,0.8);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 14px;
-      color: var(--muted);
-      font-size: 0.95rem;
+      display: block;
     }
 
     .section {
@@ -213,7 +149,7 @@
 
     .section-copy {
       color: var(--muted);
-      max-width: 62ch;
+      max-width: 68ch;
       margin-bottom: 26px;
     }
 
@@ -243,6 +179,15 @@
       font-size: 0.98rem;
     }
 
+    .feature {
+      background: rgba(255,255,255,0.75);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-top: 24px;
+    }
+
     .footer {
       padding: 14px 0 40px;
       color: var(--muted);
@@ -256,15 +201,15 @@
       }
 
       .headline { max-width: 12ch; }
-      .hero-card { order: -1; }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <nav class="nav">
       <div class="brand">Grandma.care</div>
-      <div class="tag">Coming soon</div>
+      <div class="tag">Live prototype</div>
     </nav>
   </div>
 
@@ -274,31 +219,21 @@
         <div class="tag">AI support for seniors and caregivers</div>
         <h1 class="headline">For analog people in a digital world.</h1>
         <p class="subhead">
-          Grandma.care is building a simple, compassionate AI companion to help seniors live more safely and independently — with caregiver support built in from the start.
+          Grandma.care is a simple caregiver and senior tablet app designed to help older adults stay safer, connected, and supported at home.
         </p>
+
         <div class="actions">
-          <a class="btn btn-primary" href="mailto:hello@grandma.care">Contact us</a>
-          <a class="btn btn-secondary" href="#about">Learn more</a>
+          <a class="btn btn-primary" href="#">Download Caregiver App</a>
+          <a class="btn btn-secondary" href="#">Set Up Senior Tablet App</a>
         </div>
-        <p class="note">Temporary landing page while the first version is in development.</p>
+
+        <p class="note">
+          Phase One is designed for a caregiver’s phone and a dedicated senior tablet that can stay visible and available throughout the day.
+        </p>
       </div>
 
-      <div class="hero-card">
-        <div class="glow"></div>
-        <div class="device">
-          <div class="device-top">
-            <span>Grandma.care</span>
-            <span>Live prototype</span>
-          </div>
-          <div class="bubble bubble-ai">Hi Barbara. It’s okay. You’re at home, and Alison will check in later this afternoon.</div>
-          <div class="bubble bubble-user">Okay. Thank you.</div>
-          <div class="bubble bubble-ai">I noticed the stove has been on for a while. Would you like me to remind you to turn it off?</div>
-          <div class="mini-list">
-            <div class="mini-item">Caregiver alerts</div>
-            <div class="mini-item">Fall and inactivity check-ins</div>
-            <div class="mini-item">Simple voice guidance</div>
-          </div>
-        </div>
+      <div>
+        <img class="hero-image" src="grandma-care-tablet.jpg" alt="Senior using the Grandma.care tablet reminder app">
       </div>
     </div>
   </header>
@@ -308,7 +243,7 @@
       <div class="container">
         <h2 class="section-title">Built for real families.</h2>
         <p class="section-copy">
-          We’re exploring a new kind of support system for seniors with memory loss, confusion, or low comfort with technology — and for the families trying to keep them safe without taking away independence.
+          Grandma.care helps families support seniors with memory loss, confusion, or low comfort with technology — without taking away independence.
         </p>
 
         <div class="cards">
@@ -316,14 +251,33 @@
             <h3>Simple by design</h3>
             <p>No complicated menus, no technical setup for the senior, and no assumption that they can navigate modern devices on their own.</p>
           </div>
+
           <div class="card">
             <h3>Caregiver connected</h3>
-            <p>Designed to keep trusted family members informed with alerts, updates, and support tools in the background.</p>
+            <p>Trusted family members can send reminders, check-ins, and messages from the caregiver app to the senior’s tablet.</p>
           </div>
+
           <div class="card">
             <h3>Safety focused</h3>
-            <p>Made to support everyday independence while reducing risks around falls, wandering, confusion, and household safety.</p>
+            <p>Designed to support daily routines, reduce confusion, and help families notice when something may need attention.</p>
           </div>
+        </div>
+
+        <div class="feature">
+          <h2 class="section-title">Phase One Prototype</h2>
+          <p class="section-copy">
+            The first version of Grandma.care uses two connected apps: a caregiver app for a family member’s phone and a senior tablet app designed to run throughout the day on an iPad, Android tablet, or older dedicated tablet.
+          </p>
+          <p class="section-copy">
+            Families can place the tablet somewhere visible in the home so reminders, check-ins, and family messages are easy for the senior to see and respond to. The goal is to make support feel calm, familiar, and simple.
+          </p>
+        </div>
+
+        <div class="feature">
+          <h2 class="section-title">Future Vision</h2>
+          <p class="section-copy">
+            Future versions of Grandma.care may expand beyond standard tablets into a dedicated senior-friendly device: simple, portable, always-on, and designed specifically for care reminders, safety check-ins, and family connection at home or on the go.
+          </p>
         </div>
       </div>
     </section>
@@ -331,7 +285,7 @@
 
   <footer class="footer">
     <div class="container">
-      © 2026 Grandma.care. All rights reserved.
+      © 2026 Patnik Creative. All rights reserved.
     </div>
   </footer>
 </body>
