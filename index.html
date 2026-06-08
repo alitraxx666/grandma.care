@@ -4,7 +4,9 @@
   <link rel="icon" href="favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Grandma.care</title>
+
   <meta name="description" content="Grandma.care helps older adults with cognitive impairments live independently while staying safe, healthy, and supported by caregivers who live elsewhere." />
 
   <style>
@@ -21,17 +23,23 @@
       --max: 1180px;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: linear-gradient(180deg, #f8f5ec 0%, var(--bg) 100%);
       color: var(--text);
       line-height: 1.5;
     }
 
-    a { color: inherit; text-decoration: none; }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
     .container {
       width: min(var(--max), calc(100% - 32px));
@@ -95,6 +103,11 @@
       font-weight: 700;
       border: 1px solid var(--border);
       cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
     }
 
     .btn-primary {
@@ -122,11 +135,10 @@
     }
 
     .feature {
-  background: rgba(255,255,255,0.78);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px;
-}
+      background: rgba(255,255,255,0.78);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
       box-shadow: var(--shadow);
       margin-bottom: 22px;
     }
@@ -163,6 +175,7 @@
       padding: 10px 0 34px;
       color: var(--muted);
       font-size: 0.92rem;
+      text-align: center;
     }
 
     @media (max-width: 900px) {
@@ -183,95 +196,122 @@
 </head>
 
 <body>
-  <header class="hero">
-    <div class="container hero-grid">
-      <div>
-        <h1 class="headline">For analog people in a digital world.</h1>
 
-        <img class="logo" src="grandma-care-logo.png" alt="Grandma.care logo">
+<header class="hero">
+  <div class="container hero-grid">
 
-        <p class="tagline">
-          Independence for seniors. Peace of mind for families.
-        </p>
+    <div>
 
-        <p class="subhead">
-          Grandma.care is a simple caregiver and senior tablet app designed to help older adults with cognitive impairments live independently in their own home while staying safe, healthy, and supported by a caregiver who lives elsewhere.
-        </p>
+      <h1 class="headline">
+        For analog people in a digital world.
+      </h1>
 
-        <p class="subhead">
-          Grandma.care is a low-tech piece of technology: simple on purpose, designed for older adults who still don't know how to work the remote.
-        </p>
+      <img
+        class="logo"
+        src="grandma-care-logo.png"
+        alt="Grandma.care logo">
 
-        <p class="subhead">
-          The goal is not to add more complicated technology to their lives. The goal is to make daily support easy and independent.
-        </p>
+      <p class="tagline">
+        Independence for seniors. Peace of mind for families.
+      </p>
 
-        <div class="actions">
-          <a class="btn btn-primary" href="#">First Setup Caregiver Dashboard</a>
-          <a class="btn btn-secondary" href="#">Then Set Up Senior Tablet App</a>
-        </div>
+      <p class="subhead">
+        Grandma.care is a simple caregiver and senior tablet platform designed to help older adults with cognitive impairments live independently while staying safe, healthy, and connected to family members who may live elsewhere.
+      </p>
+
+      <p class="subhead">
+        Grandma.care is intentionally simple. It is built for older adults who may struggle with modern technology but still want to remain independent in their own homes.
+      </p>
+
+      <p class="subhead">
+        The goal is not to add more technology. The goal is to make daily support easier, safer, and more dignified.
+      </p>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="caregiver-dashboard.html">
+          Set Up Caregiver Dashboard
+        </a>
+
+        <a class="btn btn-secondary" href="senior-tablet.html">
+          Preview Senior Tablet App
+        </a>
       </div>
 
-      <div>
-        <img class="hero-image" src="grandma-care-tablet.jpg" alt="Senior using the Grandma.care tablet reminder app">
-      </div>
     </div>
-  </header>
 
-  <main>
-    <section class="section">
-      <div class="container">
+    <div>
+      <img
+        class="hero-image"
+        src="grandma-care-tablet.jpg"
+        alt="Senior using Grandma.care tablet app">
+    </div>
 
-       <div class="feature">
+  </div>
+</header>
 
+<main>
 
-
-  <img
-    src="how-grandma-care-works.png"
-
-    style="
-      width:100%;
-      border-radius:20px;
-      display:block;
-      margin-top:20px;
-      box-shadow: var(--shadow);
-    ">
-
-
-
-        <div class="feature">
-          <div class="story-grid">
-            <img
-              src="grandma-portrait.jpg"
-              alt="Barbara, the inspiration behind Grandma.care"
-              class="portrait">
-
-            <div>
-              <h2 class="section-title">The Story Behind Grandma.care</h2>
-
-              <p class="section-copy">
-                Grandma.care was inspired by Barbara, my grandmother living independently with dementia. 
-              </p>
-
-              <p class="section-copy">
-                My family wanted a better way to help her stay safe, make sure is taking her prescriptions, remind her about appointments, and make sure she isn't forgetting important tasks without taking away her independence or moving her into a care home before it was necessary.
-              </p>
-
-              <p class="section-copy">
-                Grandma.care is built for families like mine: families who love someone with memory or cognitive challenges and want to support them with dignity, safety, and peace of mind.
-              </p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
+  <section class="section">
     <div class="container">
-      © 2026 Patnik Creative. All rights reserved.
+
+      <div class="feature">
+
+        <img
+          src="how-grandma-care-works.png"
+          alt="How Grandma.care works"
+          style="
+            width:100%;
+            border-radius:20px;
+            display:block;
+            margin-top:20px;
+            box-shadow: var(--shadow);
+          ">
+
+      </div>
+
+      <div class="feature">
+
+        <div class="story-grid">
+
+          <img
+            src="grandma-portrait.jpg"
+            alt="Barbara, the inspiration behind Grandma.care"
+            class="portrait">
+
+          <div>
+
+            <h2 class="section-title">
+              The Story Behind Grandma.care
+            </h2>
+
+            <p class="section-copy">
+              Grandma.care was inspired by Barbara, my grandmother living independently with dementia.
+            </p>
+
+            <p class="section-copy">
+              My family wanted a better way to help her stay safe, make sure she was taking her prescriptions, remind her about appointments, and support her daily routine without taking away her independence or moving her into assisted living before it was necessary.
+            </p>
+
+            <p class="section-copy">
+              Grandma.care is built for families like mine: families who love someone with memory or cognitive challenges and want to support them with dignity, safety, and peace of mind.
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
-  </footer>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container">
+    © 2026 Patnik Creative. All rights reserved.
+  </div>
+</footer>
+
 </body>
 </html>
