@@ -19,9 +19,7 @@
       --radius: 24px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -98,6 +96,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .small {
       text-align: center;
       font-size: 0.9rem;
@@ -108,6 +111,20 @@
       color: var(--accent);
       font-weight: 800;
       text-decoration: none;
+    }
+
+    .message {
+      margin-top: 14px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .error {
+      color: #b42318;
+    }
+
+    .success {
+      color: #1f7a4d;
     }
   </style>
 </head>
@@ -125,30 +142,92 @@
     </p>
 
     <label>Your Name</label>
-    <input type="text" placeholder="Allison Smith">
+    <input id="caregiverName" type="text" placeholder="Allison Smith">
 
     <label>Email Address</label>
-    <input type="email" placeholder="you@example.com">
+    <input id="email" type="email" placeholder="you@example.com">
 
     <label>Password</label>
-    <input type="password" placeholder="Create a password">
+    <input id="password" type="password" placeholder="Create a password">
 
     <label>Senior's Name</label>
-    <input type="text" placeholder="Barbara">
+    <input id="seniorName" type="text" placeholder="Barbara">
 
     <div class="security-note">
-      🔒 This prototype is designed for secure caregiver access. In the full version, account information and health reminders will be encrypted and protected.
+      🔒 This prototype uses real caregiver account sign-up through Supabase. In the full version, health reminders and caregiver data will be protected with secure database rules.
     </div>
 
-    <button onclick="window.location.href='caregiver-dashboard.html'">
-      Continue to Caregiver Dashboard
+    <button id="signupButton">
+      Create Account
     </button>
 
+    <div id="message" class="message"></div>
+
     <p class="small">
-      Already have an account? <a href="caregiver-dashboard.html">Sign in</a>
+      Already have an account? <a href="login.html">Sign in</a>
     </p>
 
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = "https://rsmiivsdxbnwwamdxkhm.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_QCQfaxIpjuOx_26bnBikcQ_rzF29DFa";
+
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const signupButton = document.getElementById("signupButton");
+    const message = document.getElementById("message");
+
+    signupButton.addEventListener("click", async () => {
+      const caregiverName = document.getElementById("caregiverName").value.trim();
+      const seniorName = document.getElementById("seniorName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      message.textContent = "";
+      message.className = "message";
+
+      if (!caregiverName || !seniorName || !email || !password) {
+        message.textContent = "Please fill out all fields.";
+        message.classList.add("error");
+        return;
+      }
+
+      signupButton.disabled = true;
+      signupButton.textContent = "Creating account...";
+
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            caregiver_name: caregiverName,
+            senior_name: seniorName
+          }
+        }
+      });
+
+      if (error) {
+        message.textContent = error.message;
+        message.classList.add("error");
+        signupButton.disabled = false;
+        signupButton.textContent = "Create Account";
+        return;
+      }
+
+      localStorage.setItem("grandmaCaregiverName", caregiverName);
+      localStorage.setItem("grandmaSeniorName", seniorName);
+
+      message.textContent = "Account created! Taking you to the caregiver dashboard...";
+      message.classList.add("success");
+
+      setTimeout(() => {
+        window.location.href = "caregiver-dashboard.html";
+      }, 1200);
+    });
+  </script>
 
 </body>
 </html>
