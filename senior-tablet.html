@@ -4,7 +4,6 @@
   <link rel="icon" href="favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Senior Tablet | Grandma.care</title>
 
   <style>
@@ -18,11 +17,10 @@
       --success:#1F7A4D;
       --border:#D8D1C1;
       --shadow:0 14px 40px rgba(35,74,83,0.15);
+      --yellow:#FFF3B0;
     }
 
-    * {
-      box-sizing:border-box;
-    }
+    * { box-sizing:border-box; }
 
     body {
       margin:0;
@@ -36,15 +34,14 @@
     .tablet {
       min-height:100vh;
       display:grid;
-      grid-template-columns: 44% 56%;
-      gap:0;
+      grid-template-columns:44% 56%;
     }
 
     .photo-side {
       position:relative;
-      background:#ddd;
       min-height:100vh;
       overflow:hidden;
+      background:#ddd;
     }
 
     .photo-side img {
@@ -58,17 +55,17 @@
       position:absolute;
       left:26px;
       bottom:26px;
-      background:rgba(255,255,255,0.88);
-      color:var(--accent);
+      background:rgba(255,255,255,0.9);
       padding:14px 22px;
       border-radius:999px;
-      font-size:1.4rem;
+      font-size:1.35rem;
       font-weight:900;
+      color:var(--accent);
     }
 
     .app-side {
       min-height:100vh;
-      padding:32px;
+      padding:28px;
       display:flex;
       flex-direction:column;
       justify-content:center;
@@ -80,125 +77,140 @@
       font-size:2rem;
       font-weight:900;
       color:var(--accent);
-      margin-bottom:16px;
+      margin-bottom:12px;
       line-height:1.2;
     }
 
     .hello {
-      font-size:2.8rem;
+      font-size:2.6rem;
       font-weight:900;
-      margin-bottom:22px;
+      margin-bottom:18px;
     }
 
     .card {
+      width:min(780px,100%);
       background:white;
-      width:min(760px,100%);
       border-radius:34px;
-      padding:36px;
+      padding:30px;
       box-shadow:var(--shadow);
       border:1px solid var(--border);
+    }
+
+    .active-reminder {
+      background:var(--yellow);
+      border:4px solid var(--accent);
     }
 
     .time {
       font-size:2rem;
       font-weight:900;
       color:var(--accent);
-      margin-bottom:12px;
+      margin-bottom:10px;
     }
 
     .task {
-      font-size:3rem;
+      font-size:2.8rem;
       line-height:1.08;
       font-weight:900;
-      margin-bottom:20px;
+      margin-bottom:18px;
     }
 
     .instruction {
-      font-size:1.35rem;
+      font-size:1.3rem;
       color:var(--muted);
-      margin-bottom:28px;
+      margin-bottom:24px;
     }
 
     .buttons {
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:18px;
+      gap:16px;
     }
 
     button {
       border:none;
-      border-radius:28px;
-      padding:26px 22px;
-      font-size:1.65rem;
+      border-radius:26px;
+      padding:24px 18px;
+      font-size:1.55rem;
       font-weight:900;
       cursor:pointer;
       color:white;
     }
 
-    .yes {
-      background:var(--success);
-    }
-
-    .help {
-      background:var(--danger);
-    }
+    .yes { background:var(--success); }
+    .help { background:var(--danger); }
+    .call { background:var(--accent); width:100%; margin-top:14px; }
 
     .status {
-      margin-top:22px;
-      font-size:1.3rem;
+      margin-top:18px;
+      font-size:1.25rem;
       font-weight:900;
     }
 
-    .upcoming {
-      width:min(760px,100%);
-      margin-top:20px;
-      background:rgba(255,255,255,0.75);
+    .upcoming, .pillbox, .family-note {
+      width:min(780px,100%);
+      margin-top:16px;
+      background:rgba(255,255,255,0.78);
       border:1px solid var(--border);
       border-radius:24px;
-      padding:18px 22px;
+      padding:16px 20px;
       text-align:left;
     }
 
-    .upcoming-title {
-      font-size:1rem;
+    .section-title {
+      font-size:.95rem;
       text-transform:uppercase;
-      letter-spacing:0.08em;
+      letter-spacing:.08em;
       font-weight:900;
       color:var(--muted);
-      margin-bottom:6px;
+      margin-bottom:8px;
     }
 
-    .upcoming-text {
-      font-size:1.25rem;
+    .upcoming-text, .family-text {
+      font-size:1.2rem;
       font-weight:800;
-      color:var(--text);
+    }
+
+    .pill-grid {
+      display:grid;
+      grid-template-columns:70px repeat(7, 1fr);
+      gap:6px;
+      text-align:center;
+      font-weight:900;
+    }
+
+    .pill-cell {
+      background:white;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:8px 4px;
+      min-height:38px;
+    }
+
+    .pill-head {
+      background:var(--accent);
+      color:white;
+    }
+
+    .pill-active {
+      background:var(--yellow);
+      border:3px solid var(--accent);
+    }
+
+    .pill-done {
+      background:#DFF3E8;
+      color:var(--success);
+      font-size:1.2rem;
     }
 
     @media(max-width:850px) {
-      body {
-        overflow:auto;
-      }
-
-      .tablet {
-        grid-template-columns:1fr;
-      }
-
-      .photo-side {
-        min-height:36vh;
-      }
-
-      .app-side {
-        min-height:64vh;
-        padding:22px;
-      }
-
-      .task {
-        font-size:2.2rem;
-      }
-
-      .buttons {
-        grid-template-columns:1fr;
-      }
+      body { overflow:auto; }
+      .tablet { grid-template-columns:1fr; }
+      .photo-side { min-height:34vh; }
+      .app-side { min-height:66vh; padding:20px; }
+      .task { font-size:2.1rem; }
+      .buttons { grid-template-columns:1fr; }
+      .pill-grid { font-size:.8rem; grid-template-columns:56px repeat(7, 1fr); }
     }
   </style>
 </head>
@@ -209,56 +221,45 @@
 
   <div class="photo-side">
     <img id="familyPhoto" src="family-photo-1.jpg" alt="Family photo slideshow">
-    <div class="photo-label">
-      Family Photos ❤️
-    </div>
+    <div class="photo-label">Family Photos ❤️</div>
   </div>
 
   <div class="app-side">
 
-    <div class="clock" id="clockDisplay">
-      Loading time...
-    </div>
+    <div class="clock" id="clockDisplay">Loading time...</div>
+    <div class="hello" id="helloText">Hi Barbara ❤️</div>
 
-    <div class="hello" id="helloText">
-      Hi Barbara ❤️
-    </div>
+    <div class="card" id="reminderCard">
+      <div class="time" id="reminderTime">9:00 AM</div>
+      <div class="task" id="reminderTask">Take your prescription pills.</div>
+      <div class="instruction" id="instructionText">Please press one button.</div>
 
-    <div class="card">
-
-      <div class="time" id="reminderTime">
-        9:00 AM
-      </div>
-
-      <div class="task" id="reminderTask">
-        Take your prescription pills.
-      </div>
-
-      <div class="instruction">
-        Please press one button.
-      </div>
-
-      <div class="buttons">
-        <button class="yes" onclick="taskDone()">
-          ✅ Yes, I did it
-        </button>
-
-        <button class="help" onclick="needHelp()">
-          🆘 No, I need help
-        </button>
+      <div class="buttons" id="buttonArea">
+        <button class="yes" onclick="taskDone()">✅ Yes, I did it</button>
+        <button class="help" onclick="needHelp()">🆘 No, I need help</button>
       </div>
 
       <div class="status" id="statusMessage"></div>
+    </div>
 
+    <div class="pillbox">
+      <div class="section-title">Pill Organizer</div>
+      <div class="pill-grid" id="pillGrid"></div>
     </div>
 
     <div class="upcoming">
-      <div class="upcoming-title">
-        Upcoming Reminder
-      </div>
+      <div class="section-title">Upcoming Reminder</div>
       <div class="upcoming-text" id="upcomingReminder">
         3:00 PM — Take your afternoon prescription pills.
       </div>
+    </div>
+
+    <div class="family-note">
+      <div class="section-title">Family Note ❤️</div>
+      <div class="family-text" id="familyNote">
+        Allison set this up for you.
+      </div>
+      <button class="call" onclick="callFamily()">📞 Call Allison</button>
     </div>
 
   </div>
@@ -270,10 +271,11 @@
     "family-photo-1.jpg",
     "family-photo-2.jpg",
     "family-photo-3.jpg",
-    "family-photo-4.jpg""
+    "family-photo-4.jpg"
   ];
 
   let currentPhoto = 0;
+  let currentDose = "AM";
 
   function rotatePhotos() {
     currentPhoto = (currentPhoto + 1) % photos.length;
@@ -282,46 +284,143 @@
 
   setInterval(rotatePhotos, 5000);
 
+  let appData = {
+    senior: "Barbara",
+    caregiver: "Allison",
+    medication: "prescription pills",
+    medicationTime: "09:00",
+    upcomingReminder: "3:00 PM — Take your afternoon prescription pills."
+  };
+
   const savedData = localStorage.getItem("grandmaDashboardData");
 
   if (savedData) {
-    const data = JSON.parse(savedData);
-
-    const senior = data.senior || "Barbara";
-    const medication = data.medication || "prescription pills";
-    const medTime = formatTime(data.medicationTime) || "9:00 AM";
-
-    document.getElementById("helloText").textContent =
-      `Hi ${senior} ❤️`;
-
-    document.getElementById("reminderTime").textContent =
-      medTime;
-
-    document.getElementById("reminderTask").textContent =
-      `Take your ${medication}.`;
-  }
-
-  function taskDone() {
-    document.getElementById("statusMessage").textContent =
-      "Great job. Your caregiver will know this was completed.";
-  }
-
-  function needHelp() {
-    document.getElementById("statusMessage").textContent =
-      "Help requested. Your caregiver should be contacted.";
+    appData = { ...appData, ...JSON.parse(savedData) };
   }
 
   function formatTime(time) {
     if (!time) return "";
-
     const parts = time.split(":");
     let hour = parseInt(parts[0]);
     const minute = parts[1];
-
     const ampm = hour >= 12 ? "PM" : "AM";
     hour = hour % 12 || 12;
-
     return `${hour}:${minute} ${ampm}`;
+  }
+
+  function loadTabletData() {
+    const senior = appData.senior || "Barbara";
+    const caregiver = appData.caregiver || "Allison";
+    const medication = appData.medication || "prescription pills";
+    const medTime = formatTime(appData.medicationTime) || "9:00 AM";
+
+    document.getElementById("helloText").textContent = `Hi ${senior} ❤️`;
+    document.getElementById("reminderTime").textContent = medTime;
+    document.getElementById("reminderTask").textContent = `Take your ${medication}.`;
+    document.getElementById("upcomingReminder").textContent =
+      appData.upcomingReminder || "3:00 PM — Take your afternoon prescription pills.";
+    document.getElementById("familyNote").textContent =
+      `${caregiver} set this up for you.`;
+  }
+
+  function checkReminderTime() {
+    const now = new Date();
+    const current = now.toTimeString().slice(0,5);
+    const medTime = appData.medicationTime || "09:00";
+
+    const card = document.getElementById("reminderCard");
+    const instruction = document.getElementById("instructionText");
+    const buttons = document.getElementById("buttonArea");
+
+    const isDemoMode = true;
+
+    if (current === medTime || isDemoMode) {
+      card.classList.add("active-reminder");
+      instruction.textContent = "Please press one button.";
+      buttons.style.display = "grid";
+    } else {
+      card.classList.remove("active-reminder");
+      document.getElementById("reminderTime").textContent = "No reminders right now";
+      document.getElementById("reminderTask").textContent = "Enjoy your day ❤️";
+      instruction.textContent = "Your next reminder is listed below.";
+      buttons.style.display = "none";
+    }
+  }
+
+  function buildPillbox() {
+    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const times = ["AM", "Noon", "PM"];
+    const grid = document.getElementById("pillGrid");
+
+    grid.innerHTML = `<div class="pill-cell pill-head"></div>`;
+
+    days.forEach(day => {
+      grid.innerHTML += `<div class="pill-cell pill-head">${day}</div>`;
+    });
+
+    times.forEach(time => {
+      grid.innerHTML += `<div class="pill-cell pill-head">${time}</div>`;
+
+      days.forEach(day => {
+        const today = new Date().toLocaleDateString("en-US", { weekday: "short" });
+        const isToday = day === today;
+        const isActive = isToday && time === currentDose;
+
+        grid.innerHTML += `
+          <div 
+            id="pill-${day}-${time}" 
+            class="pill-cell ${isActive ? "pill-active" : ""}">
+            ${isActive ? "💊" : ""}
+          </div>
+        `;
+      });
+    });
+  }
+
+  function taskDone() {
+    const today = new Date().toLocaleDateString("en-US", { weekday: "short" });
+    const cell = document.getElementById(`pill-${today}-${currentDose}`);
+
+    if (cell) {
+      cell.classList.remove("pill-active");
+      cell.classList.add("pill-done");
+      cell.textContent = "✓";
+    }
+
+    const senior = appData.senior || "Barbara";
+
+    document.getElementById("statusMessage").textContent =
+      "Great job. Your caregiver will know this was completed.";
+
+    localStorage.setItem("grandmaLastCompleted", JSON.stringify({
+      senior: senior,
+      task: `Took ${appData.medication}`,
+      time: new Date().toLocaleString(),
+      status: "completed"
+    }));
+
+    localStorage.removeItem("grandmaAlert");
+  }
+
+  function needHelp() {
+    const senior = appData.senior || "Barbara";
+
+    document.getElementById("statusMessage").textContent =
+      "Help requested. Your caregiver should be contacted.";
+
+    localStorage.setItem("grandmaAlert", JSON.stringify({
+      senior: senior,
+      message: `${senior} requested help.`,
+      time: new Date().toLocaleString(),
+      status: "help requested"
+    }));
+  }
+
+  function callFamily() {
+    const caregiver = appData.caregiver || "Allison";
+
+    document.getElementById("statusMessage").textContent =
+      `Calling ${caregiver}...`;
   }
 
   function updateClock() {
@@ -342,8 +441,13 @@
       `${dateString}<br>${timeString}`;
   }
 
+  loadTabletData();
+  buildPillbox();
+  checkReminderTime();
   updateClock();
+
   setInterval(updateClock, 1000);
+  setInterval(checkReminderTime, 10000);
 </script>
 
 </body>
