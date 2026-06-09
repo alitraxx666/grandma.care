@@ -1,1 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Login | Grandma.care</title>
+
+  <style>
+    :root {
+      --bg:#F3F0E5;
+      --card:#FFFFFF;
+      --text:#234A53;
+      --muted:#4E707A;
+      --accent:#204A53;
+      --border:#D8D1C1;
+      --shadow:0 10px 30px rgba(35,74,83,0.08);
+      --radius:24px;
+    }
+
+    * {
+      box-sizing:border-box;
+    }
+
+    body {
+      margin:0;
+      font-family:Inter,system-ui,sans-serif;
+      background:linear-gradient(180deg,#f8f5ec 0%,var(--bg) 100%);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .card {
+      width:min(500px,100%);
+      background:white;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:32px;
+    }
+
+    .logo {
+      font-size:2rem;
+      font-weight:800;
+      margin-bottom:8px;
+    }
+
+    h1 {
+      margin-top:0;
+    }
+
+    p {
+      color:var(--muted);
+    }
+
+    label {
+      display:block;
+      margin-bottom:8px;
+      font-weight:700;
+    }
+
+    input {
+      width:100%;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      margin-bottom:18px;
+      font-size:1rem;
+    }
+
+    button {
+      width:100%;
+      background:var(--accent);
+      color:white;
+      border:none;
+      border-radius:999px;
+      padding:15px;
+      font-size:1rem;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .message {
+      margin-top:16px;
+      font-weight:700;
+      text-align:center;
+    }
+
+    .error {
+      color:#b42318;
+    }
+
+    .success {
+      color:#1f7a4d;
+    }
+
+    .small {
+      margin-top:20px;
+      text-align:center;
+    }
+
+    a {
+      color:var(--accent);
+      font-weight:700;
+      text-decoration:none;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <div class="logo">Grandma.care</div>
+
+  <h1>Caregiver Login</h1>
+
+  <p>
+    Sign in to manage reminders, medications, and daily support.
+  </p>
+
+  <label>Email Address</label>
+  <input id="email" type="email" placeholder="you@example.com">
+
+  <label>Password</label>
+  <input id="password" type="password" placeholder="Your password">
+
+  <button id="loginButton">
+    Sign In
+  </button>
+
+  <div id="message" class="message"></div>
+
+  <p class="small">
+    Need an account?
+    <a href="signup.html">Create one</a>
+  </p>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL =
+  "https://rsmiivsdxbnwwamdxkhm.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_QCQfaxIpjuOx_26bnBikcQ_rzF29DFa";
+
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+document
+  .getElementById("loginButton")
+  .addEventListener("click", async () => {
+
+    const email =
+      document.getElementById("email").value;
+
+    const password =
+      document.getElementById("password").value;
+
+    const { error } =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+      });
+
+    if (error) {
+      document.getElementById("message").textContent =
+        error.message;
+
+      document.getElementById("message").className =
+        "message error";
+
+      return;
+    }
+
+    document.getElementById("message").textContent =
+      "Login successful!";
+
+    document.getElementById("message").className =
+      "message success";
+
+    setTimeout(() => {
+      window.location.href =
+        "caregiver-dashboard.html";
+    }, 1000);
+
+});
+</script>
+
+</body>
+</html>
