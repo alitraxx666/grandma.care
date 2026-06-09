@@ -103,6 +103,12 @@
 
     textarea{ min-height:120px; }
 
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
     .button{
       background:var(--accent);
       color:white;
@@ -117,6 +123,65 @@
 
     .button-danger{ background:var(--danger); }
     .button-success{ background:var(--success); }
+
+    .days{
+      display:grid;
+      grid-template-columns:repeat(7, 1fr);
+      gap:8px;
+      margin-bottom:18px;
+    }
+
+    .days label{
+      background:#F8FAFB;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:10px;
+      text-align:center;
+      font-weight:800;
+      cursor:pointer;
+      margin:0;
+    }
+
+    .days input{
+      width:auto;
+      margin:0 4px 0 0;
+    }
+
+    .med-list{
+      margin-top:18px;
+    }
+
+    .med-item{
+      background:#F8FAFB;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      margin-top:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+    }
+
+    .med-title{
+      font-weight:900;
+      font-size:1.05rem;
+    }
+
+    .med-meta{
+      color:var(--muted);
+      margin-top:4px;
+    }
+
+    .small-danger{
+      background:var(--danger);
+      color:white;
+      border:none;
+      border-radius:999px;
+      padding:8px 12px;
+      font-weight:800;
+      cursor:pointer;
+    }
 
     .preview{
       background:#f8fafb;
@@ -142,6 +207,9 @@
     @media(max-width:700px){
       header{ flex-direction:column; }
       .card{ padding:18px; }
+      .row{ grid-template-columns:1fr; }
+      .days{ grid-template-columns:repeat(2, 1fr); }
+      .med-item{ flex-direction:column; align-items:flex-start; }
     }
   </style>
 </head>
@@ -185,17 +253,41 @@
   </div>
 
   <div class="card">
-    <h2>Daily Medication Reminder</h2>
+    <h2>Medication Schedule</h2>
 
     <label>Medication Name</label>
-    <input id="medicationInput" type="text" placeholder="prescription pills">
+    <input id="newMedName" type="text" placeholder="Blood pressure pill">
 
-    <label>Reminder Time</label>
-    <input id="medicationTimeInput" type="time">
+    <div class="row">
+      <div>
+        <label>Time</label>
+        <input id="newMedTime" type="time">
+      </div>
 
-    <label>Reminder Message</label>
-    <input id="medicationMessageInput" type="text"
-           value="Take your prescription pills.">
+      <div>
+        <label>Frequency</label>
+        <select id="newMedFrequency" onchange="frequencyChanged()">
+          <option value="daily">Daily</option>
+          <option value="weekly">Weekly</option>
+          <option value="custom">Custom Days</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Days</label>
+    <div class="days">
+      <label><input type="checkbox" class="dayCheck" value="Mon" checked>Mon</label>
+      <label><input type="checkbox" class="dayCheck" value="Tue" checked>Tue</label>
+      <label><input type="checkbox" class="dayCheck" value="Wed" checked>Wed</label>
+      <label><input type="checkbox" class="dayCheck" value="Thu" checked>Thu</label>
+      <label><input type="checkbox" class="dayCheck" value="Fri" checked>Fri</label>
+      <label><input type="checkbox" class="dayCheck" value="Sat" checked>Sat</label>
+      <label><input type="checkbox" class="dayCheck" value="Sun" checked>Sun</label>
+    </div>
+
+    <button class="button" onclick="addMedication()">Add Medication</button>
+
+    <div class="med-list" id="medicationList"></div>
   </div>
 
   <div class="card">
@@ -244,10 +336,10 @@
 
     <div class="preview">
       <h3 id="previewGreeting">Hi ❤️</h3>
-      <p>Good morning. Here's what's coming up today:</p>
+      <p>Here is what the tablet will show today:</p>
 
       <div class="reminder" id="previewMedication">
-        💊 Prescription Medication — 9:00 AM
+        💊 No medications added yet.
       </div>
 
       <div class="reminder" id="previewLunch">
@@ -255,7 +347,7 @@
       </div>
 
       <div class="reminder" id="previewAppointment">
-        🩺 Doctor Appointment — 2:00 PM
+        🩺 Doctor Appointment
       </div>
 
       <div class="reminder" id="previewMessage">
@@ -274,6 +366,8 @@
   const caregiverName = localStorage.getItem("grandmaCaregiverName");
   const seniorName = localStorage.getItem("grandmaSeniorName");
 
+  let medications = [];
+
   if (!caregiverName) {
     window.location.href = "signup.html";
   }
@@ -291,14 +385,89 @@
 
   setInterval(checkTabletStatus, 2000);
 
-  function saveDashboard() {
-    const dashboardData = {
+  function frequencyChanged() {
+    const frequency = document.getElementById("newMedFrequency").value;
+    const checks = document.querySelectorAll(".dayCheck");
+
+    if (frequency === "daily") {
+      checks.forEach(check => check.checked = true);
+    }
+
+    if (frequency === "weekly") {
+      checks.forEach(check => check.checked = false);
+      document.querySelector('.dayCheck[value="Mon"]').checked = true;
+    }
+  }
+
+  function addMedication() {
+    const name = document.getElementById("newMedName").value.trim();
+    const time = document.getElementById("newMedTime").value;
+    const frequency = document.getElementById("newMedFrequency").value;
+
+    const days = Array.from(document.querySelectorAll(".dayCheck:checked"))
+      .map(check => check.value);
+
+    if (!name || !time || days.length === 0) {
+      alert("Please enter medication name, time, and at least one day.");
+      return;
+    }
+
+    medications.push({
+      id: Date.now(),
+      name,
+      time,
+      frequency,
+      days
+    });
+
+    document.getElementById("newMedName").value = "";
+    document.getElementById("newMedTime").value = "";
+    document.getElementById("newMedFrequency").value = "daily";
+    frequencyChanged();
+
+    renderMedicationList();
+    saveDashboard(false);
+  }
+
+  function removeMedication(id) {
+    medications = medications.filter(med => med.id !== id);
+    renderMedicationList();
+    saveDashboard(false);
+  }
+
+  function renderMedicationList() {
+    const list = document.getElementById("medicationList");
+
+    if (medications.length === 0) {
+      list.innerHTML = `<p class="subtitle">No medications added yet.</p>`;
+      return;
+    }
+
+    const sortedMeds = [...medications].sort((a, b) => a.time.localeCompare(b.time));
+
+    list.innerHTML = sortedMeds.map(med => `
+      <div class="med-item">
+        <div>
+          <div class="med-title">💊 ${med.name}</div>
+          <div class="med-meta">
+            ${formatTime(med.time)} — ${med.frequency} — ${med.days.join(", ")}
+          </div>
+        </div>
+        <button class="small-danger" onclick="removeMedication(${med.id})">
+          Remove
+        </button>
+      </div>
+    `).join("");
+
+    updatePreview(collectDashboardData());
+  }
+
+  function collectDashboardData() {
+    return {
       senior: document.getElementById("seniorInput").value || "Barbara",
       caregiver: document.getElementById("caregiverInput").value || "Allison",
       phone: document.getElementById("phoneInput").value,
-      medication: document.getElementById("medicationInput").value || "prescription pills",
-      medicationTime: document.getElementById("medicationTimeInput").value || "09:00",
-      medicationMessage: document.getElementById("medicationMessageInput").value || "Take your prescription pills.",
+      medications: medications,
       breakfast: document.getElementById("breakfastInput").value,
       lunch: document.getElementById("lunchInput").value || "12:00",
       dinner: document.getElementById("dinnerInput").value,
@@ -308,6 +477,10 @@
       familyMessage: document.getElementById("familyMessageInput").value || "We love you.",
       upcomingReminder: buildUpcomingReminder()
     };
+  }
+
+  function saveDashboard(showAlert = true) {
+    const dashboardData = collectDashboardData();
 
     localStorage.setItem("grandmaDashboardData", JSON.stringify(dashboardData));
     localStorage.setItem("grandmaCaregiverName", dashboardData.caregiver);
@@ -315,52 +488,79 @@
 
     updatePreview(dashboardData);
 
-    alert("Dashboard saved! The senior tablet will now show this information.");
+    if (showAlert) {
+      alert("Dashboard saved! The senior tablet will now show this medication schedule.");
+    }
   }
 
   function buildUpcomingReminder() {
-    const lunch = document.getElementById("lunchInput").value;
-    const appointment = document.getElementById("appointmentInput").value;
-    const appointmentTime = document.getElementById("appointmentTimeInput").value;
+    const today = new Date().toLocaleDateString("en-US", { weekday: "short" });
+    const currentTime = new Date().toTimeString().slice(0,5);
 
-    if (appointment && appointmentTime) {
-      const date = new Date(appointmentTime);
-      return `${date.toLocaleTimeString("en-US", {hour:"numeric", minute:"2-digit"})} — ${appointment}`;
+    const todaysMeds = medications
+      .filter(med => med.days.includes(today))
+      .filter(med => med.time >= currentTime)
+      .sort((a, b) => a.time.localeCompare(b.time));
+
+    if (todaysMeds.length > 0) {
+      return `${formatTime(todaysMeds[0].time)} — Take ${todaysMeds[0].name}`;
     }
 
+    const lunch = document.getElementById("lunchInput").value;
     if (lunch) {
       return `${formatTime(lunch)} — Lunch`;
     }
 
-    return "3:00 PM — Take your afternoon prescription pills.";
+    return "No more reminders today.";
   }
 
   function loadDashboard() {
     const savedData = localStorage.getItem("grandmaDashboardData");
 
     if (!savedData) {
-      const starterData = {
+      medications = [
+        {
+          id: Date.now(),
+          name: "prescription pills",
+          time: "09:00",
+          frequency: "daily",
+          days: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+        }
+      ];
+
+      renderMedicationList();
+
+      updatePreview({
         senior: seniorName || "Barbara",
         caregiver: caregiverName || "Allison",
-        medication: "prescription pills",
-        medicationTime: "09:00",
+        medications,
         lunch: "12:00",
         appointment: "Doctor Appointment",
         familyMessage: "We'll call tonight at 7 PM."
-      };
+      });
 
-      updatePreview(starterData);
       return;
     }
 
     const data = JSON.parse(savedData);
 
+    medications = data.medications || [];
+
+    if (medications.length === 0 && data.medication) {
+      medications = [
+        {
+          id: Date.now(),
+          name: data.medication,
+          time: data.medicationTime || "09:00",
+          frequency: "daily",
+          days: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+        }
+      ];
+    }
+
     document.getElementById("seniorInput").value = data.senior || "";
     document.getElementById("caregiverInput").value = data.caregiver || "";
     document.getElementById("phoneInput").value = data.phone || "";
-    document.getElementById("medicationInput").value = data.medication || "";
-    document.getElementById("medicationTimeInput").value = data.medicationTime || "";
-    document.getElementById("medicationMessageInput").value = data.medicationMessage || "";
     document.getElementById("breakfastInput").value = data.breakfast || "";
     document.getElementById("lunchInput").value = data.lunch || "";
     document.getElementById("dinnerInput").value = data.dinner || "";
@@ -369,13 +569,13 @@
     document.getElementById("appointmentTimeInput").value = data.appointmentTime || "";
     document.getElementById("familyMessageInput").value = data.familyMessage || "";
 
+    renderMedicationList();
     updatePreview(data);
   }
 
   function updatePreview(data) {
     const senior = data.senior || "Barbara";
-    const medication = data.medication || "prescription pills";
-    const medTime = formatTime(data.medicationTime) || "9:00 AM";
+    const meds = data.medications || [];
     const lunchTime = formatTime(data.lunch) || "12:00 PM";
     const appointment = data.appointment || "Doctor Appointment";
     const familyMessage = data.familyMessage || "We'll call tonight at 7 PM.";
@@ -383,8 +583,18 @@
     document.getElementById("previewGreeting").textContent =
       `Hi ${senior} ❤️`;
 
-    document.getElementById("previewMedication").textContent =
-      `💊 ${medication} — ${medTime}`;
+    if (meds.length > 0) {
+      const medPreview = meds
+        .slice()
+        .sort((a, b) => a.time.localeCompare(b.time))
+        .map(med => `💊 ${med.name} — ${formatTime(med.time)} — ${med.days.join(", ")}`)
+        .join("<br>");
+
+      document.getElementById("previewMedication").innerHTML = medPreview;
+    } else {
+      document.getElementById("previewMedication").textContent =
+        "💊 No medications added yet.";
+    }
 
     document.getElementById("previewLunch").textContent =
       `🍽️ Lunch — ${lunchTime}`;
