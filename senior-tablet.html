@@ -18,6 +18,7 @@
       --border:#D8D1C1;
       --shadow:0 14px 40px rgba(35,74,83,0.15);
       --yellow:#FFF3B0;
+      --done:#DFF3E8;
     }
 
     * { box-sizing:border-box; }
@@ -101,6 +102,11 @@
       border:4px solid var(--accent);
     }
 
+    .done-reminder {
+      background:var(--done);
+      border:4px solid var(--success);
+    }
+
     .time {
       font-size:2rem;
       font-weight:900;
@@ -171,36 +177,38 @@
       font-weight:800;
     }
 
-    .pill-grid {
+    .pill-list {
       display:grid;
-      grid-template-columns:70px repeat(7, 1fr);
-      gap:6px;
-      text-align:center;
-      font-weight:900;
+      gap:10px;
     }
 
-    .pill-cell {
+    .pill-row {
       background:white;
       border:1px solid var(--border);
-      border-radius:10px;
-      padding:8px 4px;
-      min-height:38px;
+      border-radius:16px;
+      padding:12px 14px;
+      font-weight:800;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
     }
 
-    .pill-head {
-      background:var(--accent);
-      color:white;
-    }
-
-    .pill-active {
+    .pill-row.active {
       background:var(--yellow);
       border:3px solid var(--accent);
     }
 
-    .pill-done {
-      background:#DFF3E8;
+    .pill-row.done {
+      background:var(--done);
       color:var(--success);
-      font-size:1.2rem;
+      border:2px solid var(--success);
+    }
+
+    .pill-time {
+      color:var(--muted);
+      font-weight:900;
+      white-space:nowrap;
     }
 
     @media(max-width:850px) {
@@ -210,7 +218,6 @@
       .app-side { min-height:66vh; padding:20px; }
       .task { font-size:2.1rem; }
       .buttons { grid-template-columns:1fr; }
-      .pill-grid { font-size:.8rem; grid-template-columns:56px repeat(7, 1fr); }
     }
   </style>
 </head>
@@ -229,7 +236,7 @@
     <div class="clock" id="clockDisplay">Loading time...</div>
     <div class="hello" id="helloText">Hi Barbara ❤️</div>
 
-    <div class="card" id="reminderCard">
+    <div class="card active-reminder" id="reminderCard">
       <div class="time" id="reminderTime">9:00 AM</div>
       <div class="task" id="reminderTask">Take your prescription pills.</div>
       <div class="instruction" id="instructionText">Please press one button.</div>
@@ -243,14 +250,14 @@
     </div>
 
     <div class="pillbox">
-      <div class="section-title">Pill Organizer</div>
-      <div class="pill-grid" id="pillGrid"></div>
+      <div class="section-title">Today's Medicines</div>
+      <div class="pill-list" id="pillList"></div>
     </div>
 
     <div class="upcoming">
-      <div class="section-title">Upcoming Reminder</div>
+      <div class="section-title">Upcoming Medication</div>
       <div class="upcoming-text" id="upcomingReminder">
-        3:00 PM — Take your afternoon prescription pills.
+        Loading next reminder...
       </div>
     </div>
 
@@ -275,7 +282,10 @@
   ];
 
   let currentPhoto = 0;
-  let currentDose = "AM";
+  let appData = {};
+  let medications = [];
+  let todaysMeds = [];
+  let currentMed = null;
 
   function rotatePhotos() {
     currentPhoto = (currentPhoto + 1) % photos.length;
@@ -284,133 +294,204 @@
 
   setInterval(rotatePhotos, 5000);
 
-  let appData = {
-    senior: "Barbara",
-    caregiver: "Allison",
-    medication: "prescription pills",
-    medicationTime: "09:00",
-    upcomingReminder: "3:00 PM — Take your afternoon prescription pills."
-  };
+  function loadData() {
+    const savedData = localStorage.getItem("grandmaDashboardData");
 
-  const savedData = localStorage.getItem("grandmaDashboardData");
+    appData = {
+      senior: "Barbara",
+      caregiver: "Allison",
+      familyMessage: "We love you.",
+      medications: [
+        {
+          id: 1,
+          name: "prescription pills",
+          time: "09:00",
+          frequency: "daily",
+          days: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+        }
+      ]
+    };
 
-  if (savedData) {
-    appData = { ...appData, ...JSON.parse(savedData) };
-  }
+    if (savedData) {
+      appData = { ...appData, ...JSON.parse(savedData) };
+    }
 
-  function formatTime(time) {
-    if (!time) return "";
-    const parts = time.split(":");
-    let hour = parseInt(parts[0]);
-    const minute = parts[1];
-    const ampm = hour >= 12 ? "PM" : "AM";
-    hour = hour % 12 || 12;
-    return `${hour}:${minute} ${ampm}`;
-  }
+    medications = appData.medications || [];
 
-  function loadTabletData() {
-    const senior = appData.senior || "Barbara";
-    const caregiver = appData.caregiver || "Allison";
-    const medication = appData.medication || "prescription pills";
-    const medTime = formatTime(appData.medicationTime) || "9:00 AM";
+    document.getElementById("helloText").textContent =
+      `Hi ${appData.senior || "Barbara"} ❤️`;
 
-    document.getElementById("helloText").textContent = `Hi ${senior} ❤️`;
-    document.getElementById("reminderTime").textContent = medTime;
-    document.getElementById("reminderTask").textContent = `Take your ${medication}.`;
-    document.getElementById("upcomingReminder").textContent =
-      appData.upcomingReminder || "3:00 PM — Take your afternoon prescription pills.";
     document.getElementById("familyNote").textContent =
-      `${caregiver} set this up for you.`;
+      `${appData.caregiver || "Allison"} set this up for you. ${appData.familyMessage || ""}`;
   }
 
-  function checkReminderTime() {
-    const now = new Date();
-    const current = now.toTimeString().slice(0,5);
-    const medTime = appData.medicationTime || "09:00";
+  function getTodayShort() {
+    return new Date().toLocaleDateString("en-US", { weekday: "short" });
+  }
 
-    const card = document.getElementById("reminderCard");
-    const instruction = document.getElementById("instructionText");
-    const buttons = document.getElementById("buttonArea");
+  function getCompletedKey(med) {
+    const today = new Date().toISOString().slice(0,10);
+    return `completed-${today}-${med.id}`;
+  }
 
-    const isDemoMode = true;
+  function isCompleted(med) {
+    return localStorage.getItem(getCompletedKey(med)) === "true";
+  }
 
-    if (current === medTime || isDemoMode) {
-      card.classList.add("active-reminder");
-      instruction.textContent = "Please press one button.";
-      buttons.style.display = "grid";
+  function getTodaysMeds() {
+    const today = getTodayShort();
+
+    return medications
+      .filter(med => med.days && med.days.includes(today))
+      .sort((a, b) => a.time.localeCompare(b.time));
+  }
+
+  function chooseCurrentMedication() {
+    todaysMeds = getTodaysMeds();
+
+    if (todaysMeds.length === 0) {
+      currentMed = null;
+      return;
+    }
+
+    const notCompleted = todaysMeds.find(med => !isCompleted(med));
+
+    if (notCompleted) {
+      currentMed = notCompleted;
     } else {
-      card.classList.remove("active-reminder");
-      document.getElementById("reminderTime").textContent = "No reminders right now";
-      document.getElementById("reminderTask").textContent = "Enjoy your day ❤️";
-      instruction.textContent = "Your next reminder is listed below.";
-      buttons.style.display = "none";
+      currentMed = todaysMeds[todaysMeds.length - 1];
     }
   }
 
-  function buildPillbox() {
-    const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    const times = ["AM", "Noon", "PM"];
-    const grid = document.getElementById("pillGrid");
+  function updateMainCard() {
+    const card = document.getElementById("reminderCard");
+    const buttonArea = document.getElementById("buttonArea");
+    const status = document.getElementById("statusMessage");
 
-    grid.innerHTML = `<div class="pill-cell pill-head"></div>`;
+    card.classList.remove("active-reminder", "done-reminder");
 
-    days.forEach(day => {
-      grid.innerHTML += `<div class="pill-cell pill-head">${day}</div>`;
-    });
+    if (!currentMed) {
+      document.getElementById("reminderTime").textContent =
+        "No medicines today";
 
-    times.forEach(time => {
-      grid.innerHTML += `<div class="pill-cell pill-head">${time}</div>`;
+      document.getElementById("reminderTask").textContent =
+        "Enjoy your day ❤️";
 
-      days.forEach(day => {
-        const today = new Date().toLocaleDateString("en-US", { weekday: "short" });
-        const isToday = day === today;
-        const isActive = isToday && time === currentDose;
+      document.getElementById("instructionText").textContent =
+        "There are no medication reminders scheduled for today.";
 
-        grid.innerHTML += `
-          <div 
-            id="pill-${day}-${time}" 
-            class="pill-cell ${isActive ? "pill-active" : ""}">
-            ${isActive ? "💊" : ""}
+      buttonArea.style.display = "none";
+      return;
+    }
+
+    const completed = isCompleted(currentMed);
+
+    document.getElementById("reminderTime").textContent =
+      formatTime(currentMed.time);
+
+    document.getElementById("reminderTask").textContent =
+      completed
+        ? `✅ You took ${currentMed.name}.`
+        : `Take ${currentMed.name}.`;
+
+    document.getElementById("instructionText").textContent =
+      completed
+        ? "Great job. This has been marked complete."
+        : "Please press one button.";
+
+    if (completed) {
+      card.classList.add("done-reminder");
+      buttonArea.style.display = "none";
+      status.textContent = "";
+    } else {
+      card.classList.add("active-reminder");
+      buttonArea.style.display = "grid";
+    }
+  }
+
+  function renderPillList() {
+    const list = document.getElementById("pillList");
+
+    if (todaysMeds.length === 0) {
+      list.innerHTML = `<div class="pill-row">No medicines scheduled today.</div>`;
+      return;
+    }
+
+    list.innerHTML = todaysMeds.map(med => {
+      const completed = isCompleted(med);
+      const active = currentMed && med.id === currentMed.id && !completed;
+
+      return `
+        <div class="pill-row ${completed ? "done" : ""} ${active ? "active" : ""}">
+          <div>
+            ${completed ? "✅" : "💊"} ${med.name}
           </div>
-        `;
-      });
-    });
+          <div class="pill-time">
+            ${formatTime(med.time)}
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function updateUpcomingReminder() {
+    if (todaysMeds.length === 0) {
+      document.getElementById("upcomingReminder").textContent =
+        "No more medicines today.";
+      return;
+    }
+
+    const nextMed = todaysMeds.find(med => !isCompleted(med));
+
+    if (nextMed) {
+      document.getElementById("upcomingReminder").textContent =
+        `${formatTime(nextMed.time)} — Take ${nextMed.name}`;
+    } else {
+      document.getElementById("upcomingReminder").textContent =
+        "All medicines are complete for today ✅";
+    }
+  }
+
+  function refreshTablet() {
+    loadData();
+    chooseCurrentMedication();
+    updateMainCard();
+    renderPillList();
+    updateUpcomingReminder();
   }
 
   function taskDone() {
-    const today = new Date().toLocaleDateString("en-US", { weekday: "short" });
-    const cell = document.getElementById(`pill-${today}-${currentDose}`);
+    if (!currentMed) return;
 
-    if (cell) {
-      cell.classList.remove("pill-active");
-      cell.classList.add("pill-done");
-      cell.textContent = "✓";
-    }
+    localStorage.setItem(getCompletedKey(currentMed), "true");
 
     const senior = appData.senior || "Barbara";
 
-    document.getElementById("statusMessage").textContent =
-      "Great job. Your caregiver will know this was completed.";
-
     localStorage.setItem("grandmaLastCompleted", JSON.stringify({
       senior: senior,
-      task: `Took ${appData.medication}`,
+      task: `Took ${currentMed.name}`,
       time: new Date().toLocaleString(),
       status: "completed"
     }));
 
     localStorage.removeItem("grandmaAlert");
+
+    document.getElementById("statusMessage").textContent =
+      "Great job. Your caregiver will know this was completed.";
+
+    refreshTablet();
   }
 
   function needHelp() {
     const senior = appData.senior || "Barbara";
+    const medName = currentMed ? currentMed.name : "medication";
 
     document.getElementById("statusMessage").textContent =
       "Help requested. Your caregiver should be contacted.";
 
     localStorage.setItem("grandmaAlert", JSON.stringify({
       senior: senior,
-      message: `${senior} requested help.`,
+      message: `${senior} requested help with ${medName}.`,
       time: new Date().toLocaleString(),
       status: "help requested"
     }));
@@ -421,6 +502,19 @@
 
     document.getElementById("statusMessage").textContent =
       `Calling ${caregiver}...`;
+  }
+
+  function formatTime(time) {
+    if (!time) return "";
+
+    const parts = time.split(":");
+    let hour = parseInt(parts[0]);
+    const minute = parts[1];
+
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+
+    return `${hour}:${minute} ${ampm}`;
   }
 
   function updateClock() {
@@ -441,13 +535,11 @@
       `${dateString}<br>${timeString}`;
   }
 
-  loadTabletData();
-  buildPillbox();
-  checkReminderTime();
+  refreshTablet();
   updateClock();
 
   setInterval(updateClock, 1000);
-  setInterval(checkReminderTime, 10000);
+  setInterval(refreshTablet, 10000);
 </script>
 
 </body>
