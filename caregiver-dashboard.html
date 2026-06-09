@@ -4,7 +4,6 @@
   <link rel="icon" href="favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Caregiver Dashboard | Grandma.care</title>
 
   <style>
@@ -15,13 +14,13 @@
       --muted:#4E707A;
       --accent:#204A53;
       --border:#D8D1C1;
+      --danger:#B42318;
+      --success:#1F7A4D;
       --shadow:0 10px 30px rgba(35,74,83,0.08);
       --radius:24px;
     }
 
-    *{
-      box-sizing:border-box;
-    }
+    *{ box-sizing:border-box; }
 
     body{
       margin:0;
@@ -43,20 +42,14 @@
       gap:20px;
     }
 
-    .logo{
-      font-size:2rem;
-      font-weight:800;
-    }
+    .logo{ font-size:2rem; font-weight:800; }
 
     #welcomeMessage{
       margin:8px 0 4px;
       font-size:1.4rem;
     }
 
-    .subtitle{
-      color:var(--muted);
-      margin-top:8px;
-    }
+    .subtitle{ color:var(--muted); margin-top:8px; }
 
     .signout{
       background:white;
@@ -77,9 +70,21 @@
       box-shadow:var(--shadow);
     }
 
-    h2{
-      margin-top:0;
+    .alert-card{
+      display:none;
+      background:#FFF1F0;
+      border:2px solid var(--danger);
+      color:var(--danger);
     }
+
+    .success-card{
+      display:none;
+      background:#EFFAF3;
+      border:2px solid var(--success);
+      color:var(--success);
+    }
+
+    h2{ margin-top:0; }
 
     label{
       display:block;
@@ -87,9 +92,7 @@
       font-weight:600;
     }
 
-    input,
-    select,
-    textarea{
+    input, select, textarea{
       width:100%;
       padding:14px;
       border:1px solid var(--border);
@@ -98,9 +101,7 @@
       font-size:1rem;
     }
 
-    textarea{
-      min-height:120px;
-    }
+    textarea{ min-height:120px; }
 
     .button{
       background:var(--accent);
@@ -110,17 +111,18 @@
       border-radius:999px;
       font-weight:700;
       cursor:pointer;
+      margin-right:10px;
+      margin-bottom:10px;
     }
+
+    .button-danger{ background:var(--danger); }
+    .button-success{ background:var(--success); }
 
     .preview{
       background:#f8fafb;
       border:1px dashed var(--border);
       border-radius:20px;
       padding:20px;
-    }
-
-    .preview h3{
-      margin-top:0;
     }
 
     .reminder{
@@ -138,13 +140,8 @@
     }
 
     @media(max-width:700px){
-      header{
-        flex-direction:column;
-      }
-
-      .card{
-        padding:18px;
-      }
+      header{ flex-direction:column; }
+      .card{ padding:18px; }
     }
   </style>
 </head>
@@ -157,15 +154,22 @@
     <div>
       <div class="logo">Grandma.care</div>
       <h2 id="welcomeMessage">Caregiver Dashboard</h2>
-      <p class="subtitle">
-        Manage reminders, appointments, and daily support.
-      </p>
+      <p class="subtitle">Manage reminders, appointments, and daily support.</p>
     </div>
 
-    <button class="signout" onclick="logout()">
-      Sign Out
-    </button>
+    <button class="signout" onclick="logout()">Sign Out</button>
   </header>
+
+  <div class="card alert-card" id="helpAlert">
+    <h2>🔴 Help Requested</h2>
+    <p id="helpAlertText">Barbara needs assistance.</p>
+    <button class="button button-danger" onclick="clearAlert()">Clear Alert</button>
+  </div>
+
+  <div class="card success-card" id="completedAlert">
+    <h2>✅ Task Completed</h2>
+    <p id="completedAlertText">Barbara completed her reminder.</p>
+  </div>
 
   <div class="card">
     <h2>Senior Information</h2>
@@ -184,14 +188,14 @@
     <h2>Daily Medication Reminder</h2>
 
     <label>Medication Name</label>
-    <input id="medicationInput" type="text" placeholder="Blood Pressure Medication">
+    <input id="medicationInput" type="text" placeholder="prescription pills">
 
     <label>Reminder Time</label>
     <input id="medicationTimeInput" type="time">
 
     <label>Reminder Message</label>
     <input id="medicationMessageInput" type="text"
-           value="Did you take your prescription pill this morning?">
+           value="Take your prescription pills.">
   </div>
 
   <div class="card">
@@ -231,21 +235,16 @@
     <label>Message from Family</label>
     <textarea id="familyMessageInput" placeholder="Hi Grandma, we love you. We'll call tonight at 7 PM."></textarea>
 
-    <button class="button" onclick="saveDashboard()">
-      Save Dashboard
-    </button>
+    <button class="button" onclick="saveDashboard()">Save Dashboard</button>
+    <button class="button button-success" onclick="openTablet()">Open Senior Tablet</button>
   </div>
 
   <div class="card">
     <h2>Senior Tablet Preview</h2>
 
     <div class="preview">
-
       <h3 id="previewGreeting">Hi ❤️</h3>
-
-      <p>
-        Good morning. Here's what's coming up today:
-      </p>
+      <p>Good morning. Here's what's coming up today:</p>
 
       <div class="reminder" id="previewMedication">
         💊 Prescription Medication — 9:00 AM
@@ -262,7 +261,6 @@
       <div class="reminder" id="previewMessage">
         ❤️ Family Note: We'll call tonight at 7 PM.
       </div>
-
     </div>
   </div>
 
@@ -282,54 +280,76 @@
 
   window.addEventListener("load", () => {
     document.getElementById("welcomeMessage").textContent =
-      `Welcome ${caregiverName} — managing care for ${seniorName}`;
+      `Welcome ${caregiverName || "Caregiver"} — managing care for ${seniorName || "Barbara"}`;
 
-    document.getElementById("caregiverInput").value = caregiverName || "";
-    document.getElementById("seniorInput").value = seniorName || "";
+    document.getElementById("caregiverInput").value = caregiverName || "Allison";
+    document.getElementById("seniorInput").value = seniorName || "Barbara";
 
     loadDashboard();
+    checkTabletStatus();
   });
+
+  setInterval(checkTabletStatus, 2000);
 
   function saveDashboard() {
     const dashboardData = {
-      senior: document.getElementById("seniorInput").value,
-      caregiver: document.getElementById("caregiverInput").value,
+      senior: document.getElementById("seniorInput").value || "Barbara",
+      caregiver: document.getElementById("caregiverInput").value || "Allison",
       phone: document.getElementById("phoneInput").value,
-      medication: document.getElementById("medicationInput").value,
-      medicationTime: document.getElementById("medicationTimeInput").value,
-      medicationMessage: document.getElementById("medicationMessageInput").value,
+      medication: document.getElementById("medicationInput").value || "prescription pills",
+      medicationTime: document.getElementById("medicationTimeInput").value || "09:00",
+      medicationMessage: document.getElementById("medicationMessageInput").value || "Take your prescription pills.",
       breakfast: document.getElementById("breakfastInput").value,
-      lunch: document.getElementById("lunchInput").value,
+      lunch: document.getElementById("lunchInput").value || "12:00",
       dinner: document.getElementById("dinnerInput").value,
       water: document.getElementById("waterInput").value,
-      appointment: document.getElementById("appointmentInput").value,
+      appointment: document.getElementById("appointmentInput").value || "Doctor Appointment",
       appointmentTime: document.getElementById("appointmentTimeInput").value,
-      familyMessage: document.getElementById("familyMessageInput").value
+      familyMessage: document.getElementById("familyMessageInput").value || "We love you.",
+      upcomingReminder: buildUpcomingReminder()
     };
 
     localStorage.setItem("grandmaDashboardData", JSON.stringify(dashboardData));
-
     localStorage.setItem("grandmaCaregiverName", dashboardData.caregiver);
     localStorage.setItem("grandmaSeniorName", dashboardData.senior);
 
     updatePreview(dashboardData);
 
-    alert("Dashboard saved!");
+    alert("Dashboard saved! The senior tablet will now show this information.");
+  }
+
+  function buildUpcomingReminder() {
+    const lunch = document.getElementById("lunchInput").value;
+    const appointment = document.getElementById("appointmentInput").value;
+    const appointmentTime = document.getElementById("appointmentTimeInput").value;
+
+    if (appointment && appointmentTime) {
+      const date = new Date(appointmentTime);
+      return `${date.toLocaleTimeString("en-US", {hour:"numeric", minute:"2-digit"})} — ${appointment}`;
+    }
+
+    if (lunch) {
+      return `${formatTime(lunch)} — Lunch`;
+    }
+
+    return "3:00 PM — Take your afternoon prescription pills.";
   }
 
   function loadDashboard() {
     const savedData = localStorage.getItem("grandmaDashboardData");
 
     if (!savedData) {
-      updatePreview({
-        senior: seniorName,
-        medication: "Prescription Medication",
+      const starterData = {
+        senior: seniorName || "Barbara",
+        caregiver: caregiverName || "Allison",
+        medication: "prescription pills",
         medicationTime: "09:00",
         lunch: "12:00",
         appointment: "Doctor Appointment",
-        appointmentTime: "",
         familyMessage: "We'll call tonight at 7 PM."
-      });
+      };
+
+      updatePreview(starterData);
       return;
     }
 
@@ -354,7 +374,7 @@
 
   function updatePreview(data) {
     const senior = data.senior || "Barbara";
-    const medication = data.medication || "Prescription Medication";
+    const medication = data.medication || "prescription pills";
     const medTime = formatTime(data.medicationTime) || "9:00 AM";
     const lunchTime = formatTime(data.lunch) || "12:00 PM";
     const appointment = data.appointment || "Doctor Appointment";
@@ -374,6 +394,36 @@
 
     document.getElementById("previewMessage").textContent =
       `❤️ Family Note: ${familyMessage}`;
+  }
+
+  function checkTabletStatus() {
+    const alertData = localStorage.getItem("grandmaAlert");
+    const completedData = localStorage.getItem("grandmaLastCompleted");
+
+    if (alertData) {
+      const alert = JSON.parse(alertData);
+      document.getElementById("helpAlert").style.display = "block";
+      document.getElementById("helpAlertText").textContent =
+        `${alert.message} Time: ${alert.time}`;
+    } else {
+      document.getElementById("helpAlert").style.display = "none";
+    }
+
+    if (completedData) {
+      const completed = JSON.parse(completedData);
+      document.getElementById("completedAlert").style.display = "block";
+      document.getElementById("completedAlertText").textContent =
+        `${completed.senior} completed: ${completed.task}. Time: ${completed.time}`;
+    }
+  }
+
+  function clearAlert() {
+    localStorage.removeItem("grandmaAlert");
+    document.getElementById("helpAlert").style.display = "none";
+  }
+
+  function openTablet() {
+    window.open("senior-tablet.html", "_blank");
   }
 
   function formatTime(time) {
