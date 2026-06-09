@@ -1,246 +1,399 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Caregiver Dashboard | Grandma.care</title>
+  <title>Caregiver Dashboard | Grandma.care</title>
 
-<style>
-:root{
-  --bg:#F3F0E5;
-  --card:#FFFFFF;
-  --text:#234A53;
-  --muted:#4E707A;
-  --accent:#204A53;
-  --border:#D8D1C1;
-  --shadow:0 10px 30px rgba(35,74,83,0.08);
-  --radius:24px;
-}
+  <style>
+    :root{
+      --bg:#F3F0E5;
+      --card:#FFFFFF;
+      --text:#234A53;
+      --muted:#4E707A;
+      --accent:#204A53;
+      --border:#D8D1C1;
+      --shadow:0 10px 30px rgba(35,74,83,0.08);
+      --radius:24px;
+    }
 
-*{
-  box-sizing:border-box;
-}
+    *{
+      box-sizing:border-box;
+    }
 
-body{
-  margin:0;
-  font-family:Inter,system-ui,sans-serif;
-  background:linear-gradient(180deg,#f8f5ec 0%,var(--bg) 100%);
-  color:var(--text);
-}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:linear-gradient(180deg,#f8f5ec 0%,var(--bg) 100%);
+      color:var(--text);
+    }
 
-.container{
-  width:min(1000px, calc(100% - 32px));
-  margin:auto;
-}
+    .container{
+      width:min(1000px, calc(100% - 32px));
+      margin:auto;
+    }
 
-header{
-  padding:40px 0 20px;
-}
+    header{
+      padding:40px 0 20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:20px;
+    }
 
-.logo{
-  font-size:2rem;
-  font-weight:800;
-}
+    .logo{
+      font-size:2rem;
+      font-weight:800;
+    }
 
-.subtitle{
-  color:var(--muted);
-  margin-top:8px;
-}
+    #welcomeMessage{
+      margin:8px 0 4px;
+      font-size:1.4rem;
+    }
 
-.card{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:24px;
-  margin-bottom:24px;
-  box-shadow:var(--shadow);
-}
+    .subtitle{
+      color:var(--muted);
+      margin-top:8px;
+    }
 
-h2{
-  margin-top:0;
-}
+    .signout{
+      background:white;
+      color:var(--accent);
+      border:1px solid var(--border);
+      border-radius:999px;
+      padding:10px 16px;
+      font-weight:800;
+      cursor:pointer;
+    }
 
-label{
-  display:block;
-  margin-bottom:8px;
-  font-weight:600;
-}
+    .card{
+      background:white;
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:24px;
+      margin-bottom:24px;
+      box-shadow:var(--shadow);
+    }
 
-input,
-select,
-textarea{
-  width:100%;
-  padding:14px;
-  border:1px solid var(--border);
-  border-radius:12px;
-  margin-bottom:18px;
-  font-size:1rem;
-}
+    h2{
+      margin-top:0;
+    }
 
-textarea{
-  min-height:120px;
-}
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:600;
+    }
 
-.button{
-  background:var(--accent);
-  color:white;
-  padding:14px 22px;
-  border:none;
-  border-radius:999px;
-  font-weight:700;
-  cursor:pointer;
-}
+    input,
+    select,
+    textarea{
+      width:100%;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      margin-bottom:18px;
+      font-size:1rem;
+    }
 
-.preview{
-  background:#f8fafb;
-  border:1px dashed var(--border);
-  border-radius:20px;
-  padding:20px;
-}
+    textarea{
+      min-height:120px;
+    }
 
-.preview h3{
-  margin-top:0;
-}
+    .button{
+      background:var(--accent);
+      color:white;
+      padding:14px 22px;
+      border:none;
+      border-radius:999px;
+      font-weight:700;
+      cursor:pointer;
+    }
 
-.reminder{
-  background:white;
-  padding:16px;
-  border-radius:16px;
-  border:1px solid var(--border);
-  margin-top:12px;
-}
+    .preview{
+      background:#f8fafb;
+      border:1px dashed var(--border);
+      border-radius:20px;
+      padding:20px;
+    }
 
-.footer{
-  text-align:center;
-  padding:40px;
-  color:var(--muted);
-}
+    .preview h3{
+      margin-top:0;
+    }
 
-@media(max-width:700px){
-  .card{
-    padding:18px;
-  }
-}
-</style>
+    .reminder{
+      background:white;
+      padding:16px;
+      border-radius:16px;
+      border:1px solid var(--border);
+      margin-top:12px;
+    }
+
+    .footer{
+      text-align:center;
+      padding:40px;
+      color:var(--muted);
+    }
+
+    @media(max-width:700px){
+      header{
+        flex-direction:column;
+      }
+
+      .card{
+        padding:18px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="container">
 
-<header>
-  <div class="logo">Grandma.care</div>
-  <p class="subtitle">
-    Caregiver Dashboard
-  </p>
-</header>
-
-<div class="card">
-  <h2>Senior Information</h2>
-
-  <label>Senior's Name</label>
-  <input type="text" placeholder="Barbara Smith">
-
-  <label>Primary Caregiver</label>
-  <input type="text" placeholder="Allison Smith">
-
-  <label>Caregiver Phone Number</label>
-  <input type="text" placeholder="(555) 555-5555">
-</div>
-
-<div class="card">
-  <h2>Daily Medication Reminder</h2>
-
-  <label>Medication Name</label>
-  <input type="text" placeholder="Blood Pressure Medication">
-
-  <label>Reminder Time</label>
-  <input type="time">
-
-  <label>Reminder Message</label>
-  <input type="text"
-         value="Did you take your prescription pill this morning?">
-</div>
-
-<div class="card">
-  <h2>Daily Routine</h2>
-
-  <label>Breakfast Time</label>
-  <input type="time">
-
-  <label>Lunch Time</label>
-  <input type="time">
-
-  <label>Dinner Time</label>
-  <input type="time">
-
-  <label>Water Reminder Frequency</label>
-  <select>
-    <option>Every 2 Hours</option>
-    <option>Every 3 Hours</option>
-    <option>Every 4 Hours</option>
-    <option>Off</option>
-  </select>
-</div>
-
-<div class="card">
-  <h2>Appointments</h2>
-
-  <label>Next Appointment</label>
-  <input type="text" placeholder="Doctor Appointment">
-
-  <label>Date & Time</label>
-  <input type="datetime-local">
-</div>
-
-<div class="card">
-  <h2>Family Message</h2>
-
-  <label>Message from Family</label>
-  <textarea placeholder="Hi Grandma, we love you. We'll call tonight at 7 PM."></textarea>
-
-  <button class="button">
-    Save Dashboard
-  </button>
-</div>
-
-<div class="card">
-  <h2>Senior Tablet Preview</h2>
-
-  <div class="preview">
-
-    <h3>Hi Barbara ❤️</h3>
-
-    <p>
-      Good morning. Here's what's coming up today:
-    </p>
-
-    <div class="reminder">
-      💊 Prescription Medication — 9:00 AM
+  <header>
+    <div>
+      <div class="logo">Grandma.care</div>
+      <h2 id="welcomeMessage">Caregiver Dashboard</h2>
+      <p class="subtitle">
+        Manage reminders, appointments, and daily support.
+      </p>
     </div>
 
-    <div class="reminder">
-      🍽️ Lunch — 12:00 PM
-    </div>
+    <button class="signout" onclick="logout()">
+      Sign Out
+    </button>
+  </header>
 
-    <div class="reminder">
-      🩺 Doctor Appointment — 2:00 PM
-    </div>
+  <div class="card">
+    <h2>Senior Information</h2>
 
-    <div class="reminder">
-      ❤️ Family Note: We'll call tonight at 7 PM.
-    </div>
+    <label>Senior's Name</label>
+    <input id="seniorInput" type="text" placeholder="Barbara Smith">
 
+    <label>Primary Caregiver</label>
+    <input id="caregiverInput" type="text" placeholder="Allison Smith">
+
+    <label>Caregiver Phone Number</label>
+    <input id="phoneInput" type="text" placeholder="(555) 555-5555">
   </div>
+
+  <div class="card">
+    <h2>Daily Medication Reminder</h2>
+
+    <label>Medication Name</label>
+    <input id="medicationInput" type="text" placeholder="Blood Pressure Medication">
+
+    <label>Reminder Time</label>
+    <input id="medicationTimeInput" type="time">
+
+    <label>Reminder Message</label>
+    <input id="medicationMessageInput" type="text"
+           value="Did you take your prescription pill this morning?">
+  </div>
+
+  <div class="card">
+    <h2>Daily Routine</h2>
+
+    <label>Breakfast Time</label>
+    <input id="breakfastInput" type="time">
+
+    <label>Lunch Time</label>
+    <input id="lunchInput" type="time">
+
+    <label>Dinner Time</label>
+    <input id="dinnerInput" type="time">
+
+    <label>Water Reminder Frequency</label>
+    <select id="waterInput">
+      <option>Every 2 Hours</option>
+      <option>Every 3 Hours</option>
+      <option>Every 4 Hours</option>
+      <option>Off</option>
+    </select>
+  </div>
+
+  <div class="card">
+    <h2>Appointments</h2>
+
+    <label>Next Appointment</label>
+    <input id="appointmentInput" type="text" placeholder="Doctor Appointment">
+
+    <label>Date & Time</label>
+    <input id="appointmentTimeInput" type="datetime-local">
+  </div>
+
+  <div class="card">
+    <h2>Family Message</h2>
+
+    <label>Message from Family</label>
+    <textarea id="familyMessageInput" placeholder="Hi Grandma, we love you. We'll call tonight at 7 PM."></textarea>
+
+    <button class="button" onclick="saveDashboard()">
+      Save Dashboard
+    </button>
+  </div>
+
+  <div class="card">
+    <h2>Senior Tablet Preview</h2>
+
+    <div class="preview">
+
+      <h3 id="previewGreeting">Hi ❤️</h3>
+
+      <p>
+        Good morning. Here's what's coming up today:
+      </p>
+
+      <div class="reminder" id="previewMedication">
+        💊 Prescription Medication — 9:00 AM
+      </div>
+
+      <div class="reminder" id="previewLunch">
+        🍽️ Lunch — 12:00 PM
+      </div>
+
+      <div class="reminder" id="previewAppointment">
+        🩺 Doctor Appointment — 2:00 PM
+      </div>
+
+      <div class="reminder" id="previewMessage">
+        ❤️ Family Note: We'll call tonight at 7 PM.
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    Grandma.care Caregiver Dashboard Prototype
+  </div>
+
 </div>
 
-<div class="footer">
-  Grandma.care Caregiver Dashboard Prototype
-</div>
+<script>
+  const caregiverName = localStorage.getItem("grandmaCaregiverName");
+  const seniorName = localStorage.getItem("grandmaSeniorName");
 
-</div>
+  if (!caregiverName) {
+    window.location.href = "signup.html";
+  }
+
+  window.addEventListener("load", () => {
+    document.getElementById("welcomeMessage").textContent =
+      `Welcome ${caregiverName} — managing care for ${seniorName}`;
+
+    document.getElementById("caregiverInput").value = caregiverName || "";
+    document.getElementById("seniorInput").value = seniorName || "";
+
+    loadDashboard();
+  });
+
+  function saveDashboard() {
+    const dashboardData = {
+      senior: document.getElementById("seniorInput").value,
+      caregiver: document.getElementById("caregiverInput").value,
+      phone: document.getElementById("phoneInput").value,
+      medication: document.getElementById("medicationInput").value,
+      medicationTime: document.getElementById("medicationTimeInput").value,
+      medicationMessage: document.getElementById("medicationMessageInput").value,
+      breakfast: document.getElementById("breakfastInput").value,
+      lunch: document.getElementById("lunchInput").value,
+      dinner: document.getElementById("dinnerInput").value,
+      water: document.getElementById("waterInput").value,
+      appointment: document.getElementById("appointmentInput").value,
+      appointmentTime: document.getElementById("appointmentTimeInput").value,
+      familyMessage: document.getElementById("familyMessageInput").value
+    };
+
+    localStorage.setItem("grandmaDashboardData", JSON.stringify(dashboardData));
+
+    localStorage.setItem("grandmaCaregiverName", dashboardData.caregiver);
+    localStorage.setItem("grandmaSeniorName", dashboardData.senior);
+
+    updatePreview(dashboardData);
+
+    alert("Dashboard saved!");
+  }
+
+  function loadDashboard() {
+    const savedData = localStorage.getItem("grandmaDashboardData");
+
+    if (!savedData) {
+      updatePreview({
+        senior: seniorName,
+        medication: "Prescription Medication",
+        medicationTime: "09:00",
+        lunch: "12:00",
+        appointment: "Doctor Appointment",
+        appointmentTime: "",
+        familyMessage: "We'll call tonight at 7 PM."
+      });
+      return;
+    }
+
+    const data = JSON.parse(savedData);
+
+    document.getElementById("seniorInput").value = data.senior || "";
+    document.getElementById("caregiverInput").value = data.caregiver || "";
+    document.getElementById("phoneInput").value = data.phone || "";
+    document.getElementById("medicationInput").value = data.medication || "";
+    document.getElementById("medicationTimeInput").value = data.medicationTime || "";
+    document.getElementById("medicationMessageInput").value = data.medicationMessage || "";
+    document.getElementById("breakfastInput").value = data.breakfast || "";
+    document.getElementById("lunchInput").value = data.lunch || "";
+    document.getElementById("dinnerInput").value = data.dinner || "";
+    document.getElementById("waterInput").value = data.water || "Every 2 Hours";
+    document.getElementById("appointmentInput").value = data.appointment || "";
+    document.getElementById("appointmentTimeInput").value = data.appointmentTime || "";
+    document.getElementById("familyMessageInput").value = data.familyMessage || "";
+
+    updatePreview(data);
+  }
+
+  function updatePreview(data) {
+    const senior = data.senior || "Barbara";
+    const medication = data.medication || "Prescription Medication";
+    const medTime = formatTime(data.medicationTime) || "9:00 AM";
+    const lunchTime = formatTime(data.lunch) || "12:00 PM";
+    const appointment = data.appointment || "Doctor Appointment";
+    const familyMessage = data.familyMessage || "We'll call tonight at 7 PM.";
+
+    document.getElementById("previewGreeting").textContent =
+      `Hi ${senior} ❤️`;
+
+    document.getElementById("previewMedication").textContent =
+      `💊 ${medication} — ${medTime}`;
+
+    document.getElementById("previewLunch").textContent =
+      `🍽️ Lunch — ${lunchTime}`;
+
+    document.getElementById("previewAppointment").textContent =
+      `🩺 ${appointment}`;
+
+    document.getElementById("previewMessage").textContent =
+      `❤️ Family Note: ${familyMessage}`;
+  }
+
+  function formatTime(time) {
+    if (!time) return "";
+
+    const parts = time.split(":");
+    let hour = parseInt(parts[0]);
+    const minute = parts[1];
+
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+
+    return `${hour}:${minute} ${ampm}`;
+  }
+
+  function logout() {
+    localStorage.clear();
+    window.location.href = "signup.html";
+  }
+</script>
 
 </body>
 </html>
