@@ -1,24 +1,283 @@
-function updateClock() {
-  const now = new Date();
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  const options = {
-    weekday: "long",
-    month: "long",
-    day: "numeric"
-  };
+  <title>Senior Tablet | Grandma.care</title>
 
-  const dateString =
-    now.toLocaleDateString("en-US", options);
+  <style>
+    :root {
+      --bg:#F3F0E5;
+      --text:#234A53;
+      --accent:#204A53;
+      --soft:#ffffffcc;
+      --danger:#B42318;
+      --success:#1F7A4D;
+    }
 
-  const timeString =
-    now.toLocaleTimeString("en-US", {
+    * {
+      box-sizing:border-box;
+    }
+
+    body {
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      overflow:hidden;
+    }
+
+    .screen {
+      min-height:100vh;
+      display:grid;
+      grid-template-rows: 38% 62%;
+    }
+
+    .photo-area {
+      background-image:url("grandma-portrait.jpg");
+      background-size:cover;
+      background-position:center;
+      position:relative;
+    }
+
+    .photo-area::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:rgba(35,74,83,0.18);
+    }
+
+    .photo-caption {
+      position:absolute;
+      z-index:2;
+      left:32px;
+      bottom:24px;
+      background:var(--soft);
+      padding:14px 22px;
+      border-radius:999px;
+      font-size:1.5rem;
+      font-weight:800;
+    }
+
+    .reminder-area {
+      padding:34px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+
+    .clock {
+      font-size:2rem;
+      font-weight:900;
+      margin-bottom:14px;
+      color:var(--accent);
+    }
+
+    .hello {
+      font-size:2.4rem;
+      font-weight:900;
+      margin-bottom:18px;
+    }
+
+    .card {
+      background:white;
+      width:min(850px,100%);
+      border-radius:34px;
+      padding:36px;
+      box-shadow:0 14px 40px rgba(35,74,83,0.15);
+    }
+
+    .time {
+      font-size:2rem;
+      font-weight:800;
+      color:var(--accent);
+      margin-bottom:14px;
+    }
+
+    .task {
+      font-size:3rem;
+      line-height:1.1;
+      font-weight:900;
+      margin-bottom:22px;
+    }
+
+    .instruction {
+      font-size:1.5rem;
+      color:#4E707A;
+      margin-bottom:30px;
+    }
+
+    .buttons {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+
+    button {
+      border:none;
+      border-radius:28px;
+      padding:28px;
+      font-size:1.8rem;
+      font-weight:900;
+      cursor:pointer;
+      color:white;
+    }
+
+    .yes {
+      background:var(--success);
+    }
+
+    .help {
+      background:var(--danger);
+    }
+
+    .status {
+      margin-top:22px;
+      font-size:1.4rem;
+      font-weight:800;
+    }
+
+    @media(max-width:700px) {
+      .screen {
+        grid-template-rows: 30% 70%;
+      }
+
+      .task {
+        font-size:2.2rem;
+      }
+
+      .buttons {
+        grid-template-columns:1fr;
+      }
+
+      button {
+        font-size:1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="screen">
+
+  <div class="photo-area">
+    <div class="photo-caption">
+      Family Photos ❤️
+    </div>
+  </div>
+
+  <div class="reminder-area">
+
+    <div class="clock" id="clockDisplay">
+      Loading time...
+    </div>
+
+    <div class="hello" id="helloText">
+      Hi Barbara ❤️
+    </div>
+
+    <div class="card">
+
+      <div class="time" id="reminderTime">
+        9:00 AM
+      </div>
+
+      <div class="task" id="reminderTask">
+        Remember to take your prescription pills.
+      </div>
+
+      <div class="instruction">
+        Please press one button.
+      </div>
+
+      <div class="buttons">
+        <button class="yes" onclick="taskDone()">
+          ✅ Yes, I did it
+        </button>
+
+        <button class="help" onclick="needHelp()">
+          🆘 No, I need help
+        </button>
+      </div>
+
+      <div class="status" id="statusMessage"></div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+  const savedData = localStorage.getItem("grandmaDashboardData");
+
+  if (savedData) {
+    const data = JSON.parse(savedData);
+
+    const senior = data.senior || "Barbara";
+    const medication = data.medication || "prescription pills";
+    const medTime = formatTime(data.medicationTime) || "9:00 AM";
+
+    document.getElementById("helloText").textContent =
+      `Hi ${senior} ❤️`;
+
+    document.getElementById("reminderTime").textContent =
+      medTime;
+
+    document.getElementById("reminderTask").textContent =
+      `Remember to take your ${medication}.`;
+  }
+
+  function taskDone() {
+    document.getElementById("statusMessage").textContent =
+      "Great job. Your caregiver will know this was completed.";
+  }
+
+  function needHelp() {
+    document.getElementById("statusMessage").textContent =
+      "Help requested. Your caregiver should be contacted.";
+  }
+
+  function formatTime(time) {
+    if (!time) return "";
+
+    const parts = time.split(":");
+    let hour = parseInt(parts[0]);
+    const minute = parts[1];
+
+    const ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12 || 12;
+
+    return `${hour}:${minute} ${ampm}`;
+  }
+
+  function updateClock() {
+    const now = new Date();
+
+    const dateString = now.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric"
+    });
+
+    const timeString = now.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit"
     });
 
-  document.getElementById("clockDisplay").innerHTML =
-    `${dateString}<br>${timeString}`;
-}
+    document.getElementById("clockDisplay").innerHTML =
+      `${dateString}<br>${timeString}`;
+  }
 
-updateClock();
-setInterval(updateClock, 1000);
+  updateClock();
+  setInterval(updateClock, 1000);
+</script>
+
+</body>
+</html>
