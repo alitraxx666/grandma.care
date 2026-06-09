@@ -10,11 +10,14 @@
   <style>
     :root {
       --bg:#F3F0E5;
+      --card:#FFFFFF;
       --text:#234A53;
+      --muted:#4E707A;
       --accent:#204A53;
-      --soft:#ffffffcc;
       --danger:#B42318;
       --success:#1F7A4D;
+      --border:#D8D1C1;
+      --shadow:0 14px 40px rgba(35,74,83,0.15);
     }
 
     * {
@@ -30,99 +33,103 @@
       overflow:hidden;
     }
 
-    .screen {
+    .tablet {
       min-height:100vh;
       display:grid;
-      grid-template-rows: 38% 62%;
+      grid-template-columns: 44% 56%;
+      gap:0;
     }
 
-    .photo-area {
-      background-image:url("grandma-portrait.jpg");
-      background-size:cover;
-      background-position:center;
+    .photo-side {
       position:relative;
+      background:#ddd;
+      min-height:100vh;
+      overflow:hidden;
     }
 
-    .photo-area::after {
-      content:"";
-      position:absolute;
-      inset:0;
-      background:rgba(35,74,83,0.18);
+    .photo-side img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
     }
 
-    .photo-caption {
+    .photo-label {
       position:absolute;
-      z-index:2;
-      left:32px;
-      bottom:24px;
-      background:var(--soft);
+      left:26px;
+      bottom:26px;
+      background:rgba(255,255,255,0.88);
+      color:var(--accent);
       padding:14px 22px;
       border-radius:999px;
-      font-size:1.5rem;
-      font-weight:800;
+      font-size:1.4rem;
+      font-weight:900;
     }
 
-    .reminder-area {
-      padding:34px;
+    .app-side {
+      min-height:100vh;
+      padding:32px;
       display:flex;
       flex-direction:column;
-      align-items:center;
       justify-content:center;
+      align-items:center;
       text-align:center;
     }
 
     .clock {
       font-size:2rem;
       font-weight:900;
-      margin-bottom:14px;
       color:var(--accent);
+      margin-bottom:16px;
+      line-height:1.2;
     }
 
     .hello {
-      font-size:2.4rem;
-      font-weight:900;
-      margin-bottom:18px;
-    }
-
-    .card {
-      background:white;
-      width:min(850px,100%);
-      border-radius:34px;
-      padding:36px;
-      box-shadow:0 14px 40px rgba(35,74,83,0.15);
-    }
-
-    .time {
-      font-size:2rem;
-      font-weight:800;
-      color:var(--accent);
-      margin-bottom:14px;
-    }
-
-    .task {
-      font-size:3rem;
-      line-height:1.1;
+      font-size:2.8rem;
       font-weight:900;
       margin-bottom:22px;
     }
 
+    .card {
+      background:white;
+      width:min(760px,100%);
+      border-radius:34px;
+      padding:36px;
+      box-shadow:var(--shadow);
+      border:1px solid var(--border);
+    }
+
+    .time {
+      font-size:2rem;
+      font-weight:900;
+      color:var(--accent);
+      margin-bottom:12px;
+    }
+
+    .task {
+      font-size:3rem;
+      line-height:1.08;
+      font-weight:900;
+      margin-bottom:20px;
+    }
+
     .instruction {
-      font-size:1.5rem;
-      color:#4E707A;
-      margin-bottom:30px;
+      font-size:1.35rem;
+      color:var(--muted);
+      margin-bottom:28px;
     }
 
     .buttons {
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:20px;
+      gap:18px;
     }
 
     button {
       border:none;
       border-radius:28px;
-      padding:28px;
-      font-size:1.8rem;
+      padding:26px 22px;
+      font-size:1.65rem;
       font-weight:900;
       cursor:pointer;
       color:white;
@@ -138,13 +145,51 @@
 
     .status {
       margin-top:22px;
-      font-size:1.4rem;
-      font-weight:800;
+      font-size:1.3rem;
+      font-weight:900;
     }
 
-    @media(max-width:700px) {
-      .screen {
-        grid-template-rows: 30% 70%;
+    .upcoming {
+      width:min(760px,100%);
+      margin-top:20px;
+      background:rgba(255,255,255,0.75);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:18px 22px;
+      text-align:left;
+    }
+
+    .upcoming-title {
+      font-size:1rem;
+      text-transform:uppercase;
+      letter-spacing:0.08em;
+      font-weight:900;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+
+    .upcoming-text {
+      font-size:1.25rem;
+      font-weight:800;
+      color:var(--text);
+    }
+
+    @media(max-width:850px) {
+      body {
+        overflow:auto;
+      }
+
+      .tablet {
+        grid-template-columns:1fr;
+      }
+
+      .photo-side {
+        min-height:36vh;
+      }
+
+      .app-side {
+        min-height:64vh;
+        padding:22px;
       }
 
       .task {
@@ -154,25 +199,22 @@
       .buttons {
         grid-template-columns:1fr;
       }
-
-      button {
-        font-size:1.5rem;
-      }
     }
   </style>
 </head>
 
 <body>
 
-<div class="screen">
+<div class="tablet">
 
-  <div class="photo-area">
-    <div class="photo-caption">
+  <div class="photo-side">
+    <img id="familyPhoto" src="family-photo-1.jpg" alt="Family photo slideshow">
+    <div class="photo-label">
       Family Photos ❤️
     </div>
   </div>
 
-  <div class="reminder-area">
+  <div class="app-side">
 
     <div class="clock" id="clockDisplay">
       Loading time...
@@ -189,7 +231,7 @@
       </div>
 
       <div class="task" id="reminderTask">
-        Remember to take your prescription pills.
+        Take your prescription pills.
       </div>
 
       <div class="instruction">
@@ -210,11 +252,36 @@
 
     </div>
 
+    <div class="upcoming">
+      <div class="upcoming-title">
+        Upcoming Reminder
+      </div>
+      <div class="upcoming-text" id="upcomingReminder">
+        3:00 PM — Take your afternoon prescription pills.
+      </div>
+    </div>
+
   </div>
 
 </div>
 
 <script>
+  const photos = [
+    "family-photo-1.jpg",
+    "family-photo-2.jpg",
+    "family-photo-3.jpg",
+    "grandma-portrait.jpg"
+  ];
+
+  let currentPhoto = 0;
+
+  function rotatePhotos() {
+    currentPhoto = (currentPhoto + 1) % photos.length;
+    document.getElementById("familyPhoto").src = photos[currentPhoto];
+  }
+
+  setInterval(rotatePhotos, 5000);
+
   const savedData = localStorage.getItem("grandmaDashboardData");
 
   if (savedData) {
@@ -231,7 +298,7 @@
       medTime;
 
     document.getElementById("reminderTask").textContent =
-      `Remember to take your ${medication}.`;
+      `Take your ${medication}.`;
   }
 
   function taskDone() {
