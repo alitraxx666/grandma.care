@@ -279,6 +279,10 @@
   <source src="bell.mp3" type="audio/mpeg">
 </audio>
 
+  <audio id="successSound" preload="auto">
+  <source src="success.mp3" type="audio/mpeg">
+</audio>
+  
 <script>
   const photos = [
     "family-photo-1.jpg",
@@ -311,7 +315,15 @@
       });
     }
   }
+function playSuccessSound() {
+  const sound = document.getElementById("successSound");
 
+  if (sound) {
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
+  }
+}
+  
   function loadData() {
     const savedData = localStorage.getItem("grandmaDashboardData");
 
@@ -499,9 +511,10 @@
     }));
 
     localStorage.removeItem("grandmaAlert");
+    playSuccessSound();
 
     document.getElementById("statusMessage").textContent =
-      "Great job. Your caregiver will know this was completed.";
+      "🎉 Great job! Your medication has been marked complete.";
 
     refreshTablet();
   }
@@ -524,7 +537,7 @@
   }
 
   function callFamily() {
-    const caregiver = appData.caregiver || "Allison";
+    const caregiver = appData.caregiver || "Alison";
 
     document.getElementById("statusMessage").textContent =
       `Calling ${caregiver}...`;
