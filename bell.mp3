@@ -1,0 +1,12 @@
+<script>
+function playReminderBell() {
+  const bell = document.getElementById("reminderBell");
+
+  if (bell) {
+    bell.currentTime = 0;
+    bell.play().catch(() => {
+      console.log("Bell sound blocked until user interacts with the tablet.");
+    });
+  }
+}
+</script>
