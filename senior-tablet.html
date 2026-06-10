@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#F3F0E5">
+  <meta name="theme-color" content="#F3F0E5">
   <link rel="icon" href="favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -275,6 +275,10 @@
 
 </div>
 
+<audio id="reminderBell" preload="auto">
+  <source src="bell.mp3" type="audio/mpeg">
+</audio>
+
 <script>
   const photos = [
     "family-photo-1.jpg",
@@ -288,6 +292,7 @@
   let medications = [];
   let todaysMeds = [];
   let currentMed = null;
+  let lastReminderId = null;
 
   function rotatePhotos() {
     currentPhoto = (currentPhoto + 1) % photos.length;
@@ -295,6 +300,17 @@
   }
 
   setInterval(rotatePhotos, 5000);
+
+  function playReminderBell() {
+    const bell = document.getElementById("reminderBell");
+
+    if (bell) {
+      bell.currentTime = 0;
+      bell.play().catch(() => {
+        console.log("Bell sound may be blocked until the tablet is tapped once.");
+      });
+    }
+  }
 
   function loadData() {
     const savedData = localStorage.getItem("grandmaDashboardData");
@@ -383,6 +399,7 @@
         "There are no medication reminders scheduled for today.";
 
       buttonArea.style.display = "none";
+      status.textContent = "";
       return;
     }
 
@@ -408,6 +425,11 @@
     } else {
       card.classList.add("active-reminder");
       buttonArea.style.display = "grid";
+
+      if (lastReminderId !== currentMed.id) {
+        playReminderBell();
+        lastReminderId = currentMed.id;
+      }
     }
   }
 
@@ -497,6 +519,8 @@
       time: new Date().toLocaleString(),
       status: "help requested"
     }));
+
+    playReminderBell();
   }
 
   function callFamily() {
@@ -542,14 +566,17 @@
 
   setInterval(updateClock, 1000);
   setInterval(refreshTablet, 10000);
-</script>
-<script>
+
+  setInterval(() => {
+    if (currentMed && !isCompleted(currentMed)) {
+      playReminderBell();
+    }
+  }, 60000);
+
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("service-worker.js");
   }
 </script>
-  <audio id="reminderBell" preload="auto">
-  <source src="bell.mp3" type="audio/mpeg">
-</audio>
+
 </body>
 </html>
