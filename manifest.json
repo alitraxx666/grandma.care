@@ -1,0 +1,15 @@
+{
+  "name": "Grandma.care Senior Tablet",
+  "short_name": "Grandma.care",
+  "start_url": "senior-tablet.html",
+  "display": "fullscreen",
+  "background_color": "#F3F0E5",
+  "theme_color": "#F3F0E5",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
