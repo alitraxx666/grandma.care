@@ -543,6 +543,10 @@
   setInterval(updateClock, 1000);
   setInterval(refreshTablet, 10000);
 </script>
-
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js");
+  }
+</script>
 </body>
 </html>
