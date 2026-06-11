@@ -183,7 +183,8 @@ document
 
       return;
     }
-
+localStorage.setItem("grandmaCareLoggedIn", "true");
+localStorage.setItem("grandmaCareUserEmail", email);
     document.getElementById("message").textContent =
       "Login successful!";
 
