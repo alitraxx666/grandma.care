@@ -363,21 +363,22 @@
 </div>
 
 <script>
-  const caregiverName = localStorage.getItem("grandmaCaregiverName");
-  const seniorName = localStorage.getItem("grandmaSeniorName");
+  const isLoggedIn = localStorage.getItem("grandmaCareLoggedIn");
+  const caregiverName = localStorage.getItem("grandmaCaregiverName") || "Caregiver";
+  const seniorName = localStorage.getItem("grandmaSeniorName") || "Barbara";
 
   let medications = [];
 
-  if (!caregiverName) {
-    window.location.href = "signup.html";
+  if (isLoggedIn !== "true") {
+    window.location.href = "login.html";
   }
 
   window.addEventListener("load", () => {
     document.getElementById("welcomeMessage").textContent =
-      `Welcome ${caregiverName || "Caregiver"} — managing care for ${seniorName || "Barbara"}`;
+      `Welcome ${caregiverName} — managing care for ${seniorName}`;
 
-    document.getElementById("caregiverInput").value = caregiverName || "Allison";
-    document.getElementById("seniorInput").value = seniorName || "Barbara";
+    document.getElementById("caregiverInput").value = caregiverName;
+    document.getElementById("seniorInput").value = seniorName;
 
     loadDashboard();
     checkTabletStatus();
@@ -440,6 +441,7 @@
 
     if (medications.length === 0) {
       list.innerHTML = `<p class="subtitle">No medications added yet.</p>`;
+      updatePreview(collectDashboardData());
       return;
     }
 
@@ -465,7 +467,7 @@
   function collectDashboardData() {
     return {
       senior: document.getElementById("seniorInput").value || "Barbara",
-      caregiver: document.getElementById("caregiverInput").value || "Allison",
+      caregiver: document.getElementById("caregiverInput").value || "Caregiver",
       phone: document.getElementById("phoneInput").value,
       medications: medications,
       breakfast: document.getElementById("breakfastInput").value,
@@ -495,7 +497,7 @@
 
   function buildUpcomingReminder() {
     const today = new Date().toLocaleDateString("en-US", { weekday: "short" });
-    const currentTime = new Date().toTimeString().slice(0,5);
+    const currentTime = new Date().toTimeString().slice(0, 5);
 
     const todaysMeds = medications
       .filter(med => med.days.includes(today))
@@ -524,15 +526,15 @@
           name: "prescription pills",
           time: "09:00",
           frequency: "daily",
-          days: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+          days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         }
       ];
 
       renderMedicationList();
 
       updatePreview({
-        senior: seniorName || "Barbara",
-        caregiver: caregiverName || "Allison",
+        senior: seniorName,
+        caregiver: caregiverName,
         medications,
         lunch: "12:00",
         appointment: "Doctor Appointment",
@@ -553,13 +555,13 @@
           name: data.medication,
           time: data.medicationTime || "09:00",
           frequency: "daily",
-          days: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+          days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         }
       ];
     }
 
-    document.getElementById("seniorInput").value = data.senior || "";
-    document.getElementById("caregiverInput").value = data.caregiver || "";
+    document.getElementById("seniorInput").value = data.senior || seniorName;
+    document.getElementById("caregiverInput").value = data.caregiver || caregiverName;
     document.getElementById("phoneInput").value = data.phone || "";
     document.getElementById("breakfastInput").value = data.breakfast || "";
     document.getElementById("lunchInput").value = data.lunch || "";
@@ -650,8 +652,9 @@
   }
 
   function logout() {
-    localStorage.clear();
-    window.location.href = "signup.html";
+    localStorage.removeItem("grandmaCareLoggedIn");
+    localStorage.removeItem("grandmaCareUserEmail");
+    window.location.href = "login.html";
   }
 </script>
 
