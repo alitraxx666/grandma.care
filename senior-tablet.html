@@ -6,6 +6,7 @@
   <link rel="icon" href="favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Senior Tablet | Grandma.care</title>
 
   <style>
@@ -23,7 +24,9 @@
       --done:#DFF3E8;
     }
 
-    * { box-sizing:border-box; }
+    * {
+      box-sizing:border-box;
+    }
 
     body {
       margin:0;
@@ -37,7 +40,7 @@
     .tablet {
       min-height:100vh;
       display:grid;
-      grid-template-columns:44% 56%;
+      grid-template-columns:40% 60%;
     }
 
     .photo-side {
@@ -56,19 +59,19 @@
 
     .photo-label {
       position:absolute;
-      left:26px;
-      bottom:26px;
+      left:18px;
+      bottom:18px;
       background:rgba(255,255,255,0.9);
-      padding:14px 22px;
+      padding:10px 18px;
       border-radius:999px;
-      font-size:1.35rem;
+      font-size:1.05rem;
       font-weight:900;
       color:var(--accent);
     }
 
     .app-side {
       min-height:100vh;
-      padding:28px;
+      padding:20px;
       display:flex;
       flex-direction:column;
       justify-content:center;
@@ -77,24 +80,24 @@
     }
 
     .clock {
-      font-size:2rem;
+      font-size:1.7rem;
       font-weight:900;
       color:var(--accent);
-      margin-bottom:12px;
-      line-height:1.2;
+      margin-bottom:8px;
+      line-height:1.15;
     }
 
     .hello {
-      font-size:2.6rem;
+      font-size:2.3rem;
       font-weight:900;
-      margin-bottom:18px;
+      margin-bottom:12px;
     }
 
     .card {
-      width:min(780px,100%);
+      width:min(760px,100%);
       background:white;
-      border-radius:34px;
-      padding:30px;
+      border-radius:28px;
+      padding:24px;
       box-shadow:var(--shadow);
       border:1px solid var(--border);
     }
@@ -110,85 +113,98 @@
     }
 
     .time {
-      font-size:2rem;
+      font-size:1.8rem;
       font-weight:900;
       color:var(--accent);
-      margin-bottom:10px;
+      margin-bottom:8px;
     }
 
     .task {
-      font-size:2.8rem;
+      font-size:2.4rem;
       line-height:1.08;
       font-weight:900;
-      margin-bottom:18px;
+      margin-bottom:12px;
     }
 
     .instruction {
-      font-size:1.3rem;
+      font-size:1.1rem;
       color:var(--muted);
-      margin-bottom:24px;
+      margin-bottom:18px;
     }
 
     .buttons {
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:16px;
+      gap:14px;
     }
 
     button {
       border:none;
-      border-radius:26px;
-      padding:24px 18px;
-      font-size:1.55rem;
+      border-radius:24px;
+      padding:20px 14px;
+      font-size:1.3rem;
       font-weight:900;
       cursor:pointer;
       color:white;
     }
 
-    .yes { background:var(--success); }
-    .help { background:var(--danger); }
-    .call { background:var(--accent); width:100%; margin-top:14px; }
+    .yes {
+      background:var(--success);
+    }
+
+    .help {
+      background:var(--danger);
+    }
+
+    .call {
+      background:var(--accent);
+      width:100%;
+      margin-top:12px;
+    }
 
     .status {
-      margin-top:18px;
-      font-size:1.25rem;
+      margin-top:14px;
+      font-size:1.1rem;
       font-weight:900;
     }
 
-    .upcoming, .pillbox, .family-note {
-      width:min(780px,100%);
-      margin-top:16px;
+    .upcoming,
+    .pillbox,
+    .family-note {
+      width:min(760px,100%);
+      margin-top:12px;
       background:rgba(255,255,255,0.78);
       border:1px solid var(--border);
-      border-radius:24px;
-      padding:16px 20px;
+      border-radius:22px;
+      padding:12px 16px;
       text-align:left;
     }
 
     .section-title {
-      font-size:.95rem;
+      font-size:.85rem;
       text-transform:uppercase;
       letter-spacing:.08em;
       font-weight:900;
       color:var(--muted);
-      margin-bottom:8px;
+      margin-bottom:6px;
     }
 
-    .upcoming-text, .family-text {
-      font-size:1.2rem;
+    .upcoming-text,
+    .family-text {
+      font-size:1.05rem;
       font-weight:800;
     }
 
     .pill-list {
       display:grid;
-      gap:10px;
+      gap:8px;
     }
 
     .pill-row {
       background:white;
       border:1px solid var(--border);
-      border-radius:16px;
-      padding:12px 14px;
+      border-radius:14px;
+      padding:10px 12px;
       font-weight:800;
       display:flex;
       justify-content:space-between;
@@ -214,12 +230,30 @@
     }
 
     @media(max-width:850px) {
-      body { overflow:auto; }
-      .tablet { grid-template-columns:1fr; }
-      .photo-side { min-height:34vh; }
-      .app-side { min-height:66vh; padding:20px; }
-      .task { font-size:2.1rem; }
-      .buttons { grid-template-columns:1fr; }
+      body {
+        overflow:auto;
+      }
+
+      .tablet {
+        grid-template-columns:1fr;
+      }
+
+      .photo-side {
+        min-height:30vh;
+      }
+
+      .app-side {
+        min-height:70vh;
+        padding:16px;
+      }
+
+      .task {
+        font-size:2rem;
+      }
+
+      .buttons {
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
@@ -279,10 +313,10 @@
   <source src="bell.mp3" type="audio/mpeg">
 </audio>
 
-  <audio id="successSound" preload="auto">
+<audio id="successSound" preload="auto">
   <source src="success.mp3" type="audio/mpeg">
 </audio>
-  
+
 <script>
   const photos = [
     "family-photo-1.jpg",
@@ -298,12 +332,37 @@
   let currentMed = null;
   let lastReminderId = null;
 
+  function todayLocalDateKey() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
+  function clearOldCompletionData() {
+    const today = todayLocalDateKey();
+    const lastDate = localStorage.getItem("grandmaLastCompletedDate");
+
+    if (lastDate !== today) {
+      localStorage.removeItem("grandmaLastCompleted");
+      localStorage.removeItem("grandmaReminderCompleted");
+      localStorage.removeItem("grandmaAlert");
+
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith("completed-") && !key.startsWith(`completed-${today}-`)) {
+          localStorage.removeItem(key);
+        }
+      });
+
+      localStorage.setItem("grandmaLastCompletedDate", today);
+    }
+  }
+
   function rotatePhotos() {
     currentPhoto = (currentPhoto + 1) % photos.length;
     document.getElementById("familyPhoto").src = photos[currentPhoto];
   }
-
-  setInterval(rotatePhotos, 5000);
 
   function playReminderBell() {
     const bell = document.getElementById("reminderBell");
@@ -315,15 +374,16 @@
       });
     }
   }
-function playSuccessSound() {
-  const sound = document.getElementById("successSound");
 
-  if (sound) {
-    sound.currentTime = 0;
-    sound.play().catch(() => {});
+  function playSuccessSound() {
+    const sound = document.getElementById("successSound");
+
+    if (sound) {
+      sound.currentTime = 0;
+      sound.play().catch(() => {});
+    }
   }
-}
-  
+
   function loadData() {
     const savedData = localStorage.getItem("grandmaDashboardData");
 
@@ -343,7 +403,10 @@ function playSuccessSound() {
     };
 
     if (savedData) {
-      appData = { ...appData, ...JSON.parse(savedData) };
+      appData = {
+        ...appData,
+        ...JSON.parse(savedData)
+      };
     }
 
     medications = appData.medications || [];
@@ -356,11 +419,13 @@ function playSuccessSound() {
   }
 
   function getTodayShort() {
-    return new Date().toLocaleDateString("en-US", { weekday: "short" });
+    return new Date().toLocaleDateString("en-US", {
+      weekday: "short"
+    });
   }
 
   function getCompletedKey(med) {
-    const today = new Date().toISOString().slice(0,10);
+    const today = todayLocalDateKey();
     return `completed-${today}-${med.id}`;
   }
 
@@ -437,6 +502,7 @@ function playSuccessSound() {
     } else {
       card.classList.add("active-reminder");
       buttonArea.style.display = "grid";
+      status.textContent = "";
 
       if (lastReminderId !== currentMed.id) {
         playReminderBell();
@@ -449,7 +515,8 @@ function playSuccessSound() {
     const list = document.getElementById("pillList");
 
     if (todaysMeds.length === 0) {
-      list.innerHTML = `<div class="pill-row">No medicines scheduled today.</div>`;
+      list.innerHTML =
+        `<div class="pill-row">No medicines scheduled today.</div>`;
       return;
     }
 
@@ -489,6 +556,7 @@ function playSuccessSound() {
   }
 
   function refreshTablet() {
+    clearOldCompletionData();
     loadData();
     chooseCurrentMedication();
     updateMainCard();
@@ -500,6 +568,7 @@ function playSuccessSound() {
     if (!currentMed) return;
 
     localStorage.setItem(getCompletedKey(currentMed), "true");
+    localStorage.setItem("grandmaLastCompletedDate", todayLocalDateKey());
 
     const senior = appData.senior || "Barbara";
 
@@ -511,6 +580,7 @@ function playSuccessSound() {
     }));
 
     localStorage.removeItem("grandmaAlert");
+
     playSuccessSound();
 
     document.getElementById("statusMessage").textContent =
@@ -574,9 +644,28 @@ function playSuccessSound() {
       `${dateString}<br>${timeString}`;
   }
 
+  function removeOldServiceWorkerCache() {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        registrations.forEach(registration => {
+          registration.unregister();
+        });
+      });
+    }
+
+    if ("caches" in window) {
+      caches.keys().then(names => {
+        names.forEach(name => caches.delete(name));
+      });
+    }
+  }
+
+  removeOldServiceWorkerCache();
+  clearOldCompletionData();
   refreshTablet();
   updateClock();
 
+  setInterval(rotatePhotos, 5000);
   setInterval(updateClock, 1000);
   setInterval(refreshTablet, 10000);
 
@@ -585,10 +674,6 @@ function playSuccessSound() {
       playReminderBell();
     }
   }, 60000);
-
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("service-worker.js");
-  }
 </script>
 
 </body>
