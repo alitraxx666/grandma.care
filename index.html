@@ -2,8 +2,13 @@
 <html lang="en">
 <head>
   <link rel="icon" href="favicon.png">
+  <link rel="manifest" href="/manifest.json">
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <meta name="theme-color" content="#F3F0E5">
+  <meta name="mobile-web-app-capable" content="yes">
 
   <title>Grandma.care</title>
 
@@ -104,6 +109,7 @@
       border: 1px solid var(--border);
       cursor: pointer;
       transition: 0.2s ease;
+      font-size: 1rem;
     }
 
     .btn:hover {
@@ -120,6 +126,46 @@
     .btn-secondary {
       background: white;
       color: var(--text);
+    }
+
+    .install-card {
+      margin: 22px 0 18px;
+      padding: 20px;
+      background: #ffffff;
+      border: 2px solid var(--accent-deep);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .install-title {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+      letter-spacing: -0.03em;
+      color: var(--accent-deep);
+    }
+
+    .install-copy {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .install-btn {
+      width: 100%;
+      min-height: 64px;
+      font-size: 1.25rem;
+      border-radius: 18px;
+      background: var(--accent-deep);
+      color: white;
+      border: none;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+    }
+
+    .install-btn:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
     }
 
     .hero-image {
@@ -227,15 +273,25 @@
         The goal is not to add more technology. The goal is to make daily support easier, safer, and more dignified.
       </p>
 
-      <div class="actions">
-  <a class="btn btn-primary" href="signup.html">
-    Set Up Caregiver Dashboard
-  </a>
+      <div class="install-card">
+        <h2 class="install-title">Set up the dedicated tablet</h2>
+        <p class="install-copy">
+          On the senior tablet, press this button to install Grandma.care as a full-screen app.
+        </p>
+        <button id="installAppBtn" class="install-btn">
+          Install Grandma.care on this tablet
+        </button>
+      </div>
 
-  <a class="btn btn-secondary" href="senior-tablet.html">
-    Preview Senior Tablet App
-  </a>
-</div>
+      <div class="actions">
+        <a class="btn btn-primary" href="signup.html">
+          Set Up Caregiver Dashboard
+        </a>
+
+        <a class="btn btn-secondary" href="senior-tablet.html">
+          Preview Senior Tablet App
+        </a>
+      </div>
 
     </div>
 
@@ -312,6 +368,33 @@
     © 2026 Patnik Creative. All rights reserved.
   </div>
 </footer>
+
+<script>
+  let deferredPrompt;
+  const installBtn = document.getElementById("installAppBtn");
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/service-worker.js");
+  }
+
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    deferredPrompt = event;
+    installBtn.disabled = false;
+    installBtn.textContent = "Install Grandma.care on this tablet";
+  });
+
+  installBtn.addEventListener("click", async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      installBtn.textContent = "Installed or ready to open from home screen";
+    } else {
+      alert("If the install box does not appear, tap the Chrome menu ⋮ and choose Add to Home screen or Install app.");
+    }
+  });
+</script>
 
 </body>
 </html>
