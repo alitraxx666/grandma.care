@@ -9,6 +9,8 @@
 
   <title>Senior Tablet | Grandma.care</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --bg:#F3F0E5;
@@ -24,9 +26,7 @@
       --done:#DFF3E8;
     }
 
-    * {
-      box-sizing:border-box;
-    }
+    * { box-sizing:border-box; }
 
     body {
       margin:0;
@@ -35,6 +35,20 @@
       color:var(--text);
       min-height:100vh;
       overflow:hidden;
+    }
+
+    .sync-status {
+      position:fixed;
+      top:8px;
+      right:10px;
+      z-index:9999;
+      background:rgba(255,255,255,.9);
+      border:1px solid var(--border);
+      color:var(--accent);
+      border-radius:999px;
+      padding:6px 10px;
+      font-size:.72rem;
+      font-weight:900;
     }
 
     .tablet {
@@ -151,13 +165,8 @@
       color:white;
     }
 
-    .yes {
-      background:var(--success);
-    }
-
-    .help {
-      background:var(--danger);
-    }
+    .yes { background:var(--success); }
+    .help { background:var(--danger); }
 
     .call {
       background:var(--accent);
@@ -248,9 +257,7 @@
     }
 
     @media(max-width:850px) {
-      body {
-        overflow:auto;
-      }
+      body { overflow:auto; }
 
       .tablet {
         height:auto;
@@ -258,9 +265,7 @@
         grid-template-columns:1fr;
       }
 
-      .photo-side {
-        height:26vh;
-      }
+      .photo-side { height:26vh; }
 
       .app-side {
         height:auto;
@@ -268,22 +273,16 @@
         padding:12px;
       }
 
-      .task {
-        font-size:1.55rem;
-      }
-
-      .buttons {
-        grid-template-columns:1fr;
-      }
-
-      .pill-list {
-        max-height:none;
-      }
+      .task { font-size:1.55rem; }
+      .buttons { grid-template-columns:1fr; }
+      .pill-list { max-height:none; }
     }
   </style>
 </head>
 
 <body>
+
+<div class="sync-status" id="syncStatus">Connecting...</div>
 
 <div class="tablet">
 
@@ -325,7 +324,7 @@
     <div class="family-note">
       <div class="section-title">Family Note ❤️</div>
       <div class="family-text" id="familyNote">
-        Nicholas set this up for you.
+        Loading family note...
       </div>
       <button class="call" onclick="callFamily()">📞 Call Family</button>
     </div>
@@ -343,6 +342,12 @@
 </audio>
 
 <script>
+  const SUPABASE_URL = "https://rsmiivsdbnwwamdxkhm.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_QCQfaxIpjuOx_26bnBikcQ_rzF29DFa";
+  const TABLET_ID = "barbara-tablet";
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   const photos = [
     "family-photo-1.jpg",
     "family-photo-2.jpg",
@@ -356,6 +361,12 @@
   let todaysItems = [];
   let currentItem = null;
   let lastReminderId = null;
+  let isRefreshing = false;
+
+  function setSyncStatus(text) {
+    const el = document.getElementById("syncStatus");
+    if (el) el.textContent = text;
+  }
 
   function todayLocalDateKey() {
     const now = new Date();
@@ -366,15 +377,11 @@
   }
 
   function getTodayShort() {
-    return new Date().toLocaleDateString("en-US", {
-      weekday: "short"
-    });
+    return new Date().toLocaleDateString("en-US", { weekday: "short" });
   }
 
   function getTodayFull() {
-    return new Date().toLocaleDateString("en-US", {
-      weekday: "long"
-    });
+    return new Date().toLocaleDateString("en-US", { weekday: "long" });
   }
 
   function normalizeDay(day) {
@@ -436,7 +443,37 @@
     }
   }
 
-  function readDashboardData() {
+  async function readDashboardData() {
+    try {
+      const { data, error } = await supabaseClient
+        .from("grandma_tablets")
+        .select("dashboard_data")
+        .eq("tablet_id", TABLET_ID)
+        .maybeSingle();
+
+      if (error) {
+        console.log("Supabase read error:", error.message);
+        setSyncStatus("Cloud error");
+        return readLocalBackup();
+      }
+
+      if (data && data.dashboard_data) {
+        localStorage.setItem("grandmaDashboardData", JSON.stringify(data.dashboard_data));
+        setSyncStatus("Cloud synced");
+        return data.dashboard_data;
+      }
+
+      setSyncStatus("No cloud data yet");
+      return readLocalBackup();
+
+    } catch (err) {
+      console.log("Cloud unavailable:", err);
+      setSyncStatus("Using backup");
+      return readLocalBackup();
+    }
+  }
+
+  function readLocalBackup() {
     const possibleKeys = [
       "grandmaDashboardData",
       "grandmaCareDashboardData",
@@ -456,6 +493,20 @@
     }
 
     return null;
+  }
+
+  async function saveTabletEvent(eventType, payload) {
+    try {
+      await supabaseClient
+        .from("grandma_tablet_events")
+        .insert({
+          tablet_id: TABLET_ID,
+          event_type: eventType,
+          event_data: payload
+        });
+    } catch (err) {
+      console.log("Tablet event table may not exist yet. Local event still saved.", err);
+    }
   }
 
   function getNameFromItem(item) {
@@ -485,17 +536,9 @@
   }
 
   function getDaysFromItem(item) {
-    if (Array.isArray(item.days)) {
-      return item.days.map(normalizeDay);
-    }
-
-    if (Array.isArray(item.selectedDays)) {
-      return item.selectedDays.map(normalizeDay);
-    }
-
-    if (item.day) {
-      return [normalizeDay(item.day)];
-    }
+    if (Array.isArray(item.days)) return item.days.map(normalizeDay);
+    if (Array.isArray(item.selectedDays)) return item.selectedDays.map(normalizeDay);
+    if (item.day) return [normalizeDay(item.day)];
 
     if (item.frequency === "daily" || item.repeat === "daily") {
       return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
@@ -509,13 +552,8 @@
     const todayFull = getTodayFull();
     const todayDate = todayLocalDateKey();
 
-    if (item.date) {
-      return String(item.date).includes(todayDate);
-    }
-
-    if (item.appointmentDate) {
-      return String(item.appointmentDate).includes(todayDate);
-    }
+    if (item.date) return String(item.date).includes(todayDate);
+    if (item.appointmentDate) return String(item.appointmentDate).includes(todayDate);
 
     const days = getDaysFromItem(item);
     return days.includes(todayShort) || days.includes(todayFull);
@@ -538,7 +576,6 @@
     let items = [];
 
     const sources = [
-      { key: "reminders", type: "reminder" },
       { key: "medications", type: "medication" },
       { key: "meds", type: "medication" },
       { key: "routines", type: "routine" },
@@ -546,6 +583,7 @@
       { key: "tasks", type: "routine" },
       { key: "appointments", type: "appointment" },
       { key: "customReminders", type: "reminder" },
+      { key: "reminders", type: "reminder" },
       { key: "schedule", type: "reminder" }
     ];
 
@@ -560,13 +598,19 @@
     return items.sort((a,b) => String(a.time).localeCompare(String(b.time)));
   }
 
-  function loadData() {
-    const savedData = readDashboardData();
+  async function loadData() {
+    const savedData = await readDashboardData();
 
     appData = {
       senior: "Barbara",
+      seniorName: "Barbara",
       caregiver: "Family",
+      caregiverName: "Family",
       familyMessage: "We love you.",
+      familyNote: "We love you.",
+      medications: [],
+      routines: [],
+      appointments: [],
       reminders: []
     };
 
@@ -643,12 +687,8 @@
     card.classList.remove("active-reminder", "done-reminder");
 
     if (!currentItem) {
-      document.getElementById("reminderTime").textContent =
-        "No reminders today";
-
-      document.getElementById("reminderTask").textContent =
-        "Enjoy your day ❤️";
-
+      document.getElementById("reminderTime").textContent = "No reminders today";
+      document.getElementById("reminderTask").textContent = "Enjoy your day ❤️";
       document.getElementById("instructionText").textContent =
         "There are no reminders scheduled for today.";
 
@@ -739,16 +779,21 @@
     }
   }
 
-  function refreshTablet() {
+  async function refreshTablet() {
+    if (isRefreshing) return;
+    isRefreshing = true;
+
     clearOldCompletionData();
-    loadData();
+    await loadData();
     chooseCurrentItem();
     updateMainCard();
     renderPillList();
     updateUpcomingReminder();
+
+    isRefreshing = false;
   }
 
-  function taskDone() {
+  async function taskDone() {
     if (!currentItem) return;
 
     localStorage.setItem(getCompletedKey(currentItem), "true");
@@ -756,37 +801,48 @@
 
     const senior = appData.senior || appData.seniorName || "Barbara";
 
-    localStorage.setItem("grandmaLastCompleted", JSON.stringify({
+    const payload = {
       senior: senior,
       task: currentItem.name,
       type: currentItem.type,
+      item_id: currentItem.id,
       time: new Date().toLocaleString(),
       status: "completed"
-    }));
+    };
 
+    localStorage.setItem("grandmaLastCompleted", JSON.stringify(payload));
     localStorage.removeItem("grandmaAlert");
+
+    await saveTabletEvent("completed", payload);
 
     playSuccessSound();
 
     document.getElementById("statusMessage").textContent =
       "🎉 Great job! This has been marked complete.";
 
-    refreshTablet();
+    await refreshTablet();
   }
 
-  function needHelp() {
+  async function needHelp() {
     const senior = appData.senior || appData.seniorName || "Barbara";
     const itemName = currentItem ? currentItem.name : "today's reminder";
 
     document.getElementById("statusMessage").textContent =
       "Help requested. Your caregiver should be contacted.";
 
-    localStorage.setItem("grandmaAlert", JSON.stringify({
+    const payload = {
       senior: senior,
       message: `${senior} requested help with ${itemName}.`,
+      task: itemName,
+      type: currentItem ? currentItem.type : "reminder",
+      item_id: currentItem ? currentItem.id : null,
       time: new Date().toLocaleString(),
       status: "help requested"
-    }));
+    };
+
+    localStorage.setItem("grandmaAlert", JSON.stringify(payload));
+
+    await saveTabletEvent("help", payload);
 
     playReminderBell();
   }
@@ -838,9 +894,7 @@
   function removeOldServiceWorkerCache() {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.getRegistrations().then(registrations => {
-        registrations.forEach(registration => {
-          registration.unregister();
-        });
+        registrations.forEach(registration => registration.unregister());
       });
     }
 
@@ -851,10 +905,35 @@
     }
   }
 
+  function listenForRealtimeUpdates() {
+    supabaseClient
+      .channel("grandma-tablet-live")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "grandma_tablets",
+          filter: `tablet_id=eq.${TABLET_ID}`
+        },
+        async () => {
+          setSyncStatus("Updating...");
+          await refreshTablet();
+          setSyncStatus("Cloud synced");
+        }
+      )
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") {
+          setSyncStatus("Live sync on");
+        }
+      });
+  }
+
   removeOldServiceWorkerCache();
   clearOldCompletionData();
   refreshTablet();
   updateClock();
+  listenForRealtimeUpdates();
 
   setInterval(rotatePhotos, 5000);
   setInterval(updateClock, 1000);
