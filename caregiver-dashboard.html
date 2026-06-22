@@ -7,643 +7,500 @@
   <title>Caregiver Dashboard | Grandma.care</title>
 
   <style>
-    :root{
+    :root {
       --bg:#F3F0E5;
       --card:#FFFFFF;
       --text:#234A53;
       --muted:#4E707A;
       --accent:#204A53;
-      --border:#D8D1C1;
+      --accent2:#467586;
       --danger:#B42318;
       --success:#1F7A4D;
-      --shadow:0 10px 30px rgba(35,74,83,0.08);
-      --radius:24px;
+      --border:#D8D1C1;
+      --yellow:#FFF3B0;
+      --shadow:0 12px 34px rgba(35,74,83,0.12);
+      --radius:22px;
     }
 
-    *{ box-sizing:border-box; }
+    * {
+      box-sizing:border-box;
+    }
 
-    body{
+    body {
       margin:0;
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      font-family:Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background:linear-gradient(180deg,#f8f5ec 0%,var(--bg) 100%);
       color:var(--text);
+      line-height:1.4;
     }
 
-    .container{
-      width:min(1000px, calc(100% - 32px));
-      margin:auto;
+    .container {
+      width:min(1180px,calc(100% - 32px));
+      margin:0 auto;
+      padding:24px 0 40px;
     }
 
-    header{
-      padding:40px 0 20px;
+    header {
       display:flex;
       justify-content:space-between;
-      align-items:flex-start;
-      gap:20px;
+      gap:18px;
+      align-items:center;
+      margin-bottom:20px;
     }
 
-    .logo{ font-size:2rem; font-weight:800; }
-
-    #welcomeMessage{
-      margin:8px 0 4px;
-      font-size:1.4rem;
+    h1 {
+      margin:0;
+      font-size:clamp(2rem,4vw,3.3rem);
+      letter-spacing:-.05em;
+      line-height:1;
     }
 
-    .subtitle{ color:var(--muted); margin-top:8px; }
+    .subtitle {
+      margin:8px 0 0;
+      color:var(--muted);
+      font-weight:700;
+    }
 
-    .signout{
+    .top-actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn,
+    button {
+      border:none;
+      border-radius:999px;
+      padding:13px 18px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:.98rem;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+
+    .btn-primary {
+      background:var(--accent);
+      color:white;
+    }
+
+    .btn-secondary {
       background:white;
       color:var(--accent);
       border:1px solid var(--border);
-      border-radius:999px;
-      padding:10px 16px;
-      font-weight:800;
-      cursor:pointer;
     }
 
-    .card{
-      background:white;
+    .btn-danger {
+      background:var(--danger);
+      color:white;
+    }
+
+    .grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+    }
+
+    .card {
+      background:rgba(255,255,255,.82);
       border:1px solid var(--border);
       border-radius:var(--radius);
-      padding:24px;
-      margin-bottom:24px;
+      padding:18px;
       box-shadow:var(--shadow);
     }
 
-    .alert-card{
-      display:none;
-      background:#FFF1F0;
-      border:2px solid var(--danger);
-      color:var(--danger);
+    .card h2 {
+      margin:0 0 12px;
+      font-size:1.45rem;
+      letter-spacing:-.03em;
     }
 
-    .success-card{
-      display:none;
-      background:#EFFAF3;
-      border:2px solid var(--success);
-      color:var(--success);
+    .helper {
+      color:var(--muted);
+      margin:-4px 0 14px;
+      font-weight:700;
     }
 
-    h2{ margin-top:0; }
-
-    label{
+    label {
       display:block;
-      margin-bottom:8px;
-      font-weight:600;
+      font-weight:900;
+      margin:12px 0 6px;
+      color:var(--accent);
     }
 
-    input, select, textarea{
+    input,
+    select,
+    textarea {
       width:100%;
-      padding:14px;
       border:1px solid var(--border);
-      border-radius:12px;
-      margin-bottom:18px;
+      border-radius:14px;
+      padding:12px 13px;
       font-size:1rem;
+      font-family:inherit;
+      color:var(--text);
+      background:white;
     }
 
-    textarea{ min-height:120px; }
+    textarea {
+      min-height:82px;
+      resize:vertical;
+    }
 
-    .row{
+    .row {
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:16px;
+      gap:12px;
     }
 
-    .button{
-      background:var(--accent);
-      color:white;
-      padding:14px 22px;
-      border:none;
-      border-radius:999px;
-      font-weight:700;
-      cursor:pointer;
-      margin-right:10px;
-      margin-bottom:10px;
-    }
-
-    .button-danger{ background:var(--danger); }
-    .button-success{ background:var(--success); }
-
-    .days{
+    .days {
       display:grid;
-      grid-template-columns:repeat(7, 1fr);
-      gap:8px;
-      margin-bottom:18px;
+      grid-template-columns:repeat(7,1fr);
+      gap:6px;
+      margin-top:8px;
     }
 
-    .days label{
-      background:#F8FAFB;
+    .day {
+      background:white;
       border:1px solid var(--border);
       border-radius:12px;
-      padding:10px;
+      padding:9px 4px;
       text-align:center;
-      font-weight:800;
+      font-size:.85rem;
+      font-weight:900;
       cursor:pointer;
-      margin:0;
+      user-select:none;
     }
 
-    .days input{
-      width:auto;
-      margin:0 4px 0 0;
+    .day.active {
+      background:var(--accent);
+      color:white;
+      border-color:var(--accent);
     }
 
-    .med-list{
-      margin-top:18px;
-    }
-
-    .med-item{
-      background:#F8FAFB;
-      border:1px solid var(--border);
-      border-radius:18px;
-      padding:16px;
-      margin-top:12px;
+    .save-bar {
       display:flex;
-      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:16px;
+    }
+
+    .list {
+      display:grid;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .item {
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px;
+      display:grid;
+      grid-template-columns:1fr auto;
       gap:12px;
       align-items:center;
     }
 
-    .med-title{
+    .item-title {
       font-weight:900;
       font-size:1.05rem;
     }
 
-    .med-meta{
+    .item-meta {
       color:var(--muted);
-      margin-top:4px;
-    }
-
-    .small-danger{
-      background:var(--danger);
-      color:white;
-      border:none;
-      border-radius:999px;
-      padding:8px 12px;
       font-weight:800;
-      cursor:pointer;
+      font-size:.92rem;
+      margin-top:3px;
     }
 
-    .preview{
-      background:#f8fafb;
-      border:1px dashed var(--border);
-      border-radius:20px;
-      padding:20px;
+    .item button {
+      border-radius:12px;
+      padding:9px 12px;
+      font-size:.85rem;
     }
 
-    .reminder{
+    .preview {
+      background:#FDFBF4;
+    }
+
+    .preview-screen {
       background:white;
-      padding:16px;
-      border-radius:16px;
       border:1px solid var(--border);
-      margin-top:12px;
+      border-radius:20px;
+      padding:16px;
     }
 
-    .footer{
-      text-align:center;
-      padding:40px;
+    .preview-hello {
+      font-size:1.6rem;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .preview-reminder {
+      background:var(--yellow);
+      border:3px solid var(--accent);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+
+    .preview-time {
+      font-weight:900;
+      color:var(--accent);
+      font-size:1.05rem;
+    }
+
+    .preview-task {
+      font-weight:900;
+      font-size:1.25rem;
+      margin-top:3px;
+    }
+
+    .preview-list {
+      display:grid;
+      gap:8px;
+    }
+
+    .preview-row {
+      border:1px solid var(--border);
+      border-radius:13px;
+      padding:9px 10px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-weight:800;
+    }
+
+    .alert-box {
+      border-radius:16px;
+      padding:14px;
+      font-weight:900;
+      margin-bottom:10px;
+    }
+
+    .alert-good {
+      background:#DFF3E8;
+      color:var(--success);
+      border:1px solid var(--success);
+    }
+
+    .alert-danger {
+      background:#FDE7E5;
+      color:var(--danger);
+      border:1px solid var(--danger);
+    }
+
+    .small-note {
+      font-size:.88rem;
       color:var(--muted);
+      font-weight:700;
+      margin-top:8px;
     }
 
-    @media(max-width:700px){
-      header{ flex-direction:column; }
-      .card{ padding:18px; }
-      .row{ grid-template-columns:1fr; }
-      .days{ grid-template-columns:repeat(2, 1fr); }
-      .med-item{ flex-direction:column; align-items:flex-start; }
+    .hidden {
+      display:none;
+    }
+
+    @media(max-width:900px) {
+      header,
+      .grid {
+        grid-template-columns:1fr;
+        display:grid;
+      }
+
+      .row {
+        grid-template-columns:1fr;
+      }
+
+      .days {
+        grid-template-columns:repeat(4,1fr);
+      }
+
+      .top-actions {
+        justify-content:flex-start;
+      }
     }
   </style>
 </head>
 
 <body>
+  <div class="container">
 
-<div class="container">
-
-  <header>
-    <div>
-      <div class="logo">Grandma.care</div>
-      <h2 id="welcomeMessage">Caregiver Dashboard</h2>
-      <p class="subtitle">Manage reminders, appointments, and daily support.</p>
-    </div>
-
-    <button class="signout" onclick="logout()">Sign Out</button>
-  </header>
-
-  <div class="card alert-card" id="helpAlert">
-    <h2>🔴 Help Requested</h2>
-    <p id="helpAlertText">Barbara needs assistance.</p>
-    <button class="button button-danger" onclick="clearAlert()">Clear Alert</button>
-  </div>
-
-  <div class="card success-card" id="completedAlert">
-    <h2>✅ Task Completed</h2>
-    <p id="completedAlertText">Barbara completed her reminder.</p>
-  </div>
-
-  <div class="card">
-    <h2>Senior Information</h2>
-
-    <label>Senior's Name</label>
-    <input id="seniorInput" type="text" placeholder="Barbara Smith">
-
-    <label>Primary Caregiver</label>
-    <input id="caregiverInput" type="text" placeholder="Allison Smith">
-
-    <label>Caregiver Phone Number</label>
-    <input id="phoneInput" type="text" placeholder="(555) 555-5555">
-  </div>
-
-  <div class="card">
-    <h2>Medication Schedule</h2>
-
-    <label>Medication Name</label>
-    <input id="newMedName" type="text" placeholder="Blood pressure pill">
-
-    <div class="row">
+    <header>
       <div>
-        <label>Time</label>
-        <input id="newMedTime" type="time">
+        <h1>Caregiver Dashboard</h1>
+        <p class="subtitle">Set up Barbara’s reminders, routines, appointments, and family note.</p>
       </div>
 
-      <div>
-        <label>Frequency</label>
-        <select id="newMedFrequency" onchange="frequencyChanged()">
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="custom">Custom Days</option>
-        </select>
+      <div class="top-actions">
+        <a class="btn btn-secondary" href="index.html">Home</a>
+        <a class="btn btn-primary" href="senior-tablet.html" target="_blank">Open Senior Tablet</a>
       </div>
-    </div>
+    </header>
 
-    <label>Days</label>
-    <div class="days">
-      <label><input type="checkbox" class="dayCheck" value="Mon" checked>Mon</label>
-      <label><input type="checkbox" class="dayCheck" value="Tue" checked>Tue</label>
-      <label><input type="checkbox" class="dayCheck" value="Wed" checked>Wed</label>
-      <label><input type="checkbox" class="dayCheck" value="Thu" checked>Thu</label>
-      <label><input type="checkbox" class="dayCheck" value="Fri" checked>Fri</label>
-      <label><input type="checkbox" class="dayCheck" value="Sat" checked>Sat</label>
-      <label><input type="checkbox" class="dayCheck" value="Sun" checked>Sun</label>
-    </div>
+    <div class="grid">
 
-    <button class="button" onclick="addMedication()">Add Medication</button>
+      <section class="card">
+        <h2>Caregiver & Senior</h2>
+        <p class="helper">These names appear on the senior tablet.</p>
 
-    <div class="med-list" id="medicationList"></div>
-  </div>
+        <div class="row">
+          <div>
+            <label for="seniorName">Senior Name</label>
+            <input id="seniorName" placeholder="Barbara">
+          </div>
 
-  <div class="card">
-    <h2>Daily Routine</h2>
-
-    <label>Breakfast Time</label>
-    <input id="breakfastInput" type="time">
-
-    <label>Lunch Time</label>
-    <input id="lunchInput" type="time">
-
-    <label>Dinner Time</label>
-    <input id="dinnerInput" type="time">
-
-    <label>Water Reminder Frequency</label>
-    <select id="waterInput">
-      <option>Every 2 Hours</option>
-      <option>Every 3 Hours</option>
-      <option>Every 4 Hours</option>
-      <option>Off</option>
-    </select>
-  </div>
-
-  <div class="card">
-    <h2>Appointments</h2>
-
-    <label>Next Appointment</label>
-    <input id="appointmentInput" type="text" placeholder="Doctor Appointment">
-
-    <label>Date & Time</label>
-    <input id="appointmentTimeInput" type="datetime-local">
-  </div>
-
-  <div class="card">
-    <h2>Family Message</h2>
-
-    <label>Message from Family</label>
-    <textarea id="familyMessageInput" placeholder="Hi Grandma, we love you. We'll call tonight at 7 PM."></textarea>
-
-    <button class="button" onclick="saveDashboard()">Save Dashboard</button>
-    <button class="button button-success" onclick="openTablet()">Open Senior Tablet</button>
-  </div>
-
-  <div class="card">
-    <h2>Senior Tablet Preview</h2>
-
-    <div class="preview">
-      <h3 id="previewGreeting">Hi ❤️</h3>
-      <p>Here is what the tablet will show today:</p>
-
-      <div class="reminder" id="previewMedication">
-        💊 No medications added yet.
-      </div>
-
-      <div class="reminder" id="previewLunch">
-        🍽️ Lunch — 12:00 PM
-      </div>
-
-      <div class="reminder" id="previewAppointment">
-        🩺 Doctor Appointment
-      </div>
-
-      <div class="reminder" id="previewMessage">
-        ❤️ Family Note: We'll call tonight at 7 PM.
-      </div>
-    </div>
-  </div>
-
-  <div class="footer">
-    Grandma.care Caregiver Dashboard Prototype
-  </div>
-
-</div>
-
-<script>
-  const isLoggedIn = localStorage.getItem("grandmaCareLoggedIn");
-  const caregiverName = localStorage.getItem("grandmaCaregiverName") || "Caregiver";
-  const seniorName = localStorage.getItem("grandmaSeniorName") || "Barbara";
-
-  let medications = [];
-
-  if (isLoggedIn !== "true") {
-    window.location.href = "login.html";
-  }
-
-  window.addEventListener("load", () => {
-    document.getElementById("welcomeMessage").textContent =
-      `Welcome ${caregiverName} — managing care for ${seniorName}`;
-
-    document.getElementById("caregiverInput").value = caregiverName;
-    document.getElementById("seniorInput").value = seniorName;
-
-    loadDashboard();
-    checkTabletStatus();
-  });
-
-  setInterval(checkTabletStatus, 2000);
-
-  function frequencyChanged() {
-    const frequency = document.getElementById("newMedFrequency").value;
-    const checks = document.querySelectorAll(".dayCheck");
-
-    if (frequency === "daily") {
-      checks.forEach(check => check.checked = true);
-    }
-
-    if (frequency === "weekly") {
-      checks.forEach(check => check.checked = false);
-      document.querySelector('.dayCheck[value="Mon"]').checked = true;
-    }
-  }
-
-  function addMedication() {
-    const name = document.getElementById("newMedName").value.trim();
-    const time = document.getElementById("newMedTime").value;
-    const frequency = document.getElementById("newMedFrequency").value;
-
-    const days = Array.from(document.querySelectorAll(".dayCheck:checked"))
-      .map(check => check.value);
-
-    if (!name || !time || days.length === 0) {
-      alert("Please enter medication name, time, and at least one day.");
-      return;
-    }
-
-    medications.push({
-      id: Date.now(),
-      name,
-      time,
-      frequency,
-      days
-    });
-
-    document.getElementById("newMedName").value = "";
-    document.getElementById("newMedTime").value = "";
-    document.getElementById("newMedFrequency").value = "daily";
-    frequencyChanged();
-
-    renderMedicationList();
-    saveDashboard(false);
-  }
-
-  function removeMedication(id) {
-    medications = medications.filter(med => med.id !== id);
-    renderMedicationList();
-    saveDashboard(false);
-  }
-
-  function renderMedicationList() {
-    const list = document.getElementById("medicationList");
-
-    if (medications.length === 0) {
-      list.innerHTML = `<p class="subtitle">No medications added yet.</p>`;
-      updatePreview(collectDashboardData());
-      return;
-    }
-
-    const sortedMeds = [...medications].sort((a, b) => a.time.localeCompare(b.time));
-
-    list.innerHTML = sortedMeds.map(med => `
-      <div class="med-item">
-        <div>
-          <div class="med-title">💊 ${med.name}</div>
-          <div class="med-meta">
-            ${formatTime(med.time)} — ${med.frequency} — ${med.days.join(", ")}
+          <div>
+            <label for="caregiverName">Caregiver Name</label>
+            <input id="caregiverName" placeholder="Allison">
           </div>
         </div>
-        <button class="small-danger" onclick="removeMedication(${med.id})">
-          Remove
-        </button>
-      </div>
-    `).join("");
 
-    updatePreview(collectDashboardData());
+        <label for="familyMessage">Family Note</label>
+        <textarea id="familyMessage" placeholder="We love you. Call us if you need anything."></textarea>
+
+        <div class="save-bar">
+          <button class="btn-primary" onclick="saveNamesAndNote()">Save Names & Note</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Add Reminder</h2>
+        <p class="helper">Add medicines, meals, routines, appointments, or custom reminders.</p>
+
+        <div class="row">
+          <div>
+            <label for="reminderType">Type</label>
+            <select id="reminderType" onchange="toggleDateField()">
+              <option value="medication">Medication</option>
+              <option value="routine">Daily Routine</option>
+              <option value="appointment">Appointment</option>
+              <option value="reminder">Custom Reminder</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="reminderTime">Time</label>
+            <input id="reminderTime" type="time">
+          </div>
+        </div>
+
+        <label for="reminderName">Reminder Name</label>
+        <input id="reminderName" placeholder="Example: Blood pressure pill, Lunch, Dinner, Physical therapy">
+
+        <div id="dateField" class="hidden">
+          <label for="reminderDate">Appointment Date</label>
+          <input id="reminderDate" type="date">
+        </div>
+
+        <label>Days</label>
+        <div class="days" id="daysBox">
+          <div class="day active" data-day="Sun">Sun</div>
+          <div class="day active" data-day="Mon">Mon</div>
+          <div class="day active" data-day="Tue">Tue</div>
+          <div class="day active" data-day="Wed">Wed</div>
+          <div class="day active" data-day="Thu">Thu</div>
+          <div class="day active" data-day="Fri">Fri</div>
+          <div class="day active" data-day="Sat">Sat</div>
+        </div>
+
+        <div class="save-bar">
+          <button class="btn-primary" onclick="addReminder()">Add to Schedule</button>
+          <button class="btn-secondary" onclick="clearForm()">Clear</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Current Schedule</h2>
+        <p class="helper">This is the data saved for the senior tablet.</p>
+        <div class="list" id="scheduleList"></div>
+
+        <div class="save-bar">
+          <button class="btn-primary" onclick="saveDashboardData()">Save Dashboard</button>
+          <button class="btn-danger" onclick="resetDashboard()">Reset All</button>
+        </div>
+
+        <p class="small-note">
+          The senior tablet reads from this saved data using the key <strong>grandmaDashboardData</strong>.
+        </p>
+      </section>
+
+      <section class="card preview">
+        <h2>Senior Tablet Preview</h2>
+        <p class="helper">This should match what appears on the real senior tablet.</p>
+
+        <div id="caregiverAlerts"></div>
+
+        <div class="preview-screen">
+          <div class="preview-hello" id="previewHello">Hi Barbara ❤️</div>
+
+          <div class="preview-reminder" id="previewReminder">
+            <div class="preview-time" id="previewTime">No reminders yet</div>
+            <div class="preview-task" id="previewTask">Add something to the schedule.</div>
+          </div>
+
+          <div class="preview-list" id="previewList"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+<script>
+  let dashboardData = {
+    senior: "Barbara",
+    seniorName: "Barbara",
+    caregiver: "Allison",
+    caregiverName: "Allison",
+    familyMessage: "We love you.",
+    medications: [],
+    routines: [],
+    appointments: [],
+    reminders: []
+  };
+
+  const dayButtons = document.querySelectorAll(".day");
+
+  dayButtons.forEach(button => {
+    button.addEventListener("click", () => {
+      button.classList.toggle("active");
+    });
+  });
+
+  function generateId() {
+    return "item-" + Date.now() + "-" + Math.random().toString(16).slice(2);
   }
 
-  function collectDashboardData() {
-    return {
-      senior: document.getElementById("seniorInput").value || "Barbara",
-      caregiver: document.getElementById("caregiverInput").value || "Caregiver",
-      phone: document.getElementById("phoneInput").value,
-      medications: medications,
-      breakfast: document.getElementById("breakfastInput").value,
-      lunch: document.getElementById("lunchInput").value || "12:00",
-      dinner: document.getElementById("dinnerInput").value,
-      water: document.getElementById("waterInput").value,
-      appointment: document.getElementById("appointmentInput").value || "Doctor Appointment",
-      appointmentTime: document.getElementById("appointmentTimeInput").value,
-      familyMessage: document.getElementById("familyMessageInput").value || "We love you.",
-      upcomingReminder: buildUpcomingReminder()
-    };
+  function todayLocalDateKey() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
   }
 
-  function saveDashboard(showAlert = true) {
-    const dashboardData = collectDashboardData();
-
-    localStorage.setItem("grandmaDashboardData", JSON.stringify(dashboardData));
-    localStorage.setItem("grandmaCaregiverName", dashboardData.caregiver);
-    localStorage.setItem("grandmaSeniorName", dashboardData.senior);
-
-    updatePreview(dashboardData);
-
-    if (showAlert) {
-      alert("Dashboard saved! The senior tablet will now show this medication schedule.");
-    }
-  }
-
-  function buildUpcomingReminder() {
-    const today = new Date().toLocaleDateString("en-US", { weekday: "short" });
-    const currentTime = new Date().toTimeString().slice(0, 5);
-
-    const todaysMeds = medications
-      .filter(med => med.days.includes(today))
-      .filter(med => med.time >= currentTime)
-      .sort((a, b) => a.time.localeCompare(b.time));
-
-    if (todaysMeds.length > 0) {
-      return `${formatTime(todaysMeds[0].time)} — Take ${todaysMeds[0].name}`;
-    }
-
-    const lunch = document.getElementById("lunchInput").value;
-    if (lunch) {
-      return `${formatTime(lunch)} — Lunch`;
-    }
-
-    return "No more reminders today.";
-  }
-
-  function loadDashboard() {
-    const savedData = localStorage.getItem("grandmaDashboardData");
-
-    if (!savedData) {
-      medications = [
-        {
-          id: Date.now(),
-          name: "prescription pills",
-          time: "09:00",
-          frequency: "daily",
-          days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        }
-      ];
-
-      renderMedicationList();
-
-      updatePreview({
-        senior: seniorName,
-        caregiver: caregiverName,
-        medications,
-        lunch: "12:00",
-        appointment: "Doctor Appointment",
-        familyMessage: "We'll call tonight at 7 PM."
-      });
-
-      return;
-    }
-
-    const data = JSON.parse(savedData);
-
-    medications = data.medications || [];
-
-    if (medications.length === 0 && data.medication) {
-      medications = [
-        {
-          id: Date.now(),
-          name: data.medication,
-          time: data.medicationTime || "09:00",
-          frequency: "daily",
-          days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        }
-      ];
-    }
-
-    document.getElementById("seniorInput").value = data.senior || seniorName;
-    document.getElementById("caregiverInput").value = data.caregiver || caregiverName;
-    document.getElementById("phoneInput").value = data.phone || "";
-    document.getElementById("breakfastInput").value = data.breakfast || "";
-    document.getElementById("lunchInput").value = data.lunch || "";
-    document.getElementById("dinnerInput").value = data.dinner || "";
-    document.getElementById("waterInput").value = data.water || "Every 2 Hours";
-    document.getElementById("appointmentInput").value = data.appointment || "";
-    document.getElementById("appointmentTimeInput").value = data.appointmentTime || "";
-    document.getElementById("familyMessageInput").value = data.familyMessage || "";
-
-    renderMedicationList();
-    updatePreview(data);
-  }
-
-  function updatePreview(data) {
-    const senior = data.senior || "Barbara";
-    const meds = data.medications || [];
-    const lunchTime = formatTime(data.lunch) || "12:00 PM";
-    const appointment = data.appointment || "Doctor Appointment";
-    const familyMessage = data.familyMessage || "We'll call tonight at 7 PM.";
-
-    document.getElementById("previewGreeting").textContent =
-      `Hi ${senior} ❤️`;
-
-    if (meds.length > 0) {
-      const medPreview = meds
-        .slice()
-        .sort((a, b) => a.time.localeCompare(b.time))
-        .map(med => `💊 ${med.name} — ${formatTime(med.time)} — ${med.days.join(", ")}`)
-        .join("<br>");
-
-      document.getElementById("previewMedication").innerHTML = medPreview;
-    } else {
-      document.getElementById("previewMedication").textContent =
-        "💊 No medications added yet.";
-    }
-
-    document.getElementById("previewLunch").textContent =
-      `🍽️ Lunch — ${lunchTime}`;
-
-    document.getElementById("previewAppointment").textContent =
-      `🩺 ${appointment}`;
-
-    document.getElementById("previewMessage").textContent =
-      `❤️ Family Note: ${familyMessage}`;
-  }
-
-  function checkTabletStatus() {
-    const alertData = localStorage.getItem("grandmaAlert");
-    const completedData = localStorage.getItem("grandmaLastCompleted");
-
-    if (alertData) {
-      const alert = JSON.parse(alertData);
-      document.getElementById("helpAlert").style.display = "block";
-      document.getElementById("helpAlertText").textContent =
-        `${alert.message} Time: ${alert.time}`;
-    } else {
-      document.getElementById("helpAlert").style.display = "none";
-    }
-
-    if (completedData) {
-      const completed = JSON.parse(completedData);
-      document.getElementById("completedAlert").style.display = "block";
-      document.getElementById("completedAlertText").textContent =
-        `${completed.senior} completed: ${completed.task}. Time: ${completed.time}`;
-    }
-  }
-
-  function clearAlert() {
-    localStorage.removeItem("grandmaAlert");
-    document.getElementById("helpAlert").style.display = "none";
-  }
-
-  function openTablet() {
-    window.open("senior-tablet.html", "_blank");
+  function getTodayShort() {
+    return new Date().toLocaleDateString("en-US", {
+      weekday: "short"
+    });
   }
 
   function formatTime(time) {
     if (!time) return "";
 
-    const parts = time.split(":");
+    if (String(time).includes("AM") || String(time).includes("PM")) {
+      return time;
+    }
+
+    const parts = String(time).split(":");
     let hour = parseInt(parts[0]);
-    const minute = parts[1];
+    const minute = parts[1] || "00";
+
+    if (isNaN(hour)) return time;
 
     const ampm = hour >= 12 ? "PM" : "AM";
     hour = hour % 12 || 12;
@@ -651,11 +508,324 @@
     return `${hour}:${minute} ${ampm}`;
   }
 
-  function logout() {
-    localStorage.removeItem("grandmaCareLoggedIn");
-    localStorage.removeItem("grandmaCareUserEmail");
-    window.location.href = "login.html";
+  function getSelectedDays() {
+    return Array.from(document.querySelectorAll(".day.active"))
+      .map(day => day.dataset.day);
   }
+
+  function toggleDateField() {
+    const type = document.getElementById("reminderType").value;
+    const dateField = document.getElementById("dateField");
+
+    if (type === "appointment") {
+      dateField.classList.remove("hidden");
+    } else {
+      dateField.classList.add("hidden");
+    }
+  }
+
+  function loadDashboardData() {
+    const saved = localStorage.getItem("grandmaDashboardData");
+
+    if (saved) {
+      try {
+        dashboardData = {
+          ...dashboardData,
+          ...JSON.parse(saved)
+        };
+      } catch (err) {
+        console.log("Could not read dashboard data.");
+      }
+    }
+
+    dashboardData.medications = dashboardData.medications || [];
+    dashboardData.routines = dashboardData.routines || [];
+    dashboardData.appointments = dashboardData.appointments || [];
+    dashboardData.reminders = dashboardData.reminders || [];
+
+    document.getElementById("seniorName").value =
+      dashboardData.senior || dashboardData.seniorName || "Barbara";
+
+    document.getElementById("caregiverName").value =
+      dashboardData.caregiver || dashboardData.caregiverName || "Allison";
+
+    document.getElementById("familyMessage").value =
+      dashboardData.familyMessage || dashboardData.familyNote || "";
+  }
+
+  function saveDashboardData() {
+    dashboardData.senior = document.getElementById("seniorName").value.trim() || "Barbara";
+    dashboardData.seniorName = dashboardData.senior;
+
+    dashboardData.caregiver = document.getElementById("caregiverName").value.trim() || "Allison";
+    dashboardData.caregiverName = dashboardData.caregiver;
+
+    dashboardData.familyMessage = document.getElementById("familyMessage").value.trim();
+    dashboardData.familyNote = dashboardData.familyMessage;
+
+    localStorage.setItem("grandmaDashboardData", JSON.stringify(dashboardData));
+
+    renderAll();
+    alert("Saved. Open or refresh the Senior Tablet page to see the update.");
+  }
+
+  function saveNamesAndNote() {
+    saveDashboardData();
+  }
+
+  function addReminder() {
+    const type = document.getElementById("reminderType").value;
+    const name = document.getElementById("reminderName").value.trim();
+    const time = document.getElementById("reminderTime").value;
+    const date = document.getElementById("reminderDate").value;
+    const days = getSelectedDays();
+
+    if (!name) {
+      alert("Please enter a reminder name.");
+      return;
+    }
+
+    if (!time) {
+      alert("Please choose a time.");
+      return;
+    }
+
+    if (type === "appointment" && !date) {
+      alert("Please choose an appointment date.");
+      return;
+    }
+
+    const item = {
+      id: generateId(),
+      type: type,
+      name: name,
+      title: name,
+      time: time,
+      days: type === "appointment" ? [] : days,
+      frequency: type === "appointment" ? "once" : "daily"
+    };
+
+    if (type === "appointment") {
+      item.date = date;
+      item.appointmentDate = date;
+    }
+
+    if (type === "medication") {
+      dashboardData.medications.push(item);
+    } else if (type === "routine") {
+      dashboardData.routines.push(item);
+    } else if (type === "appointment") {
+      dashboardData.appointments.push(item);
+    } else {
+      dashboardData.reminders.push(item);
+    }
+
+    saveSilently();
+    clearForm();
+    renderAll();
+  }
+
+  function saveSilently() {
+    dashboardData.senior = document.getElementById("seniorName").value.trim() || "Barbara";
+    dashboardData.seniorName = dashboardData.senior;
+
+    dashboardData.caregiver = document.getElementById("caregiverName").value.trim() || "Allison";
+    dashboardData.caregiverName = dashboardData.caregiver;
+
+    dashboardData.familyMessage = document.getElementById("familyMessage").value.trim();
+    dashboardData.familyNote = dashboardData.familyMessage;
+
+    localStorage.setItem("grandmaDashboardData", JSON.stringify(dashboardData));
+  }
+
+  function clearForm() {
+    document.getElementById("reminderName").value = "";
+    document.getElementById("reminderTime").value = "";
+    document.getElementById("reminderDate").value = "";
+  }
+
+  function getAllItems() {
+    return [
+      ...dashboardData.medications,
+      ...dashboardData.routines,
+      ...dashboardData.appointments,
+      ...dashboardData.reminders
+    ].sort((a,b) => String(a.time).localeCompare(String(b.time)));
+  }
+
+  function getItemCollection(type) {
+    if (type === "medication") return dashboardData.medications;
+    if (type === "routine") return dashboardData.routines;
+    if (type === "appointment") return dashboardData.appointments;
+    return dashboardData.reminders;
+  }
+
+  function deleteItem(id, type) {
+    const collection = getItemCollection(type);
+    const index = collection.findIndex(item => item.id === id);
+
+    if (index > -1) {
+      collection.splice(index, 1);
+    }
+
+    saveSilently();
+    renderAll();
+  }
+
+  function itemIsToday(item) {
+    const today = getTodayShort();
+    const todayDate = todayLocalDateKey();
+
+    if (item.type === "appointment") {
+      return item.date === todayDate || item.appointmentDate === todayDate;
+    }
+
+    if (!item.days || item.days.length === 0) return true;
+
+    return item.days.includes(today);
+  }
+
+  function getCompletedKey(item) {
+    return `completed-${todayLocalDateKey()}-${item.id}`;
+  }
+
+  function isCompleted(item) {
+    return localStorage.getItem(getCompletedKey(item)) === "true";
+  }
+
+  function renderScheduleList() {
+    const list = document.getElementById("scheduleList");
+    const items = getAllItems();
+
+    if (items.length === 0) {
+      list.innerHTML = `<div class="item"><div><div class="item-title">No reminders yet.</div><div class="item-meta">Add a medication, routine, appointment, or custom reminder.</div></div></div>`;
+      return;
+    }
+
+    list.innerHTML = items.map(item => {
+      const dayText = item.type === "appointment"
+        ? `Date: ${item.date || item.appointmentDate}`
+        : `Days: ${(item.days || []).join(", ") || "Every day"}`;
+
+      return `
+        <div class="item">
+          <div>
+            <div class="item-title">${getIcon(item.type)} ${item.name}</div>
+            <div class="item-meta">${capitalize(item.type)} • ${formatTime(item.time)} • ${dayText}</div>
+          </div>
+          <button class="btn-danger" onclick="deleteItem('${item.id}','${item.type}')">Delete</button>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderPreview() {
+    const todayItems = getAllItems().filter(itemIsToday);
+    const nextItem = todayItems.find(item => !isCompleted(item)) || todayItems[0];
+
+    const senior = dashboardData.senior || dashboardData.seniorName || "Barbara";
+    document.getElementById("previewHello").textContent = `Hi ${senior} ❤️`;
+
+    if (!nextItem) {
+      document.getElementById("previewTime").textContent = "No reminders today";
+      document.getElementById("previewTask").textContent = "Enjoy your day ❤️";
+    } else {
+      document.getElementById("previewTime").textContent = formatTime(nextItem.time);
+      document.getElementById("previewTask").textContent = `${getIcon(nextItem.type)} ${nextItem.name}`;
+    }
+
+    const previewList = document.getElementById("previewList");
+
+    if (todayItems.length === 0) {
+      previewList.innerHTML = `<div class="preview-row"><span>No schedule for today.</span></div>`;
+      return;
+    }
+
+    previewList.innerHTML = todayItems.map(item => {
+      return `
+        <div class="preview-row">
+          <span>${isCompleted(item) ? "✅" : getIcon(item.type)} ${item.name}</span>
+          <span>${formatTime(item.time)}</span>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function renderAlerts() {
+    const alertsBox = document.getElementById("caregiverAlerts");
+    const alertRaw = localStorage.getItem("grandmaAlert");
+    const completedRaw = localStorage.getItem("grandmaLastCompleted");
+
+    let html = "";
+
+    if (alertRaw) {
+      try {
+        const alert = JSON.parse(alertRaw);
+        html += `
+          <div class="alert-box alert-danger">
+            🆘 ${alert.message || "Help requested."}<br>
+            <small>${alert.time || ""}</small>
+          </div>
+        `;
+      } catch (err) {}
+    }
+
+    if (completedRaw) {
+      try {
+        const completed = JSON.parse(completedRaw);
+        html += `
+          <div class="alert-box alert-good">
+            ✅ ${completed.senior || "Senior"} completed: ${completed.task || "Reminder"}<br>
+            <small>${completed.time || ""}</small>
+          </div>
+        `;
+      } catch (err) {}
+    }
+
+    alertsBox.innerHTML = html;
+  }
+
+  function renderAll() {
+    renderScheduleList();
+    renderPreview();
+    renderAlerts();
+  }
+
+  function resetDashboard() {
+    const ok = confirm("Reset all dashboard reminders?");
+    if (!ok) return;
+
+    dashboardData.medications = [];
+    dashboardData.routines = [];
+    dashboardData.appointments = [];
+    dashboardData.reminders = [];
+
+    localStorage.removeItem("grandmaLastCompleted");
+    localStorage.removeItem("grandmaReminderCompleted");
+    localStorage.removeItem("grandmaAlert");
+
+    saveSilently();
+    renderAll();
+  }
+
+  function getIcon(type) {
+    if (type === "medication") return "💊";
+    if (type === "routine") return "🍽️";
+    if (type === "appointment") return "📅";
+    return "🔔";
+  }
+
+  function capitalize(word) {
+    if (!word) return "";
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  }
+
+  loadDashboardData();
+  toggleDateField();
+  renderAll();
+
+  setInterval(renderAlerts, 3000);
+  setInterval(renderPreview, 3000);
 </script>
 
 </body>
