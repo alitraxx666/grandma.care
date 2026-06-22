@@ -85,6 +85,11 @@
       cursor:pointer;
     }
 
+    button:disabled {
+      opacity:.6;
+      cursor:not-allowed;
+    }
+
     .message {
       margin-top:16px;
       font-weight:700;
@@ -121,14 +126,14 @@
   <h1>Caregiver Login</h1>
 
   <p>
-    Sign in to manage reminders, medications, and daily support.
+    Sign in to manage reminders, medications, routines, appointments, and daily support.
   </p>
 
-  <label>Email Address</label>
-  <input id="email" type="email" placeholder="you@example.com">
+  <label for="email">Email Address</label>
+  <input id="email" type="email" placeholder="you@example.com" autocomplete="email">
 
-  <label>Password</label>
-  <input id="password" type="password" placeholder="Your password">
+  <label for="password">Password</label>
+  <input id="password" type="password" placeholder="Your password" autocomplete="current-password">
 
   <button id="loginButton">
     Sign In
@@ -158,44 +163,84 @@ const supabaseClient =
     SUPABASE_KEY
   );
 
-document
-  .getElementById("loginButton")
-  .addEventListener("click", async () => {
+const loginButton =
+  document.getElementById("loginButton");
 
-    const email =
-      document.getElementById("email").value;
+const message =
+  document.getElementById("message");
 
-    const password =
-      document.getElementById("password").value;
+async function checkExistingSession() {
+  const {
+    data: { session }
+  } = await supabaseClient.auth.getSession();
 
-    const { error } =
-      await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-      });
+  if (session && session.user) {
+    localStorage.setItem("grandmaCareLoggedIn", "true");
+    localStorage.setItem("grandmaCareUserEmail", session.user.email);
+    localStorage.setItem("grandmaCareUserId", session.user.id);
 
-    if (error) {
-      document.getElementById("message").textContent =
-        error.message;
+    window.location.href = "caregiver-dashboard.html";
+  }
+}
 
-      document.getElementById("message").className =
-        "message error";
+checkExistingSession();
 
-      return;
-    }
-localStorage.setItem("grandmaCareLoggedIn", "true");
-localStorage.setItem("grandmaCareUserEmail", email);
-    document.getElementById("message").textContent =
-      "Login successful!";
+loginButton.addEventListener("click", async () => {
+  const email =
+    document.getElementById("email").value.trim();
 
-    document.getElementById("message").className =
-      "message success";
+  const password =
+    document.getElementById("password").value;
 
-    setTimeout(() => {
-      window.location.href =
-        "caregiver-dashboard.html";
-    }, 1000);
+  if (!email || !password) {
+    message.textContent =
+      "Please enter your email and password.";
 
+    message.className =
+      "message error";
+
+    return;
+  }
+
+  loginButton.disabled = true;
+  loginButton.textContent = "Signing in...";
+
+  message.textContent = "Signing in...";
+  message.className = "message";
+
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+  if (error) {
+    loginButton.disabled = false;
+    loginButton.textContent = "Sign In";
+
+    message.textContent =
+      error.message;
+
+    message.className =
+      "message error";
+
+    return;
+  }
+
+  localStorage.setItem("grandmaCareLoggedIn", "true");
+  localStorage.setItem("grandmaCareUserEmail", data.user.email);
+  localStorage.setItem("grandmaCareUserId", data.user.id);
+
+  message.textContent =
+    "Login successful!";
+
+  message.className =
+    "message success";
+
+  setTimeout(() => {
+    window.location.href =
+      "caregiver-dashboard.html";
+  }, 800);
 });
 </script>
 
