@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Caregiver Dashboard | Grandma.care</title>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --bg:#F3F0E5;
@@ -22,9 +24,7 @@
       --radius:22px;
     }
 
-    * {
-      box-sizing:border-box;
-    }
+    * { box-sizing:border-box; }
 
     body {
       margin:0;
@@ -61,6 +61,18 @@
       font-weight:700;
     }
 
+    .sync-pill {
+      display:inline-flex;
+      margin-top:10px;
+      padding:7px 11px;
+      border-radius:999px;
+      background:white;
+      border:1px solid var(--border);
+      color:var(--accent);
+      font-size:.86rem;
+      font-weight:900;
+    }
+
     .top-actions {
       display:flex;
       gap:10px;
@@ -83,21 +95,9 @@
       gap:8px;
     }
 
-    .btn-primary {
-      background:var(--accent);
-      color:white;
-    }
-
-    .btn-secondary {
-      background:white;
-      color:var(--accent);
-      border:1px solid var(--border);
-    }
-
-    .btn-danger {
-      background:var(--danger);
-      color:white;
-    }
+    .btn-primary { background:var(--accent); color:white; }
+    .btn-secondary { background:white; color:var(--accent); border:1px solid var(--border); }
+    .btn-danger { background:var(--danger); color:white; }
 
     .grid {
       display:grid;
@@ -132,9 +132,7 @@
       color:var(--accent);
     }
 
-    input,
-    select,
-    textarea {
+    input, select, textarea {
       width:100%;
       border:1px solid var(--border);
       border-radius:14px;
@@ -223,9 +221,7 @@
       font-size:.85rem;
     }
 
-    .preview {
-      background:#FDFBF4;
-    }
+    .preview { background:#FDFBF4; }
 
     .preview-screen {
       background:white;
@@ -301,28 +297,17 @@
       margin-top:8px;
     }
 
-    .hidden {
-      display:none;
-    }
+    .hidden { display:none; }
 
     @media(max-width:900px) {
-      header,
-      .grid {
+      header, .grid {
         grid-template-columns:1fr;
         display:grid;
       }
 
-      .row {
-        grid-template-columns:1fr;
-      }
-
-      .days {
-        grid-template-columns:repeat(4,1fr);
-      }
-
-      .top-actions {
-        justify-content:flex-start;
-      }
+      .row { grid-template-columns:1fr; }
+      .days { grid-template-columns:repeat(4,1fr); }
+      .top-actions { justify-content:flex-start; }
     }
   </style>
 </head>
@@ -334,6 +319,7 @@
       <div>
         <h1>Caregiver Dashboard</h1>
         <p class="subtitle">Set up Barbara’s reminders, routines, appointments, and family note.</p>
+        <div class="sync-pill" id="syncStatus">Connecting to cloud...</div>
       </div>
 
       <div class="top-actions">
@@ -425,7 +411,7 @@
         </div>
 
         <p class="small-note">
-          The senior tablet reads from this saved data using the key <strong>grandmaDashboardData</strong>.
+          Cloud sync is connected through Supabase using tablet ID <strong>barbara-tablet</strong>.
         </p>
       </section>
 
@@ -451,12 +437,19 @@
   </div>
 
 <script>
+  const SUPABASE_URL = "https://rsmiivsdbnwwamdxkhm.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_QCQfaxIpjuOx_26bnBikcQ_rzF29DFa";
+  const TABLET_ID = "barbara-tablet";
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
   let dashboardData = {
     senior: "Barbara",
     seniorName: "Barbara",
     caregiver: "Allison",
     caregiverName: "Allison",
     familyMessage: "We love you.",
+    familyNote: "We love you.",
     medications: [],
     routines: [],
     appointments: [],
@@ -470,6 +463,11 @@
       button.classList.toggle("active");
     });
   });
+
+  function setSyncStatus(text) {
+    const el = document.getElementById("syncStatus");
+    if (el) el.textContent = text;
+  }
 
   function generateId() {
     return "item-" + Date.now() + "-" + Math.random().toString(16).slice(2);
@@ -524,24 +522,59 @@
     }
   }
 
-  function loadDashboardData() {
-    const saved = localStorage.getItem("grandmaDashboardData");
+  async function loadDashboardData() {
+    setSyncStatus("Loading cloud data...");
 
-    if (saved) {
-      try {
+    try {
+      const { data, error } = await supabaseClient
+        .from("grandma_tablets")
+        .select("dashboard_data")
+        .eq("tablet_id", TABLET_ID)
+        .maybeSingle();
+
+      if (error) {
+        console.log("Cloud load error:", error.message);
+        setSyncStatus("Cloud load failed — using this device");
+      }
+
+      if (data && data.dashboard_data) {
+        dashboardData = {
+          ...dashboardData,
+          ...data.dashboard_data
+        };
+
+        localStorage.setItem("grandmaDashboardData", JSON.stringify(dashboardData));
+        setSyncStatus("Cloud synced");
+      } else {
+        const saved = localStorage.getItem("grandmaDashboardData");
+
+        if (saved) {
+          dashboardData = {
+            ...dashboardData,
+            ...JSON.parse(saved)
+          };
+
+          await saveToSupabase(false);
+          setSyncStatus("Uploaded this device to cloud");
+        } else {
+          await saveToSupabase(false);
+          setSyncStatus("New cloud file created");
+        }
+      }
+    } catch (err) {
+      console.log("Could not connect to Supabase.", err);
+      setSyncStatus("Offline/local mode");
+
+      const saved = localStorage.getItem("grandmaDashboardData");
+      if (saved) {
         dashboardData = {
           ...dashboardData,
           ...JSON.parse(saved)
         };
-      } catch (err) {
-        console.log("Could not read dashboard data.");
       }
     }
 
-    dashboardData.medications = dashboardData.medications || [];
-    dashboardData.routines = dashboardData.routines || [];
-    dashboardData.appointments = dashboardData.appointments || [];
-    dashboardData.reminders = dashboardData.reminders || [];
+    normalizeDashboardData();
 
     document.getElementById("seniorName").value =
       dashboardData.senior || dashboardData.seniorName || "Barbara";
@@ -551,9 +584,40 @@
 
     document.getElementById("familyMessage").value =
       dashboardData.familyMessage || dashboardData.familyNote || "";
+
+    renderAll();
   }
 
-  function saveDashboardData() {
+  function normalizeDashboardData() {
+    dashboardData.medications = dashboardData.medications || [];
+    dashboardData.routines = dashboardData.routines || [];
+    dashboardData.appointments = dashboardData.appointments || [];
+    dashboardData.reminders = dashboardData.reminders || [];
+  }
+
+  async function saveToSupabase(showAlert = false) {
+    normalizeDashboardData();
+
+    const { error } = await supabaseClient
+      .from("grandma_tablets")
+      .upsert({
+        tablet_id: TABLET_ID,
+        dashboard_data: dashboardData,
+        updated_at: new Date().toISOString()
+      });
+
+    if (error) {
+      console.log("Supabase save error:", error.message);
+      setSyncStatus("Cloud save failed");
+      if (showAlert) alert("Saved on this device, but cloud sync failed.");
+      return false;
+    }
+
+    setSyncStatus("Saved to cloud");
+    return true;
+  }
+
+  async function saveDashboardData() {
     dashboardData.senior = document.getElementById("seniorName").value.trim() || "Barbara";
     dashboardData.seniorName = dashboardData.senior;
 
@@ -566,14 +630,16 @@
     localStorage.setItem("grandmaDashboardData", JSON.stringify(dashboardData));
 
     renderAll();
-    alert("Saved. Open or refresh the Senior Tablet page to see the update.");
+
+    const ok = await saveToSupabase(true);
+    if (ok) alert("Saved to cloud. The senior tablet should update.");
   }
 
   function saveNamesAndNote() {
     saveDashboardData();
   }
 
-  function addReminder() {
+  async function addReminder() {
     const type = document.getElementById("reminderType").value;
     const name = document.getElementById("reminderName").value.trim();
     const time = document.getElementById("reminderTime").value;
@@ -620,12 +686,12 @@
       dashboardData.reminders.push(item);
     }
 
-    saveSilently();
+    await saveSilently();
     clearForm();
     renderAll();
   }
 
-  function saveSilently() {
+  async function saveSilently() {
     dashboardData.senior = document.getElementById("seniorName").value.trim() || "Barbara";
     dashboardData.seniorName = dashboardData.senior;
 
@@ -636,6 +702,7 @@
     dashboardData.familyNote = dashboardData.familyMessage;
 
     localStorage.setItem("grandmaDashboardData", JSON.stringify(dashboardData));
+    await saveToSupabase(false);
   }
 
   function clearForm() {
@@ -660,7 +727,7 @@
     return dashboardData.reminders;
   }
 
-  function deleteItem(id, type) {
+  async function deleteItem(id, type) {
     const collection = getItemCollection(type);
     const index = collection.findIndex(item => item.id === id);
 
@@ -668,7 +735,7 @@
       collection.splice(index, 1);
     }
 
-    saveSilently();
+    await saveSilently();
     renderAll();
   }
 
@@ -791,7 +858,7 @@
     renderAlerts();
   }
 
-  function resetDashboard() {
+  async function resetDashboard() {
     const ok = confirm("Reset all dashboard reminders?");
     if (!ok) return;
 
@@ -804,7 +871,7 @@
     localStorage.removeItem("grandmaReminderCompleted");
     localStorage.removeItem("grandmaAlert");
 
-    saveSilently();
+    await saveSilently();
     renderAll();
   }
 
@@ -822,7 +889,6 @@
 
   loadDashboardData();
   toggleDateField();
-  renderAll();
 
   setInterval(renderAlerts, 3000);
   setInterval(renderPreview, 3000);
