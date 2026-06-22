@@ -119,6 +119,40 @@
       border:1px solid var(--border);
     }
 
+    .intro-card {
+      background:var(--accent);
+      color:white;
+      border-radius:var(--radius);
+      padding:22px;
+      margin-bottom:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .intro-kicker {
+      font-size:.85rem;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-weight:900;
+      opacity:.82;
+      margin-bottom:8px;
+    }
+
+    .intro-title {
+      margin:0 0 10px;
+      font-size:clamp(2.1rem,5vw,4.2rem);
+      line-height:.95;
+      letter-spacing:-.06em;
+      max-width:12ch;
+    }
+
+    .intro-copy {
+      margin:0;
+      max-width:75ch;
+      color:rgba(255,255,255,.88);
+      font-size:1.05rem;
+      font-weight:700;
+    }
+
     .grid {
       display:grid;
       grid-template-columns:1.05fr .95fr;
@@ -305,6 +339,14 @@
       <a class="btn btn-primary" href="caregiver-dashboard.html">Caregiver Dashboard</a>
     </div>
   </header>
+
+  <section class="intro-card">
+    <div class="intro-kicker">For analog people in a digital world.</div>
+    <h2 class="intro-title">Simple support for daily independence.</h2>
+    <p class="intro-copy">
+      Grandma.care is a caregiver dashboard and senior tablet system designed for older adults who may struggle with memory, routines, medications, or modern technology. A caregiver sets up reminders from one device, and the senior sees a calm, easy tablet screen with family photos, a large clock, clear prompts, and simple buttons to say “I did it” or “I need help.”
+    </p>
+  </section>
 
   <main class="grid">
 
