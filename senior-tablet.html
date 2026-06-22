@@ -19,7 +19,7 @@
       --danger:#B42318;
       --success:#1F7A4D;
       --border:#D8D1C1;
-      --shadow:0 14px 40px rgba(35,74,83,0.15);
+      --shadow:0 10px 28px rgba(35,74,83,0.14);
       --yellow:#FFF3B0;
       --done:#DFF3E8;
     }
@@ -38,14 +38,14 @@
     }
 
     .tablet {
-      min-height:100vh;
+      height:100vh;
       display:grid;
-      grid-template-columns:40% 60%;
+      grid-template-columns:38% 62%;
     }
 
     .photo-side {
       position:relative;
-      min-height:100vh;
+      height:100vh;
       overflow:hidden;
       background:#ddd;
     }
@@ -59,90 +59,93 @@
 
     .photo-label {
       position:absolute;
-      left:18px;
-      bottom:18px;
+      left:14px;
+      bottom:14px;
       background:rgba(255,255,255,0.9);
-      padding:10px 18px;
+      padding:8px 14px;
       border-radius:999px;
-      font-size:1.05rem;
+      font-size:.95rem;
       font-weight:900;
       color:var(--accent);
     }
 
     .app-side {
-      min-height:100vh;
-      padding:20px;
+      height:100vh;
+      padding:12px 16px;
       display:flex;
       flex-direction:column;
-      justify-content:center;
+      justify-content:flex-start;
       align-items:center;
       text-align:center;
+      overflow:hidden;
     }
 
     .clock {
-      font-size:1.7rem;
+      font-size:1.28rem;
       font-weight:900;
       color:var(--accent);
-      margin-bottom:8px;
+      margin-bottom:4px;
       line-height:1.15;
     }
 
     .hello {
-      font-size:2.3rem;
+      font-size:1.85rem;
       font-weight:900;
-      margin-bottom:12px;
+      margin-bottom:8px;
+      line-height:1;
     }
 
     .card {
-      width:min(760px,100%);
+      width:min(700px,100%);
       background:white;
-      border-radius:28px;
-      padding:24px;
+      border-radius:22px;
+      padding:14px 16px;
       box-shadow:var(--shadow);
       border:1px solid var(--border);
     }
 
     .active-reminder {
       background:var(--yellow);
-      border:4px solid var(--accent);
+      border:3px solid var(--accent);
     }
 
     .done-reminder {
       background:var(--done);
-      border:4px solid var(--success);
+      border:3px solid var(--success);
     }
 
     .time {
-      font-size:1.8rem;
+      font-size:1.25rem;
       font-weight:900;
       color:var(--accent);
-      margin-bottom:8px;
+      margin-bottom:4px;
     }
 
     .task {
-      font-size:2.4rem;
-      line-height:1.08;
+      font-size:1.75rem;
+      line-height:1.05;
       font-weight:900;
-      margin-bottom:12px;
+      margin-bottom:6px;
     }
 
     .instruction {
-      font-size:1.1rem;
+      font-size:.95rem;
       color:var(--muted);
-      margin-bottom:18px;
+      margin-bottom:10px;
+      font-weight:700;
     }
 
     .buttons {
       display:grid;
       grid-template-columns:1fr 1fr;
-      gap:14px;
+      gap:10px;
     }
 
     button {
       border:none;
-      border-radius:24px;
-      padding:20px 14px;
-      font-size:1.3rem;
+      border-radius:18px;
+      padding:13px 10px;
+      font-size:1.05rem;
       font-weight:900;
       cursor:pointer;
       color:white;
@@ -159,62 +162,69 @@
     .call {
       background:var(--accent);
       width:100%;
-      margin-top:12px;
+      margin-top:8px;
+      padding:12px 10px;
+      font-size:1rem;
     }
 
     .status {
-      margin-top:14px;
-      font-size:1.1rem;
+      margin-top:8px;
+      font-size:.95rem;
       font-weight:900;
     }
 
     .upcoming,
     .pillbox,
     .family-note {
-      width:min(760px,100%);
-      margin-top:12px;
+      width:min(700px,100%);
+      margin-top:8px;
       background:rgba(255,255,255,0.78);
       border:1px solid var(--border);
-      border-radius:22px;
-      padding:12px 16px;
+      border-radius:18px;
+      padding:9px 12px;
       text-align:left;
     }
 
     .section-title {
-      font-size:.85rem;
+      font-size:.72rem;
       text-transform:uppercase;
       letter-spacing:.08em;
       font-weight:900;
       color:var(--muted);
-      margin-bottom:6px;
+      margin-bottom:4px;
     }
 
     .upcoming-text,
     .family-text {
-      font-size:1.05rem;
+      font-size:.95rem;
       font-weight:800;
+      line-height:1.25;
     }
 
     .pill-list {
       display:grid;
-      gap:8px;
+      gap:6px;
+      max-height:155px;
+      overflow:auto;
+      padding-right:3px;
     }
 
     .pill-row {
       background:white;
       border:1px solid var(--border);
-      border-radius:14px;
-      padding:10px 12px;
+      border-radius:12px;
+      padding:8px 10px;
       font-weight:800;
       display:flex;
       justify-content:space-between;
-      gap:12px;
+      gap:10px;
       align-items:center;
+      font-size:.95rem;
     }
 
     .pill-row.active {
       background:var(--yellow);
-      border:3px solid var(--accent);
+      border:2px solid var(--accent);
     }
 
     .pill-row.done {
@@ -229,30 +239,45 @@
       white-space:nowrap;
     }
 
+    .type-label {
+      font-size:.75rem;
+      color:var(--muted);
+      font-weight:900;
+      text-transform:uppercase;
+      margin-right:5px;
+    }
+
     @media(max-width:850px) {
       body {
         overflow:auto;
       }
 
       .tablet {
+        height:auto;
+        min-height:100vh;
         grid-template-columns:1fr;
       }
 
       .photo-side {
-        min-height:30vh;
+        height:26vh;
       }
 
       .app-side {
-        min-height:70vh;
-        padding:16px;
+        height:auto;
+        min-height:74vh;
+        padding:12px;
       }
 
       .task {
-        font-size:2rem;
+        font-size:1.55rem;
       }
 
       .buttons {
         grid-template-columns:1fr;
+      }
+
+      .pill-list {
+        max-height:none;
       }
     }
   </style>
@@ -273,25 +298,25 @@
     <div class="hello" id="helloText">Hi Barbara ❤️</div>
 
     <div class="card active-reminder" id="reminderCard">
-      <div class="time" id="reminderTime">9:00 AM</div>
-      <div class="task" id="reminderTask">Take your prescription pills.</div>
-      <div class="instruction" id="instructionText">Please press one button.</div>
+      <div class="time" id="reminderTime">Loading...</div>
+      <div class="task" id="reminderTask">Checking today's schedule...</div>
+      <div class="instruction" id="instructionText">Please wait.</div>
 
       <div class="buttons" id="buttonArea">
         <button class="yes" onclick="taskDone()">✅ Yes, I did it</button>
-        <button class="help" onclick="needHelp()">🆘 No, I need help</button>
+        <button class="help" onclick="needHelp()">🆘 I need help</button>
       </div>
 
       <div class="status" id="statusMessage"></div>
     </div>
 
     <div class="pillbox">
-      <div class="section-title">Today's Medicines</div>
+      <div class="section-title">Today's Schedule</div>
       <div class="pill-list" id="pillList"></div>
     </div>
 
     <div class="upcoming">
-      <div class="section-title">Upcoming Medication</div>
+      <div class="section-title">Next Reminder</div>
       <div class="upcoming-text" id="upcomingReminder">
         Loading next reminder...
       </div>
@@ -302,7 +327,7 @@
       <div class="family-text" id="familyNote">
         Nicholas set this up for you.
       </div>
-      <button class="call" onclick="callFamily()">📞 Call Nick</button>
+      <button class="call" onclick="callFamily()">📞 Call Family</button>
     </div>
 
   </div>
@@ -327,9 +352,9 @@
 
   let currentPhoto = 0;
   let appData = {};
-  let medications = [];
-  let todaysMeds = [];
-  let currentMed = null;
+  let allItems = [];
+  let todaysItems = [];
+  let currentItem = null;
   let lastReminderId = null;
 
   function todayLocalDateKey() {
@@ -338,6 +363,33 @@
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const day = String(now.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
+  }
+
+  function getTodayShort() {
+    return new Date().toLocaleDateString("en-US", {
+      weekday: "short"
+    });
+  }
+
+  function getTodayFull() {
+    return new Date().toLocaleDateString("en-US", {
+      weekday: "long"
+    });
+  }
+
+  function normalizeDay(day) {
+    if (!day) return "";
+    const d = String(day).toLowerCase().slice(0,3);
+    const map = {
+      sun:"Sun",
+      mon:"Mon",
+      tue:"Tue",
+      wed:"Wed",
+      thu:"Thu",
+      fri:"Fri",
+      sat:"Sat"
+    };
+    return map[d] || day;
   }
 
   function clearOldCompletionData() {
@@ -384,78 +436,203 @@
     }
   }
 
+  function readDashboardData() {
+    const possibleKeys = [
+      "grandmaDashboardData",
+      "grandmaCareDashboardData",
+      "grandmaCareData",
+      "dashboardData"
+    ];
+
+    for (const key of possibleKeys) {
+      const raw = localStorage.getItem(key);
+      if (raw) {
+        try {
+          return JSON.parse(raw);
+        } catch (err) {
+          console.log("Could not read", key);
+        }
+      }
+    }
+
+    return null;
+  }
+
+  function getNameFromItem(item) {
+    return (
+      item.name ||
+      item.title ||
+      item.task ||
+      item.label ||
+      item.medication ||
+      item.medicationName ||
+      item.routine ||
+      item.appointment ||
+      item.description ||
+      "Reminder"
+    );
+  }
+
+  function getTimeFromItem(item) {
+    return (
+      item.time ||
+      item.reminderTime ||
+      item.startTime ||
+      item.appointmentTime ||
+      item.medicationTime ||
+      "09:00"
+    );
+  }
+
+  function getDaysFromItem(item) {
+    if (Array.isArray(item.days)) {
+      return item.days.map(normalizeDay);
+    }
+
+    if (Array.isArray(item.selectedDays)) {
+      return item.selectedDays.map(normalizeDay);
+    }
+
+    if (item.day) {
+      return [normalizeDay(item.day)];
+    }
+
+    if (item.frequency === "daily" || item.repeat === "daily") {
+      return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    }
+
+    return ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  }
+
+  function itemIsToday(item) {
+    const todayShort = getTodayShort();
+    const todayFull = getTodayFull();
+    const todayDate = todayLocalDateKey();
+
+    if (item.date) {
+      return String(item.date).includes(todayDate);
+    }
+
+    if (item.appointmentDate) {
+      return String(item.appointmentDate).includes(todayDate);
+    }
+
+    const days = getDaysFromItem(item);
+    return days.includes(todayShort) || days.includes(todayFull);
+  }
+
+  function normalizeItem(item, type, index) {
+    const id = item.id || `${type}-${index}-${getNameFromItem(item)}-${getTimeFromItem(item)}`;
+
+    return {
+      ...item,
+      id: id,
+      type: item.type || type,
+      name: getNameFromItem(item),
+      time: getTimeFromItem(item),
+      days: getDaysFromItem(item)
+    };
+  }
+
+  function collectAllItems(data) {
+    let items = [];
+
+    const sources = [
+      { key: "reminders", type: "reminder" },
+      { key: "medications", type: "medication" },
+      { key: "meds", type: "medication" },
+      { key: "routines", type: "routine" },
+      { key: "dailyRoutines", type: "routine" },
+      { key: "tasks", type: "routine" },
+      { key: "appointments", type: "appointment" },
+      { key: "customReminders", type: "reminder" },
+      { key: "schedule", type: "reminder" }
+    ];
+
+    sources.forEach(source => {
+      if (Array.isArray(data[source.key])) {
+        data[source.key].forEach((item, index) => {
+          items.push(normalizeItem(item, source.type, index));
+        });
+      }
+    });
+
+    return items.sort((a,b) => String(a.time).localeCompare(String(b.time)));
+  }
+
   function loadData() {
-    const savedData = localStorage.getItem("grandmaDashboardData");
+    const savedData = readDashboardData();
 
     appData = {
       senior: "Barbara",
-      caregiver: "Nick",
+      caregiver: "Family",
       familyMessage: "We love you.",
-      medications: [
-        {
-          id: 1,
-          name: "prescription pills",
-          time: "09:00",
-          frequency: "daily",
-          days: ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
-        }
-      ]
+      reminders: []
     };
 
     if (savedData) {
       appData = {
         ...appData,
-        ...JSON.parse(savedData)
+        ...savedData
       };
     }
 
-    medications = appData.medications || [];
+    allItems = collectAllItems(appData);
 
     document.getElementById("helloText").textContent =
-      `Hi ${appData.senior || "Barbara"} ❤️`;
+      `Hi ${appData.senior || appData.seniorName || "Barbara"} ❤️`;
+
+    const caregiverName = appData.caregiver || appData.caregiverName || "Family";
+    const note = appData.familyMessage || appData.familyNote || appData.note || "";
 
     document.getElementById("familyNote").textContent =
-      `${appData.caregiver || "Nick"} set this up for you. ${appData.familyMessage || ""}`;
+      `${caregiverName} set this up for you. ${note}`;
   }
 
-  function getTodayShort() {
-    return new Date().toLocaleDateString("en-US", {
-      weekday: "short"
-    });
-  }
-
-  function getCompletedKey(med) {
+  function getCompletedKey(item) {
     const today = todayLocalDateKey();
-    return `completed-${today}-${med.id}`;
+    return `completed-${today}-${item.id}`;
   }
 
-  function isCompleted(med) {
-    return localStorage.getItem(getCompletedKey(med)) === "true";
+  function isCompleted(item) {
+    return localStorage.getItem(getCompletedKey(item)) === "true";
   }
 
-  function getTodaysMeds() {
-    const today = getTodayShort();
-
-    return medications
-      .filter(med => med.days && med.days.includes(today))
-      .sort((a, b) => a.time.localeCompare(b.time));
+  function getTodaysItems() {
+    return allItems
+      .filter(itemIsToday)
+      .sort((a, b) => String(a.time).localeCompare(String(b.time)));
   }
 
-  function chooseCurrentMedication() {
-    todaysMeds = getTodaysMeds();
+  function chooseCurrentItem() {
+    todaysItems = getTodaysItems();
 
-    if (todaysMeds.length === 0) {
-      currentMed = null;
+    if (todaysItems.length === 0) {
+      currentItem = null;
       return;
     }
 
-    const notCompleted = todaysMeds.find(med => !isCompleted(med));
+    const notCompleted = todaysItems.find(item => !isCompleted(item));
 
     if (notCompleted) {
-      currentMed = notCompleted;
+      currentItem = notCompleted;
     } else {
-      currentMed = todaysMeds[todaysMeds.length - 1];
+      currentItem = todaysItems[todaysItems.length - 1];
     }
+  }
+
+  function getActionText(item) {
+    if (!item) return "Reminder";
+
+    if (item.type === "medication") {
+      return `Take ${item.name}.`;
+    }
+
+    if (item.type === "appointment") {
+      return `${item.name}.`;
+    }
+
+    return item.name;
   }
 
   function updateMainCard() {
@@ -465,30 +642,30 @@
 
     card.classList.remove("active-reminder", "done-reminder");
 
-    if (!currentMed) {
+    if (!currentItem) {
       document.getElementById("reminderTime").textContent =
-        "No medicines today";
+        "No reminders today";
 
       document.getElementById("reminderTask").textContent =
         "Enjoy your day ❤️";
 
       document.getElementById("instructionText").textContent =
-        "There are no medication reminders scheduled for today.";
+        "There are no reminders scheduled for today.";
 
       buttonArea.style.display = "none";
       status.textContent = "";
       return;
     }
 
-    const completed = isCompleted(currentMed);
+    const completed = isCompleted(currentItem);
 
     document.getElementById("reminderTime").textContent =
-      formatTime(currentMed.time);
+      formatTime(currentItem.time);
 
     document.getElementById("reminderTask").textContent =
       completed
-        ? `✅ You took ${currentMed.name}.`
-        : `Take ${currentMed.name}.`;
+        ? `✅ ${currentItem.name} is done.`
+        : getActionText(currentItem);
 
     document.getElementById("instructionText").textContent =
       completed
@@ -504,9 +681,9 @@
       buttonArea.style.display = "grid";
       status.textContent = "";
 
-      if (lastReminderId !== currentMed.id) {
+      if (lastReminderId !== currentItem.id) {
         playReminderBell();
-        lastReminderId = currentMed.id;
+        lastReminderId = currentItem.id;
       }
     }
   }
@@ -514,23 +691,30 @@
   function renderPillList() {
     const list = document.getElementById("pillList");
 
-    if (todaysMeds.length === 0) {
+    if (todaysItems.length === 0) {
       list.innerHTML =
-        `<div class="pill-row">No medicines scheduled today.</div>`;
+        `<div class="pill-row">No reminders scheduled today.</div>`;
       return;
     }
 
-    list.innerHTML = todaysMeds.map(med => {
-      const completed = isCompleted(med);
-      const active = currentMed && med.id === currentMed.id && !completed;
+    list.innerHTML = todaysItems.map(item => {
+      const completed = isCompleted(item);
+      const active = currentItem && item.id === currentItem.id && !completed;
+
+      let icon = "🔔";
+      if (item.type === "medication") icon = "💊";
+      if (item.type === "routine") icon = "🍽️";
+      if (item.type === "appointment") icon = "📅";
 
       return `
         <div class="pill-row ${completed ? "done" : ""} ${active ? "active" : ""}">
           <div>
-            ${completed ? "✅" : "💊"} ${med.name}
+            ${completed ? "✅" : icon}
+            <span class="type-label">${item.type}</span>
+            ${item.name}
           </div>
           <div class="pill-time">
-            ${formatTime(med.time)}
+            ${formatTime(item.time)}
           </div>
         </div>
       `;
@@ -538,43 +722,44 @@
   }
 
   function updateUpcomingReminder() {
-    if (todaysMeds.length === 0) {
+    if (todaysItems.length === 0) {
       document.getElementById("upcomingReminder").textContent =
-        "No more medicines today.";
+        "No more reminders today.";
       return;
     }
 
-    const nextMed = todaysMeds.find(med => !isCompleted(med));
+    const nextItem = todaysItems.find(item => !isCompleted(item));
 
-    if (nextMed) {
+    if (nextItem) {
       document.getElementById("upcomingReminder").textContent =
-        `${formatTime(nextMed.time)} — Take ${nextMed.name}`;
+        `${formatTime(nextItem.time)} — ${nextItem.name}`;
     } else {
       document.getElementById("upcomingReminder").textContent =
-        "All medicines are complete for today ✅";
+        "Everything is complete for today ✅";
     }
   }
 
   function refreshTablet() {
     clearOldCompletionData();
     loadData();
-    chooseCurrentMedication();
+    chooseCurrentItem();
     updateMainCard();
     renderPillList();
     updateUpcomingReminder();
   }
 
   function taskDone() {
-    if (!currentMed) return;
+    if (!currentItem) return;
 
-    localStorage.setItem(getCompletedKey(currentMed), "true");
+    localStorage.setItem(getCompletedKey(currentItem), "true");
     localStorage.setItem("grandmaLastCompletedDate", todayLocalDateKey());
 
-    const senior = appData.senior || "Barbara";
+    const senior = appData.senior || appData.seniorName || "Barbara";
 
     localStorage.setItem("grandmaLastCompleted", JSON.stringify({
       senior: senior,
-      task: `Took ${currentMed.name}`,
+      task: currentItem.name,
+      type: currentItem.type,
       time: new Date().toLocaleString(),
       status: "completed"
     }));
@@ -584,21 +769,21 @@
     playSuccessSound();
 
     document.getElementById("statusMessage").textContent =
-      "🎉 Great job! Your medication has been marked complete.";
+      "🎉 Great job! This has been marked complete.";
 
     refreshTablet();
   }
 
   function needHelp() {
-    const senior = appData.senior || "Barbara";
-    const medName = currentMed ? currentMed.name : "medication";
+    const senior = appData.senior || appData.seniorName || "Barbara";
+    const itemName = currentItem ? currentItem.name : "today's reminder";
 
     document.getElementById("statusMessage").textContent =
       "Help requested. Your caregiver should be contacted.";
 
     localStorage.setItem("grandmaAlert", JSON.stringify({
       senior: senior,
-      message: `${senior} requested help with ${medName}.`,
+      message: `${senior} requested help with ${itemName}.`,
       time: new Date().toLocaleString(),
       status: "help requested"
     }));
@@ -607,7 +792,7 @@
   }
 
   function callFamily() {
-    const caregiver = appData.caregiver || "Alison";
+    const caregiver = appData.caregiver || appData.caregiverName || "Family";
 
     document.getElementById("statusMessage").textContent =
       `Calling ${caregiver}...`;
@@ -616,9 +801,15 @@
   function formatTime(time) {
     if (!time) return "";
 
-    const parts = time.split(":");
+    if (String(time).includes("AM") || String(time).includes("PM")) {
+      return time;
+    }
+
+    const parts = String(time).split(":");
     let hour = parseInt(parts[0]);
-    const minute = parts[1];
+    const minute = parts[1] || "00";
+
+    if (isNaN(hour)) return time;
 
     const ampm = hour >= 12 ? "PM" : "AM";
     hour = hour % 12 || 12;
@@ -667,10 +858,10 @@
 
   setInterval(rotatePhotos, 5000);
   setInterval(updateClock, 1000);
-  setInterval(refreshTablet, 10000);
+  setInterval(refreshTablet, 3000);
 
   setInterval(() => {
-    if (currentMed && !isCompleted(currentMed)) {
+    if (currentItem && !isCompleted(currentItem)) {
       playReminderBell();
     }
   }, 60000);
