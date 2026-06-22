@@ -3,239 +3,285 @@
 <head>
   <link rel="icon" href="favicon.png">
   <link rel="manifest" href="/manifest.json">
-
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <meta name="theme-color" content="#F3F0E5">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Grandma.care">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Grandma.care</title>
 
-  <meta name="description" content="Grandma.care helps older adults with cognitive impairments live independently while staying safe, healthy, and supported by caregivers who live elsewhere." />
+  <meta name="description" content="Grandma.care helps caregivers set up simple reminders, routines, appointments, and family notes for a senior tablet." />
 
   <style>
     :root {
-      --bg: #F3F0E5;
-      --card: #FFFFFF;
-      --text: #234A53;
-      --muted: #4E707A;
-      --accent: #467586;
-      --accent-deep: #204A53;
-      --border: #D8D1C1;
-      --shadow: 0 10px 30px rgba(35,74,83,0.08);
-      --radius: 24px;
-      --max: 1180px;
+      --bg:#F3F0E5;
+      --card:#FFFFFF;
+      --text:#234A53;
+      --muted:#4E707A;
+      --accent:#204A53;
+      --accent2:#467586;
+      --danger:#B42318;
+      --success:#1F7A4D;
+      --border:#D8D1C1;
+      --yellow:#FFF3B0;
+      --shadow:0 12px 34px rgba(35,74,83,0.12);
+      --radius:22px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing:border-box; }
 
     body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
-        BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #f8f5ec 0%, var(--bg) 100%);
-      color: var(--text);
-      line-height: 1.5;
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:linear-gradient(180deg,#f8f5ec 0%,var(--bg) 100%);
+      color:var(--text);
+      line-height:1.4;
     }
 
     a {
-      color: inherit;
-      text-decoration: none;
+      color:inherit;
+      text-decoration:none;
     }
 
     .container {
-      width: min(var(--max), calc(100% - 32px));
-      margin: 0 auto;
+      width:min(1180px,calc(100% - 32px));
+      margin:0 auto;
+      padding:24px 0 40px;
     }
 
-    .hero {
-      padding: 14px 0 42px;
+    header {
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:center;
+      margin-bottom:20px;
     }
 
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 53% 47%;
-      gap: 24px;
-      align-items: start;
-    }
-
-    .headline {
-      font-size: clamp(2.8rem, 6vw, 5.4rem);
-      line-height: 0.95;
-      letter-spacing: -0.06em;
-      margin: 0 0 14px;
-      max-width: 11ch;
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:14px;
     }
 
     .logo {
-      height: 120px;
-      width: auto;
-      display: block;
-      margin: 4px 0 16px;
+      height:72px;
+      width:auto;
+      display:block;
     }
 
-    .tagline {
-      font-size: 1.08rem;
-      color: var(--accent-deep);
-      font-weight: 800;
-      margin: 0 0 18px;
+    h1 {
+      margin:0;
+      font-size:clamp(2rem,4vw,3.3rem);
+      letter-spacing:-.05em;
+      line-height:1;
     }
 
-    .subhead {
-      font-size: 1.08rem;
-      color: var(--muted);
-      max-width: 60ch;
-      margin: 0 0 18px;
+    .subtitle {
+      margin:8px 0 0;
+      color:var(--muted);
+      font-weight:700;
     }
 
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 24px 0 18px;
+    .top-actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 0 18px;
-      border-radius: 999px;
-      font-weight: 700;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      transition: 0.2s ease;
-      font-size: 1rem;
-    }
-
-    .btn:hover {
-      transform: translateY(-2px);
+      border:none;
+      border-radius:999px;
+      padding:13px 18px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:.98rem;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
     }
 
     .btn-primary {
-      background: var(--accent-deep);
-      color: white;
-      border-color: var(--accent-deep);
-      box-shadow: var(--shadow);
+      background:var(--accent);
+      color:white;
+      box-shadow:var(--shadow);
     }
 
     .btn-secondary {
-      background: white;
-      color: var(--text);
+      background:white;
+      color:var(--accent);
+      border:1px solid var(--border);
     }
 
-    .install-card {
-      margin: 22px 0 18px;
-      padding: 20px;
-      background: #ffffff;
-      border: 2px solid var(--accent-deep);
-      border-radius: 22px;
-      box-shadow: var(--shadow);
+    .grid {
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      align-items:start;
     }
 
-    .install-title {
-      margin: 0 0 8px;
-      font-size: 1.35rem;
-      letter-spacing: -0.03em;
-      color: var(--accent-deep);
+    .card {
+      background:rgba(255,255,255,.82);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
     }
 
-    .install-copy {
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: 1rem;
+    .card h2 {
+      margin:0 0 12px;
+      font-size:1.45rem;
+      letter-spacing:-.03em;
     }
 
-    .install-btn {
-      width: 100%;
-      min-height: 64px;
-      font-size: 1.25rem;
-      border-radius: 18px;
-      background: var(--accent-deep);
-      color: white;
-      border: none;
-      font-weight: 900;
-      cursor: pointer;
-      box-shadow: var(--shadow);
+    .helper {
+      color:var(--muted);
+      margin:-4px 0 14px;
+      font-weight:700;
     }
 
-    .install-btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
+    .steps {
+      display:grid;
+      gap:12px;
     }
 
-    .hero-image {
-      width: 100%;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      display: block;
+    .step {
+      background:white;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:14px;
+      align-items:start;
     }
 
-    .section {
-      padding: 14px 0 38px;
+    .step-number {
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      background:var(--accent);
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      flex-shrink:0;
     }
 
-    .feature {
-      background: rgba(255,255,255,0.78);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: var(--shadow);
-      margin-bottom: 22px;
+    .step-title {
+      font-weight:900;
+      font-size:1.08rem;
+      margin-bottom:4px;
     }
 
-    .section-title {
-      font-size: clamp(1.6rem, 4vw, 2.35rem);
-      letter-spacing: -0.04em;
-      margin: 0 0 12px;
+    .step-copy {
+      color:var(--muted);
+      font-weight:700;
+      margin:0;
     }
 
-    .section-copy {
-      color: var(--muted);
-      max-width: 72ch;
-      margin: 0 0 16px;
+    .main-actions {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .main-actions .btn {
+      min-height:58px;
+      border-radius:18px;
+      font-size:1.05rem;
+    }
+
+    .preview-image {
+      width:100%;
+      border-radius:20px;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      display:block;
+    }
+
+    .mini-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:18px;
+    }
+
+    .mini-card {
+      background:white;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      font-weight:800;
+      color:var(--muted);
+    }
+
+    .mini-card strong {
+      display:block;
+      color:var(--accent);
+      font-size:1.05rem;
+      margin-bottom:4px;
+    }
+
+    .story {
+      margin-top:18px;
     }
 
     .story-grid {
-      display: grid;
-      grid-template-columns: 230px 1fr;
-      gap: 24px;
-      align-items: center;
+      display:grid;
+      grid-template-columns:170px 1fr;
+      gap:18px;
+      align-items:center;
     }
 
     .portrait {
-      width: 230px;
-      max-width: 100%;
-      border-radius: 22px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      display: block;
+      width:170px;
+      max-width:100%;
+      border-radius:18px;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      display:block;
     }
 
     .footer {
-      padding: 10px 0 34px;
-      color: var(--muted);
-      font-size: 0.92rem;
-      text-align: center;
+      padding:10px 0 34px;
+      color:var(--muted);
+      font-size:.92rem;
+      text-align:center;
+      font-weight:700;
     }
 
-    @media (max-width: 900px) {
-      .hero-grid,
+    @media(max-width:900px) {
+      header,
+      .grid,
       .story-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns:1fr;
+        display:grid;
+      }
+
+      .top-actions {
+        justify-content:flex-start;
+      }
+
+      .main-actions,
+      .mini-grid {
+        grid-template-columns:1fr;
       }
 
       .logo {
-        height: 95px;
+        height:58px;
       }
 
       .portrait {
-        width: 100%;
+        width:100%;
       }
     }
   </style>
@@ -243,158 +289,145 @@
 
 <body>
 
-<header class="hero">
-  <div class="container hero-grid">
+<div class="container">
 
-    <div>
+  <header>
+    <div class="brand">
+      <img class="logo" src="grandma-care-logo.png" alt="Grandma.care logo">
+      <div>
+        <h1>Grandma.care</h1>
+        <p class="subtitle">Independence for seniors. Peace of mind for families.</p>
+      </div>
+    </div>
 
-      <h1 class="headline">
-        For analog people in a digital world.
-      </h1>
+    <div class="top-actions">
+      <a class="btn btn-secondary" href="senior-tablet.html">Senior Tablet</a>
+      <a class="btn btn-primary" href="caregiver-dashboard.html">Caregiver Dashboard</a>
+    </div>
+  </header>
 
-      <img
-        class="logo"
-        src="grandma-care-logo.png"
-        alt="Grandma.care logo">
+  <main class="grid">
 
-      <p class="tagline">
-        Independence for seniors. Peace of mind for families.
+    <section class="card">
+      <h2>Get started</h2>
+      <p class="helper">
+        Set up the caregiver dashboard first, then open the senior tablet screen on the device the senior will use.
       </p>
 
-      <p class="subhead">
-        Grandma.care is a simple caregiver and senior tablet platform designed to help older adults with cognitive impairments live independently while staying safe, healthy, and connected to family members who may live elsewhere.
-      </p>
+      <div class="steps">
 
-      <p class="subhead">
-        Grandma.care is intentionally simple. It is built for older adults who may struggle with modern technology but still want to remain independent in their own homes.
-      </p>
+        <div class="step">
+          <div class="step-number">1</div>
+          <div>
+            <div class="step-title">Open the caregiver dashboard</div>
+            <p class="step-copy">
+              Enter the senior’s name, caregiver name, family note, medications, meals, appointments, and daily routines.
+            </p>
+          </div>
+        </div>
 
-      <p class="subhead">
-        The goal is not to add more technology. The goal is to make daily support easier, safer, and more dignified.
-      </p>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div>
+            <div class="step-title">Save the schedule to the cloud</div>
+            <p class="step-copy">
+              The dashboard saves the reminder schedule so the senior tablet can update from another device.
+            </p>
+          </div>
+        </div>
 
-      <div class="install-card">
-        <h2 class="install-title">Set up the dedicated tablet</h2>
-        <p class="install-copy">
-          On the senior tablet, press this button to install Grandma.care as a full-screen app.
-        </p>
-        <button id="installAppBtn" class="install-btn">
-          Install Grandma.care on this tablet
-        </button>
+        <div class="step">
+          <div class="step-number">3</div>
+          <div>
+            <div class="step-title">Open the senior tablet screen</div>
+            <p class="step-copy">
+              Use Safari Add to Home Screen on iPad, or a kiosk browser on Android, to make the tablet feel full-screen.
+            </p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div>
+            <div class="step-title">Let the senior respond</div>
+            <p class="step-copy">
+              The senior can press “Yes, I did it” or “I need help,” giving families a simple way to check in.
+            </p>
+          </div>
+        </div>
+
       </div>
 
-      <div class="actions">
-        <a class="btn btn-primary" href="signup.html">
-          Set Up Caregiver Dashboard
+      <div class="main-actions">
+        <a class="btn btn-primary" href="caregiver-dashboard.html">
+          Start Caregiver Setup
         </a>
 
         <a class="btn btn-secondary" href="senior-tablet.html">
-          Preview Senior Tablet App
+          Open Senior Tablet
         </a>
       </div>
+    </section>
 
-    </div>
+    <section class="card">
+      <h2>What the senior sees</h2>
+      <p class="helper">
+        A calm, simple tablet screen with family photos, a large clock, clear reminders, and big response buttons.
+      </p>
 
-    <div>
       <img
-        class="hero-image"
+        class="preview-image"
         src="grandma-care-tablet.jpg"
         alt="Senior using Grandma.care tablet app">
-    </div>
 
-  </div>
-</header>
-
-<main>
-
-  <section class="section">
-    <div class="container">
-
-      <div class="feature">
-
-        <img
-          src="how-grandma-care-works.png"
-          alt="How Grandma.care works"
-          style="
-            width:100%;
-            border-radius:20px;
-            display:block;
-            margin-top:20px;
-            box-shadow: var(--shadow);
-          ">
-
-      </div>
-
-      <div class="feature">
-
-        <div class="story-grid">
-
-          <img
-            src="grandma-portrait.jpg"
-            alt="Barbara, the inspiration behind Grandma.care"
-            class="portrait">
-
-          <div>
-
-            <h2 class="section-title">
-              The Story Behind Grandma.care
-            </h2>
-
-            <p class="section-copy">
-              Grandma.care was inspired by Barbara, my grandmother living independently with dementia.
-            </p>
-
-            <p class="section-copy">
-              My family wanted a better way to help her stay safe, make sure she was taking her prescriptions, remind her about appointments, and support her daily routine without taking away her independence or moving her into assisted living before it was necessary.
-            </p>
-
-            <p class="section-copy">
-              Grandma.care is built for families like mine: families who love someone with memory or cognitive challenges and want to support them with dignity, safety, and peace of mind.
-            </p>
-
-          </div>
-
+      <div class="mini-grid">
+        <div class="mini-card">
+          <strong>Reminders</strong>
+          Medicines, meals, appointments, and routines.
         </div>
 
+        <div class="mini-card">
+          <strong>Responses</strong>
+          Simple buttons for done or help.
+        </div>
+
+        <div class="mini-card">
+          <strong>Connection</strong>
+          Family note and familiar photos.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="card story">
+    <div class="story-grid">
+
+      <img
+        src="grandma-portrait.jpg"
+        alt="Barbara, the inspiration behind Grandma.care"
+        class="portrait">
+
+      <div>
+        <h2>The Story Behind Grandma.care</h2>
+
+        <p class="helper">
+          Grandma.care was inspired by Barbara, my grandmother living independently with dementia. My family wanted a better way to help her stay safe, remember prescriptions, keep appointments, and follow daily routines without taking away her independence before it was necessary.
+        </p>
+
+        <p class="helper">
+          The goal is not more technology. The goal is simple daily support that feels familiar, dignified, and reassuring.
+        </p>
       </div>
 
     </div>
   </section>
 
-</main>
+</div>
 
 <footer class="footer">
-  <div class="container">
-    © 2026 Patnik Creative. All rights reserved.
-  </div>
+  © 2026 Patnik Creative. All rights reserved.
 </footer>
-
-<script>
-  let deferredPrompt;
-  const installBtn = document.getElementById("installAppBtn");
-
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/service-worker.js");
-  }
-
-  window.addEventListener("beforeinstallprompt", (event) => {
-    event.preventDefault();
-    deferredPrompt = event;
-    installBtn.disabled = false;
-    installBtn.textContent = "Install Grandma.care on this tablet";
-  });
-
-  installBtn.addEventListener("click", async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      await deferredPrompt.userChoice;
-      deferredPrompt = null;
-      installBtn.textContent = "Installed or ready to open from home screen";
-    } else {
-      alert("If the install box does not appear, tap the Chrome menu ⋮ and choose Add to Home screen or Install app.");
-    }
-  });
-</script>
 
 </body>
 </html>
