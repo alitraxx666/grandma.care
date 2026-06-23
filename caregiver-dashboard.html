@@ -1223,40 +1223,68 @@
     }).join("");
   }
 
-  function renderAlerts() {
-    const alertsBox = document.getElementById("caregiverAlerts");
-    const alertRaw = localStorage.getItem("grandmaAlert");
-    const completedRaw = localStorage.getItem("grandmaLastCompleted");
+  async function renderAlerts() {
+  const alertsBox = document.getElementById("caregiverAlerts");
 
-    let html = "";
+  if (!alertsBox || !TABLET_ID) return;
 
-    if (alertRaw) {
-      try {
-        const alert = JSON.parse(alertRaw);
-        html += `
-          <div class="alert-box alert-danger">
-            🆘 ${alert.message || "Help requested."}<br>
-            <small>${alert.time || ""}</small>
-          </div>
-        `;
-      } catch (err) {}
-    }
+  const { data, error } = await supabaseClient
+    .from("grandma_tablet_events")
+    .select("*")
+    .eq("tablet_id", TABLET_ID)
+    .order("created_at", { ascending: false })
+    .limit(6);
 
-    if (completedRaw) {
-      try {
-        const completed = JSON.parse(completedRaw);
-        html += `
-          <div class="alert-box alert-good">
-            ✅ ${completed.senior || "Senior"} completed: ${completed.task || "Reminder"}<br>
-            <small>${completed.time || ""}</small>
-          </div>
-        `;
-      } catch (err) {}
-    }
-
-    alertsBox.innerHTML = html;
+  if (error) {
+    alertsBox.innerHTML =
+      `<div class="alert-box alert-danger">
+        Could not load cloud alerts.
+      </div>`;
+    return;
   }
 
+  if (!data || data.length === 0) {
+    alertsBox.innerHTML =
+      `<div class="alert-box alert-good">
+        No caregiver alerts yet.
+      </div>`;
+    return;
+  }
+
+  alertsBox.innerHTML = data.map(event => {
+    const info = event.event_data || {};
+
+    let className = "alert-good";
+    let icon = "✅";
+    let title = "Completed";
+
+    if (event.event_type === "help") {
+      className = "alert-danger";
+      icon = "🆘";
+      title = "Help Requested";
+    }
+
+    if (event.event_type === "missed") {
+      className = "alert-danger";
+      icon = "⚠️";
+      title = "Missed Reminder";
+    }
+
+    if (event.event_type === "completed") {
+      className = "alert-good";
+      icon = "✅";
+      title = "Completed";
+    }
+
+    return `
+      <div class="alert-box ${className}">
+        ${icon} ${title}<br>
+        ${info.message || info.task || "Tablet event recorded."}<br>
+        <small>${new Date(event.created_at).toLocaleString()}</small>
+      </div>
+    `;
+  }).join("");
+}
   function renderAll() {
     renderScheduleList();
     renderPreview();
