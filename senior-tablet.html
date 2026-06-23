@@ -1006,10 +1006,20 @@ async function checkForMissedReminder() {
 
     localStorage.setItem(missedKey, "true");
 
-    await saveTabletEvent(
-      "missed",
-      payload
-    );
+await saveTabletEvent(
+  "missed",
+  payload
+);
+
+await sendTelegramAlert(
+  `⚠️ Grandma.care Missed Reminder
+
+${senior} did not complete:
+
+${currentItem.name}
+
+Scheduled Time: ${currentItem.time}`
+);
   }
 }
   async function refreshTablet() {
