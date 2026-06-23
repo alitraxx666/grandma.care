@@ -6,7 +6,6 @@
   <link rel="icon" href="favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Senior Tablet | Grandma.care</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -256,6 +255,18 @@
       margin-right:5px;
     }
 
+    .setup-message {
+      padding:24px;
+      font-size:1.2rem;
+      font-weight:900;
+      color:var(--accent);
+      background:white;
+      border-radius:20px;
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      max-width:640px;
+    }
+
     @media(max-width:850px) {
       body { overflow:auto; }
 
@@ -294,7 +305,7 @@
   <div class="app-side">
 
     <div class="clock" id="clockDisplay">Loading time...</div>
-    <div class="hello" id="helloText">Hi Barbara ❤️</div>
+    <div class="hello" id="helloText">Hi ❤️</div>
 
     <div class="card active-reminder" id="reminderCard">
       <div class="time" id="reminderTime">Loading...</div>
@@ -316,16 +327,12 @@
 
     <div class="upcoming">
       <div class="section-title">Next Reminder</div>
-      <div class="upcoming-text" id="upcomingReminder">
-        Loading next reminder...
-      </div>
+      <div class="upcoming-text" id="upcomingReminder">Loading next reminder...</div>
     </div>
 
     <div class="family-note">
       <div class="section-title">Family Note ❤️</div>
-      <div class="family-text" id="familyNote">
-        Loading family note...
-      </div>
+      <div class="family-text" id="familyNote">Loading family note...</div>
       <button class="call" onclick="callFamily()">📞 Call Family</button>
     </div>
 
@@ -344,17 +351,28 @@
 <script>
   const SUPABASE_URL = "https://rsmiivsdxbnwwamdxkhm.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_QCQfaxIpjuOx_26bnBikcQ_rzF29DFa";
-  const TABLET_ID = "barbara-tablet";
 
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
 
-  const photos = [
+  const urlParams = new URLSearchParams(window.location.search);
+
+  const TABLET_ID =
+    urlParams.get("account") ||
+    urlParams.get("tablet") ||
+    localStorage.getItem("grandmaCareUserId") ||
+    localStorage.getItem("grandmaCareUserEmail");
+
+  const demoPhotos = [
     "family-photo-1.jpg",
     "family-photo-2.jpg",
     "family-photo-3.jpg",
     "family-photo-4.jpg"
   ];
 
+  let photos = [...demoPhotos];
   let currentPhoto = 0;
   let appData = {};
   let allItems = [];
@@ -366,6 +384,32 @@
   function setSyncStatus(text) {
     const el = document.getElementById("syncStatus");
     if (el) el.textContent = text;
+  }
+
+  function showNoAccountMessage() {
+    setSyncStatus("No account");
+
+    document.getElementById("helloText").textContent =
+      "Tablet setup needed";
+
+    document.getElementById("reminderTime").textContent =
+      "No caregiver account connected";
+
+    document.getElementById("reminderTask").innerHTML =
+      `<div class="setup-message">
+        This senior tablet is not connected to a caregiver account yet.<br><br>
+        Open this page from the caregiver dashboard, or use:<br>
+        senior-tablet.html?account=YOUR_ACCOUNT_ID
+      </div>`;
+
+    document.getElementById("instructionText").textContent = "";
+    document.getElementById("buttonArea").style.display = "none";
+    document.getElementById("pillList").innerHTML =
+      `<div class="pill-row">No account connected.</div>`;
+    document.getElementById("upcomingReminder").textContent =
+      "Connect this tablet from the caregiver dashboard.";
+    document.getElementById("familyNote").textContent =
+      "No family note loaded yet.";
   }
 
   function todayLocalDateKey() {
@@ -419,6 +463,8 @@
   }
 
   function rotatePhotos() {
+    if (!photos || photos.length === 0) photos = [...demoPhotos];
+
     currentPhoto = (currentPhoto + 1) % photos.length;
     document.getElementById("familyPhoto").src = photos[currentPhoto];
   }
@@ -428,9 +474,7 @@
 
     if (bell) {
       bell.currentTime = 0;
-      bell.play().catch(() => {
-        console.log("Bell sound may be blocked until the tablet is tapped once.");
-      });
+      bell.play().catch(() => {});
     }
   }
 
@@ -444,6 +488,11 @@
   }
 
   async function readDashboardData() {
+    if (!TABLET_ID) {
+      showNoAccountMessage();
+      return null;
+    }
+
     try {
       const { data, error } = await supabaseClient
         .from("grandma_tablets")
@@ -463,7 +512,7 @@
         return data.dashboard_data;
       }
 
-      setSyncStatus("No cloud data yet");
+      setSyncStatus("No cloud data");
       return readLocalBackup();
 
     } catch (err) {
@@ -474,21 +523,13 @@
   }
 
   function readLocalBackup() {
-    const possibleKeys = [
-      "grandmaDashboardData",
-      "grandmaCareDashboardData",
-      "grandmaCareData",
-      "dashboardData"
-    ];
+    const raw = localStorage.getItem("grandmaDashboardData");
 
-    for (const key of possibleKeys) {
-      const raw = localStorage.getItem(key);
-      if (raw) {
-        try {
-          return JSON.parse(raw);
-        } catch (err) {
-          console.log("Could not read", key);
-        }
+    if (raw) {
+      try {
+        return JSON.parse(raw);
+      } catch (err) {
+        return null;
       }
     }
 
@@ -496,6 +537,8 @@
   }
 
   async function saveTabletEvent(eventType, payload) {
+    if (!TABLET_ID) return;
+
     try {
       await supabaseClient
         .from("grandma_tablet_events")
@@ -505,7 +548,7 @@
           event_data: payload
         });
     } catch (err) {
-      console.log("Tablet event table may not exist yet. Local event still saved.", err);
+      console.log("Tablet event not saved to cloud.", err);
     }
   }
 
@@ -601,9 +644,11 @@
   async function loadData() {
     const savedData = await readDashboardData();
 
+    if (!TABLET_ID && !savedData) return;
+
     appData = {
-      senior: "Barbara",
-      seniorName: "Barbara",
+      senior: "Senior",
+      seniorName: "Senior",
       caregiver: "Family",
       caregiverName: "Family",
       familyMessage: "We love you.",
@@ -611,7 +656,8 @@
       medications: [],
       routines: [],
       appointments: [],
-      reminders: []
+      reminders: [],
+      familyPhotos: []
     };
 
     if (savedData) {
@@ -621,13 +667,23 @@
       };
     }
 
+    if (Array.isArray(appData.familyPhotos) && appData.familyPhotos.length > 0) {
+      photos = appData.familyPhotos;
+      document.getElementById("familyPhoto").src = photos[0];
+    } else {
+      photos = [...demoPhotos];
+    }
+
     allItems = collectAllItems(appData);
 
     document.getElementById("helloText").textContent =
-      `Hi ${appData.senior || appData.seniorName || "Barbara"} ❤️`;
+      `Hi ${appData.senior || appData.seniorName || "Senior"} ❤️`;
 
-    const caregiverName = appData.caregiver || appData.caregiverName || "Family";
-    const note = appData.familyMessage || appData.familyNote || appData.note || "";
+    const caregiverName =
+      appData.caregiver || appData.caregiverName || "Family";
+
+    const note =
+      appData.familyMessage || appData.familyNote || appData.note || "";
 
     document.getElementById("familyNote").textContent =
       `${caregiverName} set this up for you. ${note}`;
@@ -635,7 +691,7 @@
 
   function getCompletedKey(item) {
     const today = todayLocalDateKey();
-    return `completed-${today}-${item.id}`;
+    return `completed-${today}-${TABLET_ID}-${item.id}`;
   }
 
   function isCompleted(item) {
@@ -658,24 +714,13 @@
 
     const notCompleted = todaysItems.find(item => !isCompleted(item));
 
-    if (notCompleted) {
-      currentItem = notCompleted;
-    } else {
-      currentItem = todaysItems[todaysItems.length - 1];
-    }
+    currentItem = notCompleted || todaysItems[todaysItems.length - 1];
   }
 
   function getActionText(item) {
     if (!item) return "Reminder";
-
-    if (item.type === "medication") {
-      return `Take ${item.name}.`;
-    }
-
-    if (item.type === "appointment") {
-      return `${item.name}.`;
-    }
-
+    if (item.type === "medication") return `Take ${item.name}.`;
+    if (item.type === "appointment") return `${item.name}.`;
     return item.name;
   }
 
@@ -687,8 +732,12 @@
     card.classList.remove("active-reminder", "done-reminder");
 
     if (!currentItem) {
-      document.getElementById("reminderTime").textContent = "No reminders today";
-      document.getElementById("reminderTask").textContent = "Enjoy your day ❤️";
+      document.getElementById("reminderTime").textContent =
+        "No reminders today";
+
+      document.getElementById("reminderTask").textContent =
+        "Enjoy your day ❤️";
+
       document.getElementById("instructionText").textContent =
         "There are no reminders scheduled for today.";
 
@@ -799,7 +848,8 @@
     localStorage.setItem(getCompletedKey(currentItem), "true");
     localStorage.setItem("grandmaLastCompletedDate", todayLocalDateKey());
 
-    const senior = appData.senior || appData.seniorName || "Barbara";
+    const senior =
+      appData.senior || appData.seniorName || "Senior";
 
     const payload = {
       senior: senior,
@@ -814,7 +864,6 @@
     localStorage.removeItem("grandmaAlert");
 
     await saveTabletEvent("completed", payload);
-
     playSuccessSound();
 
     document.getElementById("statusMessage").textContent =
@@ -824,8 +873,11 @@
   }
 
   async function needHelp() {
-    const senior = appData.senior || appData.seniorName || "Barbara";
-    const itemName = currentItem ? currentItem.name : "today's reminder";
+    const senior =
+      appData.senior || appData.seniorName || "Senior";
+
+    const itemName =
+      currentItem ? currentItem.name : "today's reminder";
 
     document.getElementById("statusMessage").textContent =
       "Help requested. Your caregiver should be contacted.";
@@ -843,12 +895,12 @@
     localStorage.setItem("grandmaAlert", JSON.stringify(payload));
 
     await saveTabletEvent("help", payload);
-
     playReminderBell();
   }
 
   function callFamily() {
-    const caregiver = appData.caregiver || appData.caregiverName || "Family";
+    const caregiver =
+      appData.caregiver || appData.caregiverName || "Family";
 
     document.getElementById("statusMessage").textContent =
       `Calling ${caregiver}...`;
@@ -906,8 +958,10 @@
   }
 
   function listenForRealtimeUpdates() {
+    if (!TABLET_ID) return;
+
     supabaseClient
-      .channel("grandma-tablet-live")
+      .channel("grandma-tablet-live-" + TABLET_ID)
       .on(
         "postgres_changes",
         {
@@ -931,19 +985,27 @@
 
   removeOldServiceWorkerCache();
   clearOldCompletionData();
-  refreshTablet();
   updateClock();
-  listenForRealtimeUpdates();
+
+  if (!TABLET_ID) {
+    showNoAccountMessage();
+  } else {
+    refreshTablet();
+    listenForRealtimeUpdates();
+  }
 
   setInterval(rotatePhotos, 5000);
   setInterval(updateClock, 1000);
-  setInterval(refreshTablet, 3000);
 
-  setInterval(() => {
-    if (currentItem && !isCompleted(currentItem)) {
-      playReminderBell();
-    }
-  }, 60000);
+  if (TABLET_ID) {
+    setInterval(refreshTablet, 3000);
+
+    setInterval(() => {
+      if (currentItem && !isCompleted(currentItem)) {
+        playReminderBell();
+      }
+    }, 60000);
+  }
 </script>
 
 </body>
