@@ -959,7 +959,59 @@
         "Everything is complete for today ✅";
     }
   }
+const MISSED_AFTER_MINUTES = 60;
 
+async function checkForMissedReminder() {
+  if (!currentItem || isCompleted(currentItem)) return;
+
+  const now = new Date();
+
+  const [hour, minute] =
+    String(currentItem.time || "09:00").split(":");
+
+  const reminderTime = new Date();
+
+  reminderTime.setHours(
+    parseInt(hour),
+    parseInt(minute || "0"),
+    0,
+    0
+  );
+
+  const minutesLate =
+    (now - reminderTime) / 1000 / 60;
+
+  const missedKey =
+    `missed-${todayLocalDateKey()}-${TABLET_ID}-${currentItem.id}`;
+
+  if (
+    minutesLate >= MISSED_AFTER_MINUTES &&
+    localStorage.getItem(missedKey) !== "true"
+  ) {
+    const senior =
+      appData.senior ||
+      appData.seniorName ||
+      "Senior";
+
+    const payload = {
+      senior: senior,
+      message: `${senior} has not completed: ${currentItem.name}.`,
+      task: currentItem.name,
+      type: currentItem.type,
+      item_id: currentItem.id,
+      scheduled_time: currentItem.time,
+      time: new Date().toLocaleString(),
+      status: "missed"
+    };
+
+    localStorage.setItem(missedKey, "true");
+
+    await saveTabletEvent(
+      "missed",
+      payload
+    );
+  }
+}
   async function refreshTablet() {
     if (isRefreshing) return;
     isRefreshing = true;
@@ -970,6 +1022,8 @@
     updateMainCard();
     renderPillList();
     updateUpcomingReminder();
+await checkForMissedReminder();
+   
 
     isRefreshing = false;
   }
