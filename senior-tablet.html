@@ -11,7 +11,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    :root {
+    :root,
+    body.theme-summer {
       --bg:#FFF4C7;
       --card:#FFFFFF;
       --text:#123A5A;
@@ -24,8 +25,92 @@
       --shadow:0 12px 30px rgba(0,108,131,0.18);
       --yellow:#FFE37A;
       --done:#D9F8DF;
-      --aqua:#D7F7F2;
-      --coral:#FFE1DA;
+      --body-bg:
+        radial-gradient(circle at top right, #B9F3FF 0%, transparent 30%),
+        linear-gradient(135deg, #FFF4C7 0%, #FFE7A8 45%, #CFF7EF 100%);
+      --photo-bg:#9FE7F5;
+      --photo-label:linear-gradient(135deg,#00A7BE,#23C6B8);
+      --reminder-bg:linear-gradient(135deg,#FFE981 0%,#FFD36A 100%);
+      --done-bg:linear-gradient(135deg,#D9F8DF 0%,#B8F0CE 100%);
+      --yes-bg:linear-gradient(135deg,#35D47A,#18A957);
+      --help-bg:linear-gradient(135deg,#FF7B6D,#FF4F76);
+      --family-bg:linear-gradient(135deg,#D7F7F2,#FFF7D6);
+    }
+
+    body.theme-spring {
+      --bg:#F7FFE8;
+      --card:#FFFFFF;
+      --text:#24443A;
+      --muted:#5B8C74;
+      --accent:#79B88A;
+      --accent-deep:#3F7F5F;
+      --danger:#F47A8D;
+      --success:#66B85F;
+      --border:#D9EDB8;
+      --shadow:0 12px 30px rgba(86,139,96,0.18);
+      --yellow:#FFF2A8;
+      --done:#E4F8DA;
+      --body-bg:
+        radial-gradient(circle at top right, #FFD6E6 0%, transparent 32%),
+        linear-gradient(135deg, #F7FFE8 0%, #E7F8D8 42%, #D9F7EE 100%);
+      --photo-bg:#D6F5DF;
+      --photo-label:linear-gradient(135deg,#77C98B,#F4A8C4);
+      --reminder-bg:linear-gradient(135deg,#FFF2A8 0%,#FFE0B5 100%);
+      --done-bg:linear-gradient(135deg,#E4F8DA 0%,#C9F0BE 100%);
+      --yes-bg:linear-gradient(135deg,#81D77B,#4FB968);
+      --help-bg:linear-gradient(135deg,#F48BA0,#E85C79);
+      --family-bg:linear-gradient(135deg,#E9FAD8,#FFF1F6);
+    }
+
+    body.theme-fall {
+      --bg:#FFF0D8;
+      --card:#FFFFFF;
+      --text:#4A2B17;
+      --muted:#8B5A32;
+      --accent:#C66A2D;
+      --accent-deep:#8F431F;
+      --danger:#B8462E;
+      --success:#6F8E3E;
+      --border:#E7B071;
+      --shadow:0 12px 30px rgba(120,72,32,0.20);
+      --yellow:#FFD78A;
+      --done:#E8F1D0;
+      --body-bg:
+        radial-gradient(circle at top right, #D66737 0%, transparent 30%),
+        linear-gradient(135deg, #FFF0D8 0%, #FFD9A0 45%, #C8894E 100%);
+      --photo-bg:#D99A5A;
+      --photo-label:linear-gradient(135deg,#B85C2B,#E69B3A);
+      --reminder-bg:linear-gradient(135deg,#FFD78A 0%,#F2A65A 100%);
+      --done-bg:linear-gradient(135deg,#E8F1D0 0%,#C8D889 100%);
+      --yes-bg:linear-gradient(135deg,#8FAF4D,#5F8F3A);
+      --help-bg:linear-gradient(135deg,#D46A3C,#A83B2E);
+      --family-bg:linear-gradient(135deg,#FFE0B5,#F6C48B);
+    }
+
+    body.theme-winter {
+      --bg:#EAF7FF;
+      --card:#FFFFFF;
+      --text:#102C4A;
+      --muted:#4E7895;
+      --accent:#2A80B9;
+      --accent-deep:#0E5B8A;
+      --danger:#C92E3F;
+      --success:#1F9D75;
+      --border:#BFE3F7;
+      --shadow:0 12px 30px rgba(20,80,120,0.18);
+      --yellow:#FFF7C2;
+      --done:#DDF6EF;
+      --body-bg:
+        radial-gradient(circle at top left, #FFFFFF 0%, transparent 26%),
+        radial-gradient(circle at top right, #D72638 0%, transparent 18%),
+        linear-gradient(135deg, #EAF7FF 0%, #D9F0FF 45%, #F7FBFF 100%);
+      --photo-bg:#D9F0FF;
+      --photo-label:linear-gradient(135deg,#0E5B8A,#D72638);
+      --reminder-bg:linear-gradient(135deg,#FFFFFF 0%,#D9F0FF 100%);
+      --done-bg:linear-gradient(135deg,#DDF6EF 0%,#B7ECDC 100%);
+      --yes-bg:linear-gradient(135deg,#28B98B,#087F5B);
+      --help-bg:linear-gradient(135deg,#E03A4E,#B91C2B);
+      --family-bg:linear-gradient(135deg,#FFFFFF,#E6F6FF);
     }
 
     * { box-sizing:border-box; }
@@ -33,9 +118,7 @@
     body {
       margin:0;
       font-family:Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top right, #B9F3FF 0%, transparent 30%),
-        linear-gradient(135deg, #FFF4C7 0%, #FFE7A8 45%, #CFF7EF 100%);
+      background:var(--body-bg);
       color:var(--text);
       min-height:100vh;
       overflow:hidden;
@@ -65,7 +148,7 @@
       position:relative;
       height:100vh;
       overflow:hidden;
-      background:#9FE7F5;
+      background:var(--photo-bg);
       border-right:6px solid rgba(255,255,255,.45);
     }
 
@@ -80,7 +163,7 @@
       position:absolute;
       left:14px;
       bottom:14px;
-      background:linear-gradient(135deg,#00A7BE,#23C6B8);
+      background:var(--photo-label);
       color:white;
       padding:9px 16px;
       border-radius:999px;
@@ -113,7 +196,7 @@
       font-weight:900;
       margin-bottom:8px;
       line-height:1;
-      color:#0A2B68;
+      color:var(--text);
     }
 
     .card {
@@ -126,19 +209,19 @@
     }
 
     .active-reminder {
-      background:linear-gradient(135deg,#FFE981 0%,#FFD36A 100%);
-      border:3px solid #00A7BE;
+      background:var(--reminder-bg);
+      border:3px solid var(--accent);
     }
 
     .done-reminder {
-      background:linear-gradient(135deg,#D9F8DF 0%,#B8F0CE 100%);
+      background:var(--done-bg);
       border:3px solid var(--success);
     }
 
     .time {
       font-size:1.25rem;
       font-weight:900;
-      color:#C95500;
+      color:var(--accent-deep);
       margin-bottom:4px;
     }
 
@@ -147,12 +230,12 @@
       line-height:1.05;
       font-weight:900;
       margin-bottom:6px;
-      color:#123A5A;
+      color:var(--text);
     }
 
     .instruction {
       font-size:.95rem;
-      color:#287489;
+      color:var(--muted);
       margin-bottom:10px;
       font-weight:800;
     }
@@ -174,19 +257,14 @@
       box-shadow:0 8px 18px rgba(0,0,0,.12);
     }
 
-    .yes {
-      background:linear-gradient(135deg,#35D47A,#18A957);
-    }
-
-    .help {
-      background:linear-gradient(135deg,#FF7B6D,#FF4F76);
-    }
+    .yes { background:var(--yes-bg); }
+    .help { background:var(--help-bg); }
 
     .status {
       margin-top:8px;
       font-size:.95rem;
       font-weight:900;
-      color:#006B83;
+      color:var(--accent-deep);
     }
 
     .upcoming,
@@ -195,23 +273,21 @@
       width:min(700px,100%);
       margin-top:8px;
       background:rgba(255,255,255,0.82);
-      border:1px solid rgba(255,216,138,.95);
+      border:1px solid var(--border);
       border-radius:20px;
       padding:9px 12px;
       text-align:left;
-      box-shadow:0 8px 20px rgba(0,108,131,0.10);
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
     }
 
-    .family-note {
-      background:linear-gradient(135deg,#D7F7F2,#FFF7D6);
-    }
+    .family-note { background:var(--family-bg); }
 
     .section-title {
       font-size:.72rem;
       text-transform:uppercase;
       letter-spacing:.08em;
       font-weight:900;
-      color:#007E96;
+      color:var(--accent-deep);
       margin-bottom:4px;
     }
 
@@ -220,7 +296,7 @@
       font-size:.95rem;
       font-weight:800;
       line-height:1.25;
-      color:#123A5A;
+      color:var(--text);
     }
 
     .pill-list {
@@ -233,7 +309,7 @@
 
     .pill-row {
       background:white;
-      border:1px solid #FFE1A6;
+      border:1px solid var(--border);
       border-radius:14px;
       padding:8px 10px;
       font-weight:800;
@@ -242,29 +318,29 @@
       gap:10px;
       align-items:center;
       font-size:.95rem;
-      color:#123A5A;
+      color:var(--text);
     }
 
     .pill-row.active {
-      background:#FFF0A6;
-      border:2px solid #00A7BE;
+      background:var(--yellow);
+      border:2px solid var(--accent);
     }
 
     .pill-row.done {
-      background:#D9F8DF;
-      color:#168B4B;
-      border:2px solid #29B86F;
+      background:var(--done);
+      color:var(--success);
+      border:2px solid var(--success);
     }
 
     .pill-time {
-      color:#007E96;
+      color:var(--accent-deep);
       font-weight:900;
       white-space:nowrap;
     }
 
     .type-label {
       font-size:.75rem;
-      color:#287489;
+      color:var(--muted);
       font-weight:900;
       text-transform:uppercase;
       margin-right:5px;
@@ -306,19 +382,17 @@
   </style>
 </head>
 
-<body>
+<body class="theme-summer">
 
 <div class="sync-status" id="syncStatus">Connecting...</div>
 
 <div class="tablet">
-
   <div class="photo-side">
     <img id="familyPhoto" src="family-photo-1.jpg" alt="Family photo slideshow">
     <div class="photo-label">Family Photos ❤️</div>
   </div>
 
   <div class="app-side">
-
     <div class="clock" id="clockDisplay">Loading time...</div>
     <div class="hello" id="helloText">Hi ❤️</div>
 
@@ -349,9 +423,7 @@
       <div class="section-title">Family Note ❤️</div>
       <div class="family-text" id="familyNote">Loading family note...</div>
     </div>
-
   </div>
-
 </div>
 
 <audio id="reminderBell" preload="auto">
@@ -394,6 +466,49 @@
   let currentItem = null;
   let lastReminderId = null;
   let isRefreshing = false;
+
+  function getAutoSeasonTheme() {
+    const month = new Date().getMonth() + 1;
+
+    if (month >= 3 && month <= 5) return "spring";
+    if (month >= 6 && month <= 8) return "summer";
+    if (month >= 9 && month <= 11) return "fall";
+    return "winter";
+  }
+
+  function applyTheme(themeChoice) {
+    let theme = themeChoice || "summer";
+
+    if (theme === "auto") {
+      theme = getAutoSeasonTheme();
+    }
+
+    const allowedThemes = ["spring", "summer", "fall", "winter"];
+
+    if (!allowedThemes.includes(theme)) {
+      theme = "summer";
+    }
+
+    document.body.classList.remove(
+      "theme-spring",
+      "theme-summer",
+      "theme-fall",
+      "theme-winter"
+    );
+
+    document.body.classList.add(`theme-${theme}`);
+
+    const themeColors = {
+      spring: "#F7FFE8",
+      summer: "#FFF4C7",
+      fall: "#FFF0D8",
+      winter: "#EAF7FF"
+    };
+
+    document
+      .querySelector('meta[name="theme-color"]')
+      .setAttribute("content", themeColors[theme]);
+  }
 
   function setSyncStatus(text) {
     const el = document.getElementById("syncStatus");
@@ -671,7 +786,8 @@
       routines: [],
       appointments: [],
       reminders: [],
-      familyPhotos: []
+      familyPhotos: [],
+      theme: "summer"
     };
 
     if (savedData) {
@@ -680,6 +796,8 @@
         ...savedData
       };
     }
+
+    applyTheme(appData.theme || appData.tabletTheme || "summer");
 
     if (Array.isArray(appData.familyPhotos) && appData.familyPhotos.length > 0) {
       photos = appData.familyPhotos;
@@ -912,14 +1030,6 @@
     playReminderBell();
   }
 
-  function callFamily() {
-    const caregiver =
-      appData.caregiver || appData.caregiverName || "Family";
-
-    document.getElementById("statusMessage").textContent =
-      `Calling ${caregiver}...`;
-  }
-
   function formatTime(time) {
     if (!time) return "";
 
@@ -997,6 +1107,7 @@
       });
   }
 
+  applyTheme("summer");
   removeOldServiceWorkerCache();
   clearOldCompletionData();
   updateClock();
