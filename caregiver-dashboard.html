@@ -314,6 +314,48 @@
       margin-top:8px;
     }
 
+    .photo-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+    }
+
+    .photo-slot {
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:10px;
+    }
+
+    .photo-slot img,
+    .photo-placeholder {
+      width:100%;
+      height:110px;
+      object-fit:cover;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:8px;
+      background:#F3F0E5;
+      color:var(--muted);
+      font-weight:900;
+      text-align:center;
+    }
+
+    .photo-slot input {
+      padding:8px;
+      font-size:.85rem;
+    }
+
+    .photo-slot button {
+      width:100%;
+      margin-top:8px;
+      border-radius:12px;
+      padding:9px 12px;
+      font-size:.85rem;
+    }
+
     .hidden { display:none; }
 
     @media(max-width:900px) {
@@ -324,6 +366,7 @@
 
       .row { grid-template-columns:1fr; }
       .days { grid-template-columns:repeat(4,1fr); }
+      .photo-grid { grid-template-columns:1fr 1fr; }
       .top-actions { justify-content:flex-start; }
     }
   </style>
@@ -370,6 +413,17 @@
         <div class="save-bar">
           <button class="btn-primary" onclick="saveNamesAndNote()">Save Names & Note</button>
         </div>
+      </section>
+
+      <section class="card">
+        <h2>Family Photos</h2>
+        <p class="helper">Upload up to 6 family photos. These appear automatically on the senior tablet slideshow.</p>
+
+        <div class="photo-grid" id="photoGrid"></div>
+
+        <p class="small-note">
+          Photos are saved in Supabase Storage and connected to this caregiver account.
+        </p>
       </section>
 
       <section class="card">
@@ -473,6 +527,7 @@
   let TABLET_ID = null;
   let loggedInEmail = null;
   let tabletUrl = "";
+  let showSavePopups = true;
 
   let dashboardData = {
     senior: "Senior",
@@ -611,6 +666,10 @@
     dashboardData.appointments = dashboardData.appointments || [];
     dashboardData.reminders = dashboardData.reminders || [];
     dashboardData.familyPhotos = dashboardData.familyPhotos || [];
+
+    if (dashboardData.familyPhotos.length > 6) {
+      dashboardData.familyPhotos = dashboardData.familyPhotos.slice(0, 6);
+    }
   }
 
   async function loadDashboardData() {
@@ -742,8 +801,6 @@
       alert("Saved to cloud. The senior tablet should update.");
     }
   }
-
-  let showSavePopups = true;
 
   function saveNamesAndNote() {
     saveDashboardData();
@@ -889,6 +946,105 @@
     }).join("");
   }
 
+  function renderPhotoUploads() {
+    const grid = document.getElementById("photoGrid");
+    if (!grid) return;
+
+    normalizeDashboardData();
+
+    let html = "";
+
+    for (let i = 0; i < 6; i++) {
+      const photoUrl = dashboardData.familyPhotos[i];
+
+      html += `
+        <div class="photo-slot">
+          ${
+            photoUrl
+              ? `<img src="${photoUrl}" alt="Family photo ${i + 1}">`
+              : `<div class="photo-placeholder">Photo ${i + 1}</div>`
+          }
+
+          <input
+            type="file"
+            accept="image/*"
+            onchange="uploadFamilyPhoto(event, ${i})"
+          >
+
+          ${
+            photoUrl
+              ? `<button class="btn-danger" onclick="removeFamilyPhoto(${i})">Remove</button>`
+              : ""
+          }
+        </div>
+      `;
+    }
+
+    grid.innerHTML = html;
+  }
+
+  async function uploadFamilyPhoto(event, index) {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    if (!TABLET_ID) {
+      alert("Please sign in first.");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please choose an image file.");
+      return;
+    }
+
+    setSyncStatus("Uploading photo...");
+
+    const fileExt = file.name.split(".").pop() || "jpg";
+    const safeExt = fileExt.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const fileName = `${TABLET_ID}/family-photo-${index + 1}-${Date.now()}.${safeExt}`;
+
+    const { error: uploadError } = await supabaseClient
+      .storage
+      .from("family-photos")
+      .upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: true
+      });
+
+    if (uploadError) {
+      console.log("Photo upload error:", uploadError.message);
+      alert("Photo upload failed: " + uploadError.message);
+      setSyncStatus("Photo upload failed");
+      return;
+    }
+
+    const { data } = supabaseClient
+      .storage
+      .from("family-photos")
+      .getPublicUrl(fileName);
+
+    dashboardData.familyPhotos[index] = data.publicUrl;
+
+    await saveSilently();
+
+    renderPhotoUploads();
+    renderAll();
+
+    setSyncStatus("Photo saved");
+  }
+
+  async function removeFamilyPhoto(index) {
+    dashboardData.familyPhotos.splice(index, 1);
+
+    await saveSilently();
+
+    renderPhotoUploads();
+    renderAll();
+
+    setSyncStatus("Photo removed");
+  }
+
   function renderPreview() {
     const todayItems = getAllItems().filter(itemIsToday);
     const nextItem = todayItems.find(item => !isCompleted(item)) || todayItems[0];
@@ -960,6 +1116,7 @@
     renderScheduleList();
     renderPreview();
     renderAlerts();
+    renderPhotoUploads();
   }
 
   async function resetDashboard() {
