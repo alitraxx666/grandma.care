@@ -1059,16 +1059,21 @@ await checkForMissedReminder();
   }
 async function sendTelegramAlert(message) {
   try {
-    await fetch(
+    const response = await fetch(
       `${SUPABASE_URL}/functions/v1/send-telegram-alert`,
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
         },
         body: JSON.stringify({ message })
       }
     );
+
+    const result = await response.json();
+    console.log("Telegram result:", result);
+
   } catch (err) {
     console.log("Telegram alert failed:", err);
   }
