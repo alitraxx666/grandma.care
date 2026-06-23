@@ -1057,7 +1057,22 @@ await checkForMissedReminder();
 
     await refreshTablet();
   }
-
+async function sendTelegramAlert(message) {
+  try {
+    await fetch(
+      `${SUPABASE_URL}/functions/v1/send-telegram-alert`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
+      }
+    );
+  } catch (err) {
+    console.log("Telegram alert failed:", err);
+  }
+}
   async function needHelp() {
     const senior =
       appData.senior || appData.seniorName || "Senior";
@@ -1081,6 +1096,14 @@ await checkForMissedReminder();
     localStorage.setItem("grandmaAlert", JSON.stringify(payload));
 
     await saveTabletEvent("help", payload);
+    await sendTelegramAlert(
+  `🆘 Grandma.care Alert
+
+${senior} requested help.
+
+Task: ${itemName}
+Time: ${new Date().toLocaleString()}`
+);
     playReminderBell();
   }
 
