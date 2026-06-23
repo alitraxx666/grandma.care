@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#F3F0E5">
+  <meta name="theme-color" content="#FFF4C7">
   <link rel="icon" href="favicon.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,17 +12,20 @@
 
   <style>
     :root {
-      --bg:#F3F0E5;
+      --bg:#FFF4C7;
       --card:#FFFFFF;
-      --text:#234A53;
-      --muted:#4E707A;
-      --accent:#204A53;
-      --danger:#B42318;
-      --success:#1F7A4D;
-      --border:#D8D1C1;
-      --shadow:0 10px 28px rgba(35,74,83,0.14);
-      --yellow:#FFF3B0;
-      --done:#DFF3E8;
+      --text:#123A5A;
+      --muted:#287489;
+      --accent:#008CA8;
+      --accent-deep:#006B83;
+      --danger:#FF6B5E;
+      --success:#29B86F;
+      --border:#FFD88A;
+      --shadow:0 12px 30px rgba(0,108,131,0.18);
+      --yellow:#FFE37A;
+      --done:#D9F8DF;
+      --aqua:#D7F7F2;
+      --coral:#FFE1DA;
     }
 
     * { box-sizing:border-box; }
@@ -30,7 +33,9 @@
     body {
       margin:0;
       font-family:Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:var(--bg);
+      background:
+        radial-gradient(circle at top right, #B9F3FF 0%, transparent 30%),
+        linear-gradient(135deg, #FFF4C7 0%, #FFE7A8 45%, #CFF7EF 100%);
       color:var(--text);
       min-height:100vh;
       overflow:hidden;
@@ -43,7 +48,7 @@
       z-index:9999;
       background:rgba(255,255,255,.9);
       border:1px solid var(--border);
-      color:var(--accent);
+      color:var(--accent-deep);
       border-radius:999px;
       padding:6px 10px;
       font-size:.72rem;
@@ -60,7 +65,8 @@
       position:relative;
       height:100vh;
       overflow:hidden;
-      background:#ddd;
+      background:#9FE7F5;
+      border-right:6px solid rgba(255,255,255,.45);
     }
 
     .photo-side img {
@@ -74,12 +80,13 @@
       position:absolute;
       left:14px;
       bottom:14px;
-      background:rgba(255,255,255,0.9);
-      padding:8px 14px;
+      background:linear-gradient(135deg,#00A7BE,#23C6B8);
+      color:white;
+      padding:9px 16px;
       border-radius:999px;
       font-size:.95rem;
       font-weight:900;
-      color:var(--accent);
+      box-shadow:var(--shadow);
     }
 
     .app-side {
@@ -96,7 +103,7 @@
     .clock {
       font-size:1.28rem;
       font-weight:900;
-      color:var(--accent);
+      color:var(--accent-deep);
       margin-bottom:4px;
       line-height:1.15;
     }
@@ -106,31 +113,32 @@
       font-weight:900;
       margin-bottom:8px;
       line-height:1;
+      color:#0A2B68;
     }
 
     .card {
       width:min(700px,100%);
       background:white;
-      border-radius:22px;
+      border-radius:24px;
       padding:14px 16px;
       box-shadow:var(--shadow);
-      border:1px solid var(--border);
+      border:1px solid rgba(255,255,255,.85);
     }
 
     .active-reminder {
-      background:var(--yellow);
-      border:3px solid var(--accent);
+      background:linear-gradient(135deg,#FFE981 0%,#FFD36A 100%);
+      border:3px solid #00A7BE;
     }
 
     .done-reminder {
-      background:var(--done);
+      background:linear-gradient(135deg,#D9F8DF 0%,#B8F0CE 100%);
       border:3px solid var(--success);
     }
 
     .time {
       font-size:1.25rem;
       font-weight:900;
-      color:var(--accent);
+      color:#C95500;
       margin-bottom:4px;
     }
 
@@ -139,13 +147,14 @@
       line-height:1.05;
       font-weight:900;
       margin-bottom:6px;
+      color:#123A5A;
     }
 
     .instruction {
       font-size:.95rem;
-      color:var(--muted);
+      color:#287489;
       margin-bottom:10px;
-      font-weight:700;
+      font-weight:800;
     }
 
     .buttons {
@@ -156,29 +165,28 @@
 
     button {
       border:none;
-      border-radius:18px;
+      border-radius:20px;
       padding:13px 10px;
       font-size:1.05rem;
       font-weight:900;
       cursor:pointer;
       color:white;
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
     }
 
-    .yes { background:var(--success); }
-    .help { background:var(--danger); }
+    .yes {
+      background:linear-gradient(135deg,#35D47A,#18A957);
+    }
 
-    .call {
-      background:var(--accent);
-      width:100%;
-      margin-top:8px;
-      padding:12px 10px;
-      font-size:1rem;
+    .help {
+      background:linear-gradient(135deg,#FF7B6D,#FF4F76);
     }
 
     .status {
       margin-top:8px;
       font-size:.95rem;
       font-weight:900;
+      color:#006B83;
     }
 
     .upcoming,
@@ -186,11 +194,16 @@
     .family-note {
       width:min(700px,100%);
       margin-top:8px;
-      background:rgba(255,255,255,0.78);
-      border:1px solid var(--border);
-      border-radius:18px;
+      background:rgba(255,255,255,0.82);
+      border:1px solid rgba(255,216,138,.95);
+      border-radius:20px;
       padding:9px 12px;
       text-align:left;
+      box-shadow:0 8px 20px rgba(0,108,131,0.10);
+    }
+
+    .family-note {
+      background:linear-gradient(135deg,#D7F7F2,#FFF7D6);
     }
 
     .section-title {
@@ -198,7 +211,7 @@
       text-transform:uppercase;
       letter-spacing:.08em;
       font-weight:900;
-      color:var(--muted);
+      color:#007E96;
       margin-bottom:4px;
     }
 
@@ -207,6 +220,7 @@
       font-size:.95rem;
       font-weight:800;
       line-height:1.25;
+      color:#123A5A;
     }
 
     .pill-list {
@@ -219,8 +233,8 @@
 
     .pill-row {
       background:white;
-      border:1px solid var(--border);
-      border-radius:12px;
+      border:1px solid #FFE1A6;
+      border-radius:14px;
       padding:8px 10px;
       font-weight:800;
       display:flex;
@@ -228,28 +242,29 @@
       gap:10px;
       align-items:center;
       font-size:.95rem;
+      color:#123A5A;
     }
 
     .pill-row.active {
-      background:var(--yellow);
-      border:2px solid var(--accent);
+      background:#FFF0A6;
+      border:2px solid #00A7BE;
     }
 
     .pill-row.done {
-      background:var(--done);
-      color:var(--success);
-      border:2px solid var(--success);
+      background:#D9F8DF;
+      color:#168B4B;
+      border:2px solid #29B86F;
     }
 
     .pill-time {
-      color:var(--muted);
+      color:#007E96;
       font-weight:900;
       white-space:nowrap;
     }
 
     .type-label {
       font-size:.75rem;
-      color:var(--muted);
+      color:#287489;
       font-weight:900;
       text-transform:uppercase;
       margin-right:5px;
@@ -259,7 +274,7 @@
       padding:24px;
       font-size:1.2rem;
       font-weight:900;
-      color:var(--accent);
+      color:var(--accent-deep);
       background:white;
       border-radius:20px;
       border:1px solid var(--border);
@@ -333,7 +348,6 @@
     <div class="family-note">
       <div class="section-title">Family Note ❤️</div>
       <div class="family-text" id="familyNote">Loading family note...</div>
-      <button class="call" onclick="callFamily()">📞 Call Family</button>
     </div>
 
   </div>
