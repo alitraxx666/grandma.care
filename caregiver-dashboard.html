@@ -356,9 +356,9 @@
       font-size:.85rem;
     }
 
-    .theme-options {
-      display:grid;
-      grid-template-columns:repeat(5,1fr);
+   .theme-options {
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
       gap:10px;
       margin-top:12px;
     }
@@ -418,7 +418,9 @@
     .winter-1 { background:#EAF7FF; }
     .winter-2 { background:#2A80B9; }
     .winter-3 { background:#C92E3F; }
-
+.sunset-1 { background:#F8E8F4; }
+.sunset-2 { background:#E78AB7; }
+.sunset-3 { background:#FFB7A3; }
     .auto-1 { background:#F7FFE8; }
     .auto-2 { background:#FFD78A; }
     .auto-3 { background:#EAF7FF; }
@@ -534,7 +536,14 @@
             </div>
             <span class="theme-label">Winter / Christmas</span>
           </button>
-
+<button class="theme-option" type="button" data-theme="sunset" onclick="selectTheme('sunset')">
+  <div class="theme-dot-row">
+    <span class="theme-dot sunset-1"></span>
+    <span class="theme-dot sunset-2"></span>
+    <span class="theme-dot sunset-3"></span>
+  </div>
+  <span class="theme-label">Sunset Clouds</span>
+</button>
           <button class="theme-option" type="button" data-theme="auto" onclick="selectTheme('auto')">
             <div class="theme-dot-row">
               <span class="theme-dot auto-1"></span>
