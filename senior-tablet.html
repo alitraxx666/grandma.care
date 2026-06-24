@@ -112,7 +112,84 @@
       --help-bg:linear-gradient(135deg,#E03A4E,#B91C2B);
       --family-bg:linear-gradient(135deg,#FFFFFF,#E6F6FF);
     }
+body.theme-sunset {
+  --bg:#F8E8F4;
+  --card:#FFFFFF;
+  --text:#5C4A68;
+  --muted:#8E7A99;
 
+  --accent:#E78AB7;
+  --accent-deep:#C96D9D;
+
+  --danger:#F06B8A;
+  --success:#7FBFA2;
+
+  --border:#F2C8DA;
+
+  --shadow:0 12px 30px rgba(201,109,157,0.20);
+
+  --yellow:#FFE7B8;
+  --done:#E7F7EE;
+
+  --body-bg:
+    radial-gradient(circle at top left,
+      #FFD7E8 0%,
+      transparent 30%),
+    radial-gradient(circle at top right,
+      #FFD4B8 0%,
+      transparent 35%),
+    linear-gradient(
+      135deg,
+      #F8E8F4 0%,
+      #FFD7E8 40%,
+      #FFD4B8 70%,
+      #E9D8FF 100%
+    );
+
+  --photo-bg:#F8D9E8;
+
+  --photo-label:
+    linear-gradient(
+      135deg,
+      #E78AB7,
+      #FFB7A3
+    );
+
+  --reminder-bg:
+    linear-gradient(
+      135deg,
+      #FFE9F2 0%,
+      #FFDCC9 100%
+    );
+
+  --done-bg:
+    linear-gradient(
+      135deg,
+      #E7F7EE 0%,
+      #D4F2E3 100%
+    );
+
+  --yes-bg:
+    linear-gradient(
+      135deg,
+      #9AD5B5,
+      #73B28D
+    );
+
+  --help-bg:
+    linear-gradient(
+      135deg,
+      #FF9AB4,
+      #F06B8A
+    );
+
+  --family-bg:
+    linear-gradient(
+      135deg,
+      #FFF1F7,
+      #FFE9D9
+    );
+}
     * { box-sizing:border-box; }
 
     body {
@@ -496,7 +573,8 @@
       theme = getAutoSeasonTheme();
     }
 
-    const allowedThemes = ["spring", "summer", "fall", "winter"];
+    const allowedThemes = ["spring", "summer", "fall", "winter",
+  "sunset"];
 
     if (!allowedThemes.includes(theme)) {
       theme = "summer";
@@ -515,7 +593,8 @@
       spring: "#F7FFE8",
       summer: "#FFF4C7",
       fall: "#FFF0D8",
-      winter: "#EAF7FF"
+      winter: "#EAF7FF",
+      sunset: "#F8E8F4"
     };
 
     document
