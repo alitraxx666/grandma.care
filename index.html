@@ -6,15 +6,15 @@
   <meta name="theme-color" content="#F3F0E5">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Grandma.care">
+  <meta name="apple-mobile-web-app-title" content="Grandma.Care">
   <link rel="apple-touch-icon" href="icon-192.png">
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Grandma.care</title>
+  <title>Grandma.Care</title>
 
-  <meta name="description" content="Grandma.care helps caregivers set up simple reminders, routines, appointments, and family notes for a senior tablet." />
+  <meta name="description" content="Grandma.Care helps caregivers set up simple reminders, routines, appointments, and family notes for a senior tablet." />
 
   <style>
     :root {
@@ -58,32 +58,33 @@
       justify-content:space-between;
       gap:18px;
       align-items:center;
-      margin-bottom:20px;
+      margin-bottom:26px;
     }
 
     .brand {
       display:flex;
       align-items:center;
-      gap:14px;
+      gap:20px;
     }
 
     .logo {
-      height:72px;
+      height:118px;
       width:auto;
       display:block;
     }
 
     h1 {
       margin:0;
-      font-size:clamp(2rem,4vw,3.3rem);
-      letter-spacing:-.05em;
-      line-height:1;
+      font-size:clamp(3.2rem,7vw,6.4rem);
+      letter-spacing:-.07em;
+      line-height:.88;
     }
 
     .subtitle {
-      margin:8px 0 0;
+      margin:10px 0 0;
       color:var(--muted);
-      font-weight:700;
+      font-weight:800;
+      font-size:1.12rem;
     }
 
     .top-actions {
@@ -119,27 +120,48 @@
       border:1px solid var(--border);
     }
 
+    .hero-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      align-items:stretch;
+      margin-bottom:18px;
+    }
+
+    .hero-image {
+      width:100%;
+      height:100%;
+      min-height:430px;
+      object-fit:cover;
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      display:block;
+    }
+
     .intro-card {
       background:var(--accent);
       color:white;
       border-radius:var(--radius);
-      padding:22px;
-      margin-bottom:18px;
+      padding:30px;
       box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
     }
 
     .intro-kicker {
-      font-size:.85rem;
+      font-size:.9rem;
       text-transform:uppercase;
       letter-spacing:.12em;
       font-weight:900;
       opacity:.82;
-      margin-bottom:8px;
+      margin-bottom:10px;
     }
 
     .intro-title {
-      margin:0 0 10px;
-      font-size:clamp(2.1rem,5vw,4.2rem);
+      margin:0 0 14px;
+      font-size:clamp(2.6rem,5vw,4.6rem);
       line-height:.95;
       letter-spacing:-.06em;
       max-width:12ch;
@@ -147,9 +169,8 @@
 
     .intro-copy {
       margin:0;
-      max-width:75ch;
       color:rgba(255,255,255,.88);
-      font-size:1.05rem;
+      font-size:1.08rem;
       font-weight:700;
     }
 
@@ -172,6 +193,12 @@
       margin:0 0 12px;
       font-size:1.45rem;
       letter-spacing:-.03em;
+    }
+
+    .get-started-title {
+      font-size:clamp(2.2rem,4vw,3.4rem) !important;
+      letter-spacing:-.06em !important;
+      line-height:.95;
     }
 
     .helper {
@@ -197,8 +224,8 @@
     }
 
     .step-number {
-      width:38px;
-      height:38px;
+      width:42px;
+      height:42px;
       border-radius:999px;
       background:var(--accent);
       color:white;
@@ -207,11 +234,12 @@
       justify-content:center;
       font-weight:900;
       flex-shrink:0;
+      font-size:1.1rem;
     }
 
     .step-title {
       font-weight:900;
-      font-size:1.08rem;
+      font-size:1.12rem;
       margin-bottom:4px;
     }
 
@@ -229,9 +257,9 @@
     }
 
     .main-actions .btn {
-      min-height:58px;
+      min-height:64px;
       border-radius:18px;
-      font-size:1.05rem;
+      font-size:1.12rem;
     }
 
     .preview-image {
@@ -295,6 +323,7 @@
 
     @media(max-width:900px) {
       header,
+      .hero-grid,
       .grid,
       .story-grid {
         grid-template-columns:1fr;
@@ -311,7 +340,15 @@
       }
 
       .logo {
-        height:58px;
+        height:86px;
+      }
+
+      h1 {
+        font-size:clamp(3rem,12vw,4.8rem);
+      }
+
+      .hero-image {
+        min-height:320px;
       }
 
       .portrait {
@@ -327,9 +364,9 @@
 
   <header>
     <div class="brand">
-      <img class="logo" src="grandma-care-logo.png" alt="Grandma.care logo">
+      <img class="logo" src="grandma-care-logo.png" alt="Grandma.Care logo">
       <div>
-        <h1>Grandma.care</h1>
+        <h1>Grandma.Care</h1>
         <p class="subtitle">Independence for seniors. Peace of mind for families.</p>
       </div>
     </div>
@@ -340,20 +377,27 @@
     </div>
   </header>
 
-  <section class="intro-card">
-    <div class="intro-kicker">For analog people in a digital world.</div>
-    <h2 class="intro-title">Simple support for daily independence.</h2>
-    <p class="intro-copy">
-      Grandma.care is a caregiver dashboard and senior tablet system designed for older adults who may struggle with memory, routines, medications, or modern technology. A caregiver sets up reminders from one device, and the senior sees a calm, easy tablet screen with family photos, a large clock, clear prompts, and simple buttons to say “I did it” or “I need help.”
-    </p>
+  <section class="hero-grid">
+    <img
+      class="hero-image"
+      src="soncomputer.png"
+      alt="Caregiver helping his mother with technology">
+
+    <div class="intro-card">
+      <div class="intro-kicker">For analog people in a digital world.</div>
+      <h2 class="intro-title">Simple support for daily independence.</h2>
+      <p class="intro-copy">
+        Grandma.Care is a caregiver dashboard and senior tablet system designed for older adults who may struggle with memory, routines, medications, or modern technology. A caregiver sets up reminders from one device, and the senior sees a calm, easy tablet screen with family photos, a large clock, clear prompts, and simple buttons to say “I did it” or “I need help.”
+      </p>
+    </div>
   </section>
 
   <main class="grid">
 
     <section class="card">
-      <h2>Get started</h2>
+      <h2 class="get-started-title">Get Started</h2>
       <p class="helper">
-        Set up the caregiver dashboard first, then open the senior tablet screen on the device the senior will use.
+        Start with the caregiver dashboard. Then connect the senior tablet so reminders, photos, and messages appear automatically.
       </p>
 
       <div class="steps">
@@ -361,9 +405,9 @@
         <div class="step">
           <div class="step-number">1</div>
           <div>
-            <div class="step-title">Open the caregiver dashboard</div>
+            <div class="step-title">Create a caregiver account</div>
             <p class="step-copy">
-              Enter the senior’s name, caregiver name, family note, medications, meals, appointments, and daily routines.
+              Sign up or log in so the caregiver dashboard can save the senior’s schedule securely in the cloud.
             </p>
           </div>
         </div>
@@ -371,9 +415,9 @@
         <div class="step">
           <div class="step-number">2</div>
           <div>
-            <div class="step-title">Save the schedule to the cloud</div>
+            <div class="step-title">Enter reminders and routines</div>
             <p class="step-copy">
-              The dashboard saves the reminder schedule so the senior tablet can update from another device.
+              Add medications, meals, appointments, family notes, photos, and simple daily reminders.
             </p>
           </div>
         </div>
@@ -381,9 +425,9 @@
         <div class="step">
           <div class="step-number">3</div>
           <div>
-            <div class="step-title">Open the senior tablet screen</div>
+            <div class="step-title">Open the senior tablet</div>
             <p class="step-copy">
-              Use Safari Add to Home Screen on iPad, or a kiosk browser on Android, to make the tablet feel full-screen.
+              Use the senior tablet link on the dedicated device so the senior sees a simple, always-on screen.
             </p>
           </div>
         </div>
@@ -391,9 +435,9 @@
         <div class="step">
           <div class="step-number">4</div>
           <div>
-            <div class="step-title">Let the senior respond</div>
+            <div class="step-title">Let Grandma respond</div>
             <p class="step-copy">
-              The senior can press “Yes, I did it” or “I need help,” giving families a simple way to check in.
+              The senior presses “Yes, I did it” or “I need help.” The caregiver can see updates and receive alerts.
             </p>
           </div>
         </div>
@@ -401,12 +445,12 @@
       </div>
 
       <div class="main-actions">
-        <a class="btn btn-primary" href="caregiver-dashboard.html">
-          Start Caregiver Setup
+        <a class="btn btn-primary" href="signup.html">
+          Start Free Caregiver Setup
         </a>
 
-        <a class="btn btn-secondary" href="senior-tablet.html">
-          Open Senior Tablet
+        <a class="btn btn-secondary" href="login.html">
+          Log In
         </a>
       </div>
     </section>
@@ -420,7 +464,7 @@
       <img
         class="preview-image"
         src="grandma-care-tablet.jpg"
-        alt="Senior using Grandma.care tablet app">
+        alt="Senior using Grandma.Care tablet app">
 
       <div class="mini-grid">
         <div class="mini-card">
@@ -447,14 +491,14 @@
 
       <img
         src="grandma-portrait.jpg"
-        alt="Barbara, the inspiration behind Grandma.care"
+        alt="Barbara, the inspiration behind Grandma.Care"
         class="portrait">
 
       <div>
-        <h2>The Story Behind Grandma.care</h2>
+        <h2>The Story Behind Grandma.Care</h2>
 
         <p class="helper">
-          Grandma.care was inspired by Barbara, my grandmother living independently with dementia. My family wanted a better way to help her stay safe, remember prescriptions, keep appointments, and follow daily routines without taking away her independence before it was necessary.
+          Grandma.Care was inspired by Barbara, my grandmother living independently with dementia. My family wanted a better way to help her stay safe, remember prescriptions, keep appointments, and follow daily routines without taking away her independence before it was necessary.
         </p>
 
         <p class="helper">
