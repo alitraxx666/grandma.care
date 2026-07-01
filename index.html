@@ -143,11 +143,11 @@
       background:var(--accent);
       color:white;
       border-radius:var(--radius);
-      padding:30px;
+      padding:26px 30px 30px;
       box-shadow:var(--shadow);
       display:flex;
       flex-direction:column;
-      justify-content:center;
+      justify-content:flex-start;
     }
 
     .intro-kicker {
@@ -173,7 +173,59 @@
       font-size:1.08rem;
       font-weight:700;
     }
+.demo-inside-card {
+  margin-top:24px;
+  padding-top:18px;
+  border-top:1px solid rgba(255,255,255,.25);
+  text-align:center;
+}
 
+.demo-inside-card a {
+  display:block;
+}
+
+.demo-thumbnail {
+  position:relative;
+  max-width:330px;
+  margin:0 auto 12px;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+}
+
+.demo-thumbnail img {
+  width:100%;
+  display:block;
+}
+
+.demo-play-button {
+  position:absolute;
+  left:50%;
+  top:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(255,255,255,.92);
+  color:#204A53;
+  width:58px;
+  height:58px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  font-weight:900;
+  padding-left:4px;
+}
+
+.demo-button {
+  display:inline-block !important;
+  background:white;
+  color:#204A53;
+  padding:13px 22px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:1rem;
+  box-shadow:0 6px 16px rgba(0,0,0,.2);
+}
     .grid {
       display:grid;
       grid-template-columns:1.05fr .95fr;
@@ -389,6 +441,25 @@
       <p class="intro-copy">
         Grandma.Care is a caregiver dashboard and senior tablet system designed for older adults who may struggle with memory, routines, medications, or modern technology. A caregiver sets up reminders from one device, and the senior sees a calm, easy tablet screen with family photos, a large clock, clear prompts, and simple buttons to say “I did it” or “I need help.”
       </p>
+      <div class="demo-inside-card">
+
+  <a class="demo-thumbnail" href="demo.html">
+    <img
+      src="https://img.youtube.com/vi/cDDkqpVq_Lk/hqdefault.jpg"
+      alt="Grandma.Care Demonstration Video">
+
+    <div class="demo-play-button">▶</div>
+  </a>
+
+  <p style="margin:12px 0 14px; color:white; font-weight:700;">
+    See Grandma.Care in action.
+  </p>
+
+  <a class="demo-button" href="demo.html">
+    🎥 Watch the 3-Minute Demonstration
+  </a>
+
+</div>
     </div>
   </section>
 
