@@ -42,9 +42,17 @@ Nicholas Cornell<br>
 📧 nckkcornell@gmail.com
 </a>
 </p>
-<div class="length">🎥 Quick Demonstration • 2 minutes 20 seconds</div>
-<div class="video">
-<iframe src="https://www.youtube.com/embed/cDDkqpVq_Lk" title="Grandma.Care Demonstration" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+</p>
+
+<p class="desc" style="margin-top:-10px;">
+  <strong>Questions?</strong> Contact Nicholas Cornell at
+  <a href="mailto:nckkcornell@gmail.com" style="color:#204A53;font-weight:900;">
+    nckkcornell@gmail.com
+  </a>
+</p>
+
+<div class="length">
+🎥 Quick Demonstration • 2 minutes 20 seconds
 </div>
 <div class="buttons">
 <a class="btn secondary" href="index.html">← Return to Homepage</a>
