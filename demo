@@ -31,7 +31,17 @@ footer{margin-top:40px;color:var(--muted);font-size:.9rem}
 <h1>Grandma.Care Demonstration</h1>
 <div class="badge">🏛️ Official Demonstration Video • 2026 Congressional App Challenge</div>
 <p class="subtitle">Helping seniors remain independent while giving caregivers peace of mind.</p>
-<p class="desc">This demonstration shows how caregivers create reminders, schedules, and family notes using the caregiver dashboard while seniors receive clear, easy-to-follow prompts on a dedicated tablet. Grandma.Care was inspired by my grandmother, Barbara, and created to help seniors remain independent for as long as possible while giving families greater peace of mind.</p>
+<p class="desc">
+This demonstration shows how caregivers create reminders, schedules, and family notes using the caregiver dashboard while seniors receive clear, easy-to-follow prompts on a dedicated tablet. Grandma.Care was inspired by my grandmother, Barbara, and created to help seniors remain independent for as long as possible while giving families greater peace of mind.
+</p>
+
+<p class="desc" style="margin-top:-10px;">
+<strong>Questions or feedback?</strong><br>
+Nicholas Cornell<br>
+<a href="mailto:nckkcornell@gmail.com" style="color:#204A53;font-weight:800;text-decoration:none;">
+📧 nckkcornell@gmail.com
+</a>
+</p>
 <div class="length">🎥 Quick Demonstration • 2 minutes 20 seconds</div>
 <div class="video">
 <iframe src="https://www.youtube.com/embed/cDDkqpVq_Lk" title="Grandma.Care Demonstration" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
